@@ -38,8 +38,8 @@ void Player::UpdateSpeed() {
 }
 
 void Player::Move(double time) {
-    coordinates_.x += dir_speed_.x * time;
-    coordinates_.y += dir_speed_.y * time;
+    coordinates_.x += dir_speed_.x * time; // двигаем по x
+    coordinates_.y += dir_speed_.y * time; // двигаем по y
 
     map_speed_ = 0;
     // добавить взаимодействие с картой
