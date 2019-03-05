@@ -1,11 +1,11 @@
 #include "headers//player.h"
 
 double Player::GetX() const {
-    return coor_x_;
+    return coordinates_.x;
 }
 
 double Player::GetY() const {
-    return coor_y_;
+    return coordinates_.y;
 }
 
 void Player::SetDirection(Direction new_dir) {
@@ -19,38 +19,29 @@ void Player::SetSpeed(double new_speed) {
 void Player::UpdateSpeed() {
     switch(direction_) {
     case Direction::N: {
-        speed_x_ = 0;
-        speed_y_ = -map_speed_; // движемся вверх
+        dir_speed_ = Coordinates(0, -map_speed_); // движемся вверх
         break;
     }
     case Direction::E: {
-        speed_x_ = map_speed_; // движемся вправо
-        speed_y_ = 0;
+        dir_speed_ = Coordinates(map_speed_, 0); // движемся вправо
         break;
     }
     case Direction::S: {
-        speed_x_ = 0;
-        speed_y_ = map_speed_; // движемся вниз
+        dir_speed_ = Coordinates(0, map_speed_); // движемся вниз
         break;
     }
     case Direction::W: {
-        speed_x_ = -map_speed_; // движемся влево
-        speed_y_ = 0;
-        break;
-    }
-    case Direction::P: { // иначе стоим на месте
-        speed_x_ = 0;
-        speed_y_ = 0;
+        dir_speed_ = Coordinates(-map_speed_, 0); // движемся влево
         break;
     }
     }
 }
 
 void Player::Move(double time) {
-    coor_x_ += speed_x_ * time;
-    coor_y_ += speed_y_ * time;
+    coordinates_.x += dir_speed_.x * time;
+    coordinates_.y += dir_speed_.y * time;
 
     map_speed_ = 0;
     // добавить взаимодействие с картой
-    // и перемещение спрайтв игрока
+    // и перемещение спрайта игрока
 }

@@ -6,7 +6,6 @@ enum class Direction {
     , E   // восток(право)
     , S   // юг(низ)
     , W   // запад(лево)
-    , P   // стоять на одном месте
 };
 
 class Player
@@ -27,6 +26,23 @@ public:
     void Move(double);            // движемся
 
 private:
+
+    class Coordinates {
+    public:
+        double x;
+        double y;
+
+        Coordinates(double x, double y)
+        : x(x)
+        , y(y) {}
+
+        Coordinates& operator=(const Coordinates& other) {
+            x = other.x;
+            y = other.y;
+            return *this;
+        }
+    };
+
     int health_;
     int attack_;
     int speed_;
@@ -34,10 +50,12 @@ private:
     Direction direction_; // направление движения игрока на карте
     int cur_frame_; // величина, которая нужна, чтобы отрисовывать героя
     double map_speed_ = 0; // скорость, с которой игрок перемещается по карте
-    double coor_x_ = 100;  // для координат надо установить некоторые изначальные значения,
-    double coor_y_ = 100;  // которые будут для всех одинаковыми
-    double speed_x_; // скорости перемещения в ДАННЫЙ МОМЕНТ
-    double speed_y_; // на карте по каждой из координат
+    Coordinates coordinates_ = {100, 100};  // для координат надо установить некоторые изначальные значения,
+                                           //которые будут для всех одинаковыми
+    Coordinates dir_speed_ = {0, 0}; // скорости перемещения в ДАННЫЙ МОМЕНТ
+                     // на карте по каждой из координат
+
+
 };
 
 #endif // PLAYER_H

@@ -37,14 +37,11 @@ void MainWindow::keyPressEvent(QKeyEvent* event) {
         player->SetDirection(Direction::E);
         break;
     }
-    default: {
-        player->SetDirection(Direction::P);
-    }
     }
 
     player->UpdateSpeed();
 
-    player->Move();
+    player->Move(0.01);
 }
 
 MainWindow::~MainWindow() {}
