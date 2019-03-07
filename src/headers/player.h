@@ -2,6 +2,9 @@
 #define PLAYER_H
 
 #include <QObject>
+#include <QPainter>
+#include <QImage>
+#include <QPicture>
 
 enum class Direction {
     N = 0 // север(верх)
@@ -18,6 +21,8 @@ public:
 
     double GetX() const;
     double GetY() const;
+
+    QImage GetPlayerImage() const;
 
     void SetDirection(Direction); // устанавливаем направление движения
     void SetSpeed(double);        // устанавливаем скорость движения по карте
@@ -58,6 +63,7 @@ private:
                                            //которые будут для всех одинаковыми
     Coordinates dir_speed_ = {0, 0}; // скорости перемещения в ДАННЫЙ МОМЕНТ
                      // на карте по каждой из координат
+    QImage* player_image_;
 
 };
 

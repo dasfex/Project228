@@ -4,7 +4,9 @@ Player::Player(int health, int attack, int speed, int defense)
     : health_(health)
     , attack_(attack)
     , speed_(speed)
-    , defense_(defense) {}
+    , defense_(defense)
+    /*, player_image_(new QImage("D:/projects codeblocks/sfml/images/hero.png"))*/
+    {}
 
 double Player::GetX() const {
     return coordinates_.x;
@@ -13,6 +15,10 @@ double Player::GetX() const {
 double Player::GetY() const {
     return coordinates_.y;
 }
+
+//QImage Player::GetPlayerImage() const {
+//    return *player_image_;
+//}
 
 void Player::SetDirection(Direction new_dir) {
     direction_ = new_dir;
