@@ -1,5 +1,11 @@
 #include "headers//player.h"
 
+Player::Player(int health, int attack, int speed, int defense)
+    : health_(health)
+    , attack_(attack)
+    , speed_(speed)
+    , defense_(defense) {}
+
 double Player::GetX() const {
     return coordinates_.x;
 }

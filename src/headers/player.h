@@ -1,6 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <QObject>
+
 enum class Direction {
     N = 0 // север(верх)
     , E   // восток(право)
@@ -8,14 +10,11 @@ enum class Direction {
     , W   // запад(лево)
 };
 
-class Player
+class Player : public QObject
 {
+    Q_OBJECT
 public:
-    Player(int health, int attack, int speed, int defense)
-    : health_(health)
-    , attack_(attack)
-    , speed_(speed)
-    , defense_(defense) {}
+    Player(int, int, int, int);
 
     double GetX() const;
     double GetY() const;
@@ -24,6 +23,11 @@ public:
     void SetSpeed(double);        // устанавливаем скорость движения по карте
     void UpdateSpeed();           // изменяем скорости по координатам
     void Move(double);            // движемся
+
+    ~Player() {}
+public slots:
+
+signals:
 
 private:
 
@@ -54,7 +58,6 @@ private:
                                            //которые будут для всех одинаковыми
     Coordinates dir_speed_ = {0, 0}; // скорости перемещения в ДАННЫЙ МОМЕНТ
                      // на карте по каждой из координат
-
 
 };
 

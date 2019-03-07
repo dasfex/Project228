@@ -1,7 +1,6 @@
 #include "headers//mainwindow.h"
 #include "headers//player.h"
 
-#include "headers//mainwindow.h"
 #include <QHBoxLayout>
 #include <QKeyEvent>
 
@@ -12,6 +11,10 @@ MainWindow::MainWindow(QWidget* parent) :
     setFixedSize(1080, 720); // пока так, под конец сделаем full screen
 
     player = new Player(100, 100, 100, 100);
+
+    control_timer_ = new QTimer;
+    connect(control_timer_, SIGNAL(timeout()), this, SLOT(keyPressEvent()));
+    control_timer_->start(1000 / 50); // запуск слота 20 раз в секунду(наверное)
 }
 
 void MainWindow::DrawMap() {
