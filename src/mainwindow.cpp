@@ -12,12 +12,9 @@ MainWindow::MainWindow(QWidget* parent) :
 
     player_ = new Player(100, 100, 100, 100);
 
-    PaintEvent();
-
     control_timer_ = new QTimer;
     connect(control_timer_, SIGNAL(timeout()), this, SLOT(keyPressEvent()));
     control_timer_->start(1000 / 50); // запуск слота 20 раз в секунду(наверное)
-
 }
 
 void MainWindow::DrawMap() {
@@ -50,11 +47,6 @@ void MainWindow::keyPressEvent(QKeyEvent* event) {
     player_->UpdateSpeed();
 
     player_->Move(time);
-}
-
-void MainWindow::PaintEvent() {
-    QPainter painter(this); // определяем объект painter, который обеспечивает рисование
-    painter.drawImage(0,0, player_->GetPlayerImage().scaled(this->size())); // рисуем наше изображение от 0,0 и растягиваем по всему виджету
 }
 
 MainWindow::~MainWindow() {

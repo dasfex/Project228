@@ -22,7 +22,7 @@ public:
     double GetX() const;
     double GetY() const;
 
-    QImage GetPlayerImage() const;
+    //QImage GetPlayerImage() const;
 
     void SetDirection(Direction); // устанавливаем направление движения
     void SetSpeed(double);        // устанавливаем скорость движения по карте
@@ -30,6 +30,7 @@ public:
     void Move(double);            // движемся
 
     ~Player() {}
+
 public slots:
 
 signals:
@@ -63,7 +64,7 @@ private:
                                            //которые будут для всех одинаковыми
     Coordinates dir_speed_ = {0, 0}; // скорости перемещения в ДАННЫЙ МОМЕНТ
                      // на карте по каждой из координат
-    QImage* player_image_;
+   // QImage* player_image_;
 
 };
 
