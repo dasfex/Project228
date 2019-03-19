@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include "headers//player.h"
-#include <QGraphicsScene>
 #include <QMainWindow>
+#include <QGraphicsScene>
 #include <QTime>
 #include <QTimer>
 #include <QWidget>
@@ -17,8 +17,15 @@ class MainWindow : public QMainWindow {
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+<<<<<<< HEAD
     ~MainWindow() override;
     void keyPressEvent(QKeyEvent* event) override; // слот, который вызывается для управления игроков
+=======
+
+    ~MainWindow() override;
+
+    void keyPressEvent(QKeyEvent* event) override; // слот, который вызывается для управления игроком
+>>>>>>> ccc7dfd4b233592d2473e48c838bf5ad8b957e8a
 
 private:
 

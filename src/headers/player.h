@@ -1,21 +1,18 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "headers/herosprite.h"
 #include <QObject>
 #include <QPainter>
 #include <QImage>
 #include <QPicture>
+<<<<<<< HEAD
 #include <QPainter>
+=======
+#include <QString>
+>>>>>>> ccc7dfd4b233592d2473e48c838bf5ad8b957e8a
 
-enum class Direction {
-    N = 0 // север(верх)
-    , E   // восток(право)
-    , S   // юг(низ)
-    , W   // запад(лево)
-};
-
-class Player : public QObject
-{
+class Player : public QObject {
     Q_OBJECT
 public:
     Player(int, int, int, int);
@@ -23,10 +20,16 @@ public:
     double GetX() const;
     double GetY() const;
 
+<<<<<<< HEAD
     void SetDirection(Direction); // устанавливаем направление движения
+=======
+    void SetDirection(Direction);
+>>>>>>> ccc7dfd4b233592d2473e48c838bf5ad8b957e8a
     void SetSpeed(double);        // устанавливаем скорость движения по карте
     void UpdateSpeed();           // изменяем скорости по координатам
     void Move(double);
+
+    void SetDirectionForFrame(Direction);
 
     int GetHealth() const;
     int GetAttack() const;
@@ -65,12 +68,16 @@ private:
     int speed_;
     int defense_;
     Direction direction_; // направление движения игрока на карте
-    int cur_frame_; // величина, которая нужна, чтобы отрисовывать героя
     double map_speed_ = 0; // скорость, с которой игрок перемещается по карте
     Coordinates coordinates_ = {100, 100};  // для координат надо установить некоторые изначальные значения,
                                            //которые будут для всех одинаковыми
     Coordinates dir_speed_ = {0, 0}; // скорости перемещения в ДАННЫЙ МОМЕНТ
+<<<<<<< HEAD
                      // на карте по каждой из координат
+=======
+                                     // на карте по каждой из координат
+    HeroSprite* sprite_;
+>>>>>>> ccc7dfd4b233592d2473e48c838bf5ad8b957e8a
 
 };
 

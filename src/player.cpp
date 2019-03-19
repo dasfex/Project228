@@ -6,6 +6,10 @@ Player::Player(int health, int attack, int speed, int defense)
     , attack_(attack)
     , speed_(speed)
     , defense_(defense)
+<<<<<<< HEAD
+=======
+    , sprite_(new HeroSprite(this))
+>>>>>>> ccc7dfd4b233592d2473e48c838bf5ad8b957e8a
     {}
 
 double Player::GetX() const {
@@ -18,6 +22,7 @@ double Player::GetY() const {
 
 void Player::SetDirection(Direction new_dir) {
     direction_ = new_dir;
+    sprite_->NextFrame(new_dir);
 }
 
 void Player::SetSpeed(double new_speed) {
@@ -53,6 +58,10 @@ void Player::Move(double time) {
     map_speed_ = 0;
     // добавить взаимодействие с картой
     // и перемещение спрайта игрока
+}
+
+void Player::SetDirectionForFrame(Direction dir) {
+    sprite_->NextFrame(dir);
 }
 
 int Player::GetHealth() const {
