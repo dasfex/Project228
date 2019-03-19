@@ -10,49 +10,46 @@ MainWindow::MainWindow(QWidget* parent) :
     DrawMap();
     setFixedSize(1080, 720); // пока так, под конец сделаем full screen    
 
-    player_ = new Player(100, 100, 100, 100);
-
-    control_timer_ = new QTimer;
-    connect(control_timer_, SIGNAL(timeout()), this, SLOT(keyPressEvent()));
-    control_timer_->start(1000 / 50); // запуск слота 20 раз в секунду(наверное)
+    player_ = new Player(100, 100, 100, 100); // fix
 }
 
 void MainWindow::DrawMap() {
-    scene_ = new QGraphicsScene(this);
 
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
-    double time = time_for_player_->currentTime().msec() / 1000;
-    time_for_player_->setHMS(0, 0, 0, 0);
+    double time = 2;
     switch (event->key()) {
     case Qt::Key_W: {
         player_->SetDirection(Direction::N);
+        player_->SetDirectionForFrame(Direction::N);
         break;
     }
     case Qt::Key_A: {
         player_->SetDirection(Direction::W);
+        player_->SetDirectionForFrame(Direction::W);
         break;
     }
     case Qt::Key_S: {
         player_->SetDirection(Direction::S);
+        player_->SetDirectionForFrame(Direction::S);
         break;
     }
     case Qt::Key_D: {
         player_->SetDirection(Direction::E);
+        player_->SetDirectionForFrame(Direction::E);
         break;
     }
     }
 
     player_->UpdateSpeed();
-
     player_->Move(time);
+
+    DrawMap();
 }
 
 MainWindow::~MainWindow() {
     delete scene_;
     delete player_;
     delete control_timer_;
-    delete time_for_player_;
 }
-
