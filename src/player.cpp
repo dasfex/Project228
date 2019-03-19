@@ -6,7 +6,6 @@ Player::Player(int health, int attack, int speed, int defense)
     , attack_(attack)
     , speed_(speed)
     , defense_(defense)
-    /*, player_image_(new QImage("D:/projects codeblocks/sfml/images/hero.png"))*/
     {}
 
 double Player::GetX() const {
@@ -17,10 +16,6 @@ double Player::GetY() const {
     return coordinates_.y;
 }
 
-//QImage Player::GetPlayerImage() const {
-//    return *player_image_;
-//}
-
 void Player::SetDirection(Direction new_dir) {
     direction_ = new_dir;
 }
@@ -30,6 +25,7 @@ void Player::SetSpeed(double new_speed) {
 }
 
 void Player::UpdateSpeed() {
+    map_speed_ = 5;
     switch(direction_) {
     case Direction::N: {
         dir_speed_ = Coordinates(0, -map_speed_); // движемся вверх
