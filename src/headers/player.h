@@ -27,7 +27,15 @@ public:
     void SetDirection(Direction); // устанавливаем направление движения
     void SetSpeed(double);        // устанавливаем скорость движения по карте
     void UpdateSpeed();           // изменяем скорости по координатам
-    void Move(double);            // движемся
+    void Move(double);
+
+    int GetHealth() const;
+    int GetAttack() const;
+    int GetDefense() const;
+
+    void SetHealth(int);
+    void SetAttack(int);
+    void SetDefense(int);
 
     ~Player() {}
 

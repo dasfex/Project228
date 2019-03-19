@@ -1,4 +1,5 @@
 #include "headers//player.h"
+#include <QtMath>
 
 Player::Player(int health, int attack, int speed, int defense)
     : health_(health)
@@ -56,4 +57,31 @@ void Player::Move(double time) {
     map_speed_ = 0;
     // добавить взаимодействие с картой
     // и перемещение спрайта игрока
+}
+
+int Player::GetHealth() const {
+    return health_;
+}
+
+int Player::GetAttack() const {
+    return attack_;
+}
+
+int Player::GetDefense() const {
+    return defense_;
+}
+
+void Player::SetHealth(int buf_health) {
+    health_ += buf_health;
+    health_ = qMax(0, health_);
+}
+
+void Player::SetAttack(int buf_attack) {
+    attack_ += buf_attack;
+    attack_ = qMax(0, attack_);
+}
+
+void Player::SetDefense(int buf_defense) {
+    defense_ += buf_defense;
+    defense_ = qMax(0, defense_);
 }
