@@ -6,10 +6,7 @@ Player::Player(int health, int attack, int speed, int defense)
     , attack_(attack)
     , speed_(speed)
     , defense_(defense)
-<<<<<<< HEAD
-=======
     , sprite_(new HeroSprite(this))
->>>>>>> ccc7dfd4b233592d2473e48c838bf5ad8b957e8a
     {}
 
 double Player::GetX() const {

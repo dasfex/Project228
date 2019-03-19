@@ -6,11 +6,6 @@
 #include <QPainter>
 #include <QImage>
 #include <QPicture>
-<<<<<<< HEAD
-#include <QPainter>
-=======
-#include <QString>
->>>>>>> ccc7dfd4b233592d2473e48c838bf5ad8b957e8a
 
 class Player : public QObject {
     Q_OBJECT
@@ -20,11 +15,8 @@ public:
     double GetX() const;
     double GetY() const;
 
-<<<<<<< HEAD
     void SetDirection(Direction); // устанавливаем направление движения
-=======
-    void SetDirection(Direction);
->>>>>>> ccc7dfd4b233592d2473e48c838bf5ad8b957e8a
+
     void SetSpeed(double);        // устанавливаем скорость движения по карте
     void UpdateSpeed();           // изменяем скорости по координатам
     void Move(double);
@@ -72,13 +64,8 @@ private:
     Coordinates coordinates_ = {100, 100};  // для координат надо установить некоторые изначальные значения,
                                            //которые будут для всех одинаковыми
     Coordinates dir_speed_ = {0, 0}; // скорости перемещения в ДАННЫЙ МОМЕНТ
-<<<<<<< HEAD
-                     // на карте по каждой из координат
-=======
                                      // на карте по каждой из координат
     HeroSprite* sprite_;
->>>>>>> ccc7dfd4b233592d2473e48c838bf5ad8b957e8a
-
 };
 
 #endif // PLAYER_H
