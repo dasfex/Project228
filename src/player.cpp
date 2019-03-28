@@ -1,5 +1,4 @@
 #include "headers//player.h"
-#include "headers/herosprite.h"
 #include <QtMath>
 
 Player::Player(int health, int attack, int speed, int defense)
@@ -7,7 +6,6 @@ Player::Player(int health, int attack, int speed, int defense)
     , attack_(attack)
     , speed_(speed)
     , defense_(defense)
-    , sprite_(new HeroSprite(nullptr))
     {}
 
 double Player::GetX() const {
@@ -20,7 +18,6 @@ double Player::GetY() const {
 
 void Player::SetDirection(Direction new_dir) {
     direction_ = new_dir;
-    sprite_->NextFrame(new_dir);
 }
 
 void Player::SetSpeed(double new_speed) {
@@ -58,10 +55,6 @@ void Player::Move(double time) {
     // и перемещение спрайта игрока
 }
 
-void Player::SetDirectionForFrame(Direction dir) {
-    sprite_->NextFrame(dir);
-}
-
 int Player::GetHealth() const {
     return health_;
 }
@@ -72,10 +65,6 @@ int Player::GetAttack() const {
 
 int Player::GetDefense() const {
     return defense_;
-}
-
-HeroSprite* Player::GetSprite() const {
-    return sprite_;
 }
 
 void Player::SetHealth(int buf_health) {

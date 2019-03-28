@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "headers//player.h"
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QTime>
@@ -9,7 +8,8 @@
 #include <QWidget>
 #include <QLabel>
 #include <QGraphicsView>
-
+#include "player.h"
+#include <QPainter>
 
 QT_BEGIN_NAMESPACE
 class QGraphicsScene;
@@ -30,6 +30,8 @@ public:
     void setView(QGraphicsView *view);
 
 private:
+
+    void paintEvent(QPaintEvent *event);
 
     QGraphicsScene* scene_;
 

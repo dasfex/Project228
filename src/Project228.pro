@@ -27,13 +27,11 @@ CONFIG += c++17
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    player.cpp \
-    herosprite.cpp
+    player.cpp
 
 HEADERS += \
     headers/mainwindow.h \
-    headers/player.h \
-    headers/herosprite.h
+    headers/player.h
 
 FORMS +=
 

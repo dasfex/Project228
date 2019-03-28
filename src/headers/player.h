@@ -1,11 +1,17 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "headers/herosprite.h"
 #include <QObject>
 #include <QPainter>
 #include <QImage>
 #include <QPicture>
+
+enum class Direction {
+    N = 0,
+    E,
+    S,
+    W
+};
 
 class Player : public QObject {
     Q_OBJECT
@@ -26,8 +32,6 @@ public:
     int GetHealth() const;
     int GetAttack() const;
     int GetDefense() const;
-
-    HeroSprite* GetSprite() const;
 
     void SetHealth(int);
     void SetAttack(int);
@@ -67,8 +71,6 @@ private:
                                            //которые будут для всех одинаковыми
     Coordinates dir_speed_ = {0, 0}; // скорости перемещения в ДАННЫЙ МОМЕНТ
                                      // на карте по каждой из координат
-    HeroSprite* sprite_;
-
 };
 
 #endif // PLAYER_H
