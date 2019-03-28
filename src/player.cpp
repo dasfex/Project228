@@ -1,4 +1,5 @@
 #include "headers//player.h"
+#include "headers/herosprite.h"
 #include <QtMath>
 
 Player::Player(int health, int attack, int speed, int defense)
@@ -6,7 +7,7 @@ Player::Player(int health, int attack, int speed, int defense)
     , attack_(attack)
     , speed_(speed)
     , defense_(defense)
-    , sprite_(new HeroSprite(this))
+    , sprite_(new HeroSprite(nullptr))
     {}
 
 double Player::GetX() const {
@@ -73,6 +74,10 @@ int Player::GetDefense() const {
     return defense_;
 }
 
+HeroSprite* Player::GetSprite() const {
+    return sprite_;
+}
+
 void Player::SetHealth(int buf_health) {
     health_ += buf_health;
     health_ = qMax(0, health_);
@@ -87,3 +92,4 @@ void Player::SetDefense(int buf_defense) {
     defense_ += buf_defense;
     defense_ = qMax(0, defense_);
 }
+

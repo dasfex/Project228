@@ -27,6 +27,8 @@ public:
     int GetAttack() const;
     int GetDefense() const;
 
+    HeroSprite* GetSprite() const;
+
     void SetHealth(int);
     void SetAttack(int);
     void SetDefense(int);
@@ -66,6 +68,7 @@ private:
     Coordinates dir_speed_ = {0, 0}; // скорости перемещения в ДАННЫЙ МОМЕНТ
                                      // на карте по каждой из координат
     HeroSprite* sprite_;
+
 };
 
 #endif // PLAYER_H

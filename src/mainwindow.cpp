@@ -9,11 +9,18 @@
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent) {
 
+    view_ = new QGraphicsView();
+    scene_ = new QGraphicsScene(this);
     DrawMap();
     setFixedSize(1080, 720); // пока так, под конец сделаем full screen
 
-    player_ = new Player(100, 100, 100, 100);
     player_ = new Player(100, 100, 100, 100); // fix
+    scene_->addItem(player_->GetSprite());
+
+    view_->setScene(scene_);
+
+    view_->show();
+
 }
 
 void MainWindow::DrawMap() {
@@ -62,6 +69,26 @@ void MainWindow::keyPressEvent(QKeyEvent* event) {
 
     DrawMap();
 }
+
+QGraphicsView *MainWindow::view() const
+{
+    return view_;
+}
+
+void MainWindow::setView(QGraphicsView *view)
+{
+    view_ = view;
+}
+
+//QGraphicsView *MainWindow::view() const
+//{
+//    return view_;
+//}
+
+//void MainWindow::setView(QGraphicsView *view)
+//{
+//    view_ = view;
+//}
 
 MainWindow::~MainWindow() {
     delete scene_;
