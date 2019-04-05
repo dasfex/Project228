@@ -7,14 +7,11 @@
 Player::Player(const sf::String& file,
                double x,
                double y,
-               double width,
-               double height,
                int health,
                int attack,
                int defense)
     : health_(health)
     , coor_(Coordinate(x, y))
-    , size_(std::make_pair(width, height))
     , attack_(attack)
     , defense_(defense)
     , file_(file) {
@@ -23,7 +20,8 @@ Player::Player(const sf::String& file,
   texture_->loadFromImage(*image_);
 
   sprite_->setTexture(*texture_);
-  sprite_->setTextureRect(sf::IntRect(2, 168, 34, 54));
+  last_rect_ = sf::IntRect(2, 168, 36, 54);
+  sprite_->setTextureRect(last_rect_);
   sprite_->setPosition(x, y);
 }
 
@@ -37,20 +35,20 @@ void Player::SetDirection(Direction new_dir) {
 
 void Player::Move(double time) {
   speed_ = 0.3;
-  cur_frame_ += 0.02 * time;
+  cur_frame_ += 0.03 * time;
   if (cur_frame_ > 4) {
     cur_frame_ -= 4;
   }
   sf::IntRect rectangle;
   switch (dir_) {
     case Direction::N: {
-      rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 168, 34, 54);
+      rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 168, 36, 54);
       direct_speed_.x = 0;
       direct_speed_.y = -speed_;
       break;
     }
     case Direction::S: {
-      rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 1, 34, 54);
+      rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 1, 36, 54);
       direct_speed_.x = 0;
       direct_speed_.y = speed_;
       break;
@@ -68,7 +66,7 @@ void Player::Move(double time) {
       break;
     }
     case Direction::STAY: {
-      rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 1, 34, 54);
+      rectangle = last_rect_;
       direct_speed_.x = 0;
       direct_speed_.y = 0;
       break;
@@ -77,14 +75,22 @@ void Player::Move(double time) {
 
   coor_.x += direct_speed_.x * time;
   coor_.y += direct_speed_.y * time;
-  direct_speed_ = {0, 0};
   speed_ = 0;
 
   sprite_->setPosition(static_cast<float>(coor_.x), static_cast<float>(coor_.y));
 
   sprite_->setTextureRect(rectangle);
+  last_rect_ = rectangle;
 }
 
 sf::Sprite* Player::GetSprite() const {
   return sprite_;
+}
+
+double Player::GetX() const {
+  return coor_.x;
+}
+
+double Player::GetY() const {
+  return coor_.y;
 }

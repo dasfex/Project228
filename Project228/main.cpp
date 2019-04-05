@@ -6,16 +6,15 @@ using namespace std;
 using namespace sf;
 
 int main() {
-  int width = 720, height = 480;
+  int width = 1440, height = 1080;
   View view;
   RenderWindow main_window(VideoMode(static_cast<unsigned int>(width),
                                      static_cast<unsigned int>(height)), "Project228");
   view.reset(FloatRect(0, 0, width, height));
 
-  Player player("hulk.png", 100, 100, 100, 100, 100, 100, 100);
+  Player player("hulk.png", 100, 100, 100, 100, 100);
 
   sf::Clock timer_for_animation_;
-  double cur_frame = 0;
 
   while (main_window.isOpen()) {
     double time = timer_for_animation_.getElapsedTime().asMicroseconds();
@@ -38,7 +37,7 @@ int main() {
         } else if (Keyboard::isKeyPressed(Keyboard::D)) {
           player.SetDirection(Direction::E);
         } else {
-          //player.SetDirection(Direction::STAY);
+          player.SetDirection(Direction::STAY);
         }
       }
       player.Move(time / 1000);

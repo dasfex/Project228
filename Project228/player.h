@@ -20,7 +20,7 @@ enum class Direction {
 class Player {
  public:
 
-  Player(const sf::String&, double, double, double, double, int, int, int);
+  Player(const sf::String&, double, double, int, int, int);
 
   bool IsAlive() const;
 
@@ -29,6 +29,9 @@ class Player {
   void Move(double);
 
   sf::Sprite* GetSprite() const;
+
+  double GetX() const;
+  double GetY() const;
 
  private:
 
@@ -49,7 +52,6 @@ class Player {
   Coordinate direct_speed_ = {0.0, 0.0};
   double speed_ = 0;
 
-  std::pair<double, double> size_;
   Direction dir_ = Direction::STAY;
 
   int attack_;
@@ -59,6 +61,8 @@ class Player {
   sf::Image* image_ = new sf::Image;
   sf::Texture* texture_ = new sf::Texture;
   sf::Sprite* sprite_ = new sf::Sprite;
+
+  sf::IntRect last_rect_;
 
   double cur_frame_ = 0.0;
 };
