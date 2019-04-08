@@ -80,10 +80,16 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="D:/CLion projects/Project228/cmake-build-debug/main_headers.h">
+		<Unit filename="D:/CLion projects/Project228/constants.h">
+			<Option target="Project228"/>
+		</Unit>
+		<Unit filename="D:/CLion projects/Project228/functions.h">
 			<Option target="Project228"/>
 		</Unit>
 		<Unit filename="D:/CLion projects/Project228/main.cpp">
+			<Option target="Project228"/>
+		</Unit>
+		<Unit filename="D:/CLion projects/Project228/main_headers.h">
 			<Option target="Project228"/>
 		</Unit>
 		<Unit filename="D:/CLion projects/Project228/player.cpp">
