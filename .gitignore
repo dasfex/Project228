@@ -4,7 +4,10 @@
 *.autosave 
 /.idea
 /CMakeFiles
-.cmake
+*.cmake
 CMakeCache.txt
 Makefile
-.exe
+*.exe
+*.xml
+*.bin
+*.log
