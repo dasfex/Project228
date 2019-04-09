@@ -2,8 +2,8 @@
 *.pro.user*
 /build-Project228-Desktop*
 *.autosave 
-/.idea
-/CMakeFiles
+.idea/
+CMakeFiles/
 *.cmake
 CMakeCache.txt
 Makefile
