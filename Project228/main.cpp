@@ -9,7 +9,7 @@ using namespace std;
 using namespace sf;
 
 int main() {
-  vector<vector<int>> map_tiles(MAP_HEIGHT, vector<int>(MAP_WIDTH));
+  vector<vector<int>> map_tiles(MAP_HEIGHT_FIRST, vector<int>(MAP_WIDTH_FIRST));
   vector<TileInfo> tiles(TILES_CNT);
   GetAllInformation(map_tiles, tiles);
 
@@ -26,7 +26,7 @@ int main() {
                                      static_cast<unsigned int>(height)), "Project228");
   view.reset(FloatRect(0, 0, width, height));
 
-  Player player("hulk.png", 1500, 1000, 100, 100, 100);
+  Player player("hulk.png", 1000, 1000, 100, 100, 100);
 
   Clock timer_for_animation_;
 
@@ -54,7 +54,7 @@ int main() {
           player.SetDirection(Direction::STAY);
         }
       }
-      player.Move(time / 1000);
+      player.Move(time / 1000, map_tiles);
     }
 
     view.setCenter(player.GetX(), player.GetY());

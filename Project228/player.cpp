@@ -33,9 +33,9 @@ void Player::SetDirection(Direction new_dir) {
   dir_ = new_dir;
 }
 
-void Player::Move(double time) {
+void Player::Move(double time, const std::vector<std::vector<int>>& map) {
   speed_ = 0.3;
-  cur_frame_ += 0.03 * time;
+  cur_frame_ += 0.01 * time;
   if (cur_frame_ > 4) {
     cur_frame_ -= 4;
   }
@@ -77,7 +77,18 @@ void Player::Move(double time) {
   coor_.y += direct_speed_.y * time;
   speed_ = 0;
 
-  sprite_->setPosition(static_cast<float>(coor_.x), static_cast<float>(coor_.y));
+  // проверяем, можем ли мы пойти в следующую клетку
+  int h = 54, w = (dir_ == Direction::N || dir_ == Direction::S) ? 36 : 22;
+  for (int i = coor_.y / 64; i < (coor_.y + h) / 64; ++i) {
+    for (int j = coor_.x / 64; j < (coor_.x + w) / 64; ++j) {
+      if (IsCantGo(map[i][j])) {
+        coor_.x -= direct_speed_.x * time;
+        coor_.y -= direct_speed_.y * time;
+      }
+    }
+  }
+
+  sprite_->setPosition(coor_.x, coor_.y);
 
   sprite_->setTextureRect(rectangle);
   last_rect_ = rectangle;
@@ -93,4 +104,8 @@ double Player::GetX() const {
 
 double Player::GetY() const {
   return coor_.y;
+}
+
+bool Player::IsCantGo(int type) {
+  return (type >= 31 && type <= 43);
 }

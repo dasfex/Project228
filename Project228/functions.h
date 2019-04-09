@@ -28,8 +28,8 @@ std::istream& operator>>(std::istream& in, TileInfo& x) {
 void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
                        std::vector<TileInfo>& tiles) {
   std::ifstream get_map("files/main_map.txt");
-  for (int i = 0; i < MAP_HEIGHT; ++i) {
-    for (int j = 0; j < MAP_WIDTH; ++j) {
+  for (int i = 0; i < MAP_HEIGHT_FIRST; ++i) {
+    for (int j = 0; j < MAP_WIDTH_FIRST; ++j) {
       get_map >> map_tiles[i][j];
     }
   }
@@ -45,8 +45,8 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
 void DrawMap(sf::RenderWindow* window,
              const std::vector<std::vector<int>>& map_types,
              const std::vector<TileInfo>& tiles, sf::Sprite& map) {
-  for (int i = 0; i < MAP_HEIGHT; ++i) {
-    for (int j = 0; j < MAP_WIDTH; ++j) {
+  for (int i = 0; i < MAP_HEIGHT_FIRST; ++i) {
+    for (int j = 0; j < MAP_WIDTH_FIRST; ++j) {
       int num = map_types[i][j] - 1;
       map.setTextureRect(sf::IntRect(tiles[num].x, tiles[num].y,
                                       tiles[num].width, tiles[num].height));
