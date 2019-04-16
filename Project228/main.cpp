@@ -5,50 +5,49 @@
 #include "player.h"
 #include "functions.h"
 
-using namespace std;
-using namespace sf;
+using std::vector;
 
 int main() {
   vector<vector<int>> map_tiles(MAP_HEIGHT_FIRST, vector<int>(MAP_WIDTH_FIRST));
   vector<TileInfo> tiles(TILES_CNT);
   GetAllInformation(map_tiles, tiles);
 
-  Image map_image;
+  sf::Image map_image;
   map_image.loadFromFile("img/map.png");
-  Texture map_texture;
+  sf::Texture map_texture;
   map_texture.loadFromImage(map_image);
-  Sprite map_sprite;
+  sf::Sprite map_sprite;
   map_sprite.setTexture(map_texture);
 
   int width = 2176, height = 1536;
-  View view;
-  RenderWindow main_window(VideoMode(static_cast<unsigned int>(width),
+  sf::View view;
+  sf::RenderWindow main_window(sf::VideoMode(static_cast<unsigned int>(width),
                                      static_cast<unsigned int>(height)), "Project228");
-  view.reset(FloatRect(0, 0, width, height));
+  view.reset(sf::FloatRect(0, 0, width, height));
 
-  Player player("hulk.png", 1000, 1000, 100, 100, 100);
+  Player player("hulk.png", 1700, 1900, 100, 100, 100);
 
-  Clock timer_for_animation_;
+  sf::Clock timer_for_animation_;
 
   while (main_window.isOpen()) {
     double time = timer_for_animation_.getElapsedTime().asMicroseconds();
     timer_for_animation_.restart();
 
-    Event event;
+    sf::Event event;
     while (main_window.pollEvent(event)) {
-      if (event.type == Event::Closed ||
-          Keyboard::isKeyPressed(Keyboard::Escape)) {
+      if (event.type == sf::Event::Closed ||
+          sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
         main_window.close();
       }
 
       if (player.IsAlive()) {
-        if (Keyboard::isKeyPressed(Keyboard::W)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
           player.SetDirection(Direction::N);
-        } else if (Keyboard::isKeyPressed(Keyboard::A)) {
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
           player.SetDirection(Direction::W);
-        } else if (Keyboard::isKeyPressed(Keyboard::S)) {
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
           player.SetDirection(Direction::S);
-        } else if (Keyboard::isKeyPressed(Keyboard::D)) {
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
           player.SetDirection(Direction::E);
         } else {
           player.SetDirection(Direction::STAY);
@@ -60,7 +59,7 @@ int main() {
     view.setCenter(player.GetX(), player.GetY());
     main_window.setView(view);
 
-    main_window.clear(Color(255, 255, 255));
+    main_window.clear(sf::Color(255, 255, 255));
 
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
 

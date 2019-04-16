@@ -6,9 +6,49 @@
 
 #IncludeRegexTransform: 
 
+D:/CLion projects/Project228/constants.h
+
+D:/CLion projects/Project228/functions.h
+iostream
+-
+fstream
+-
+main_headers.h
+D:/CLion projects/Project228/main_headers.h
+constants.h
+D:/CLion projects/Project228/constants.h
+
+D:/CLion projects/Project228/main.cpp
+iostream
+-
+vector
+-
+fstream
+-
+main_headers.h
+D:/CLion projects/Project228/main_headers.h
+player.h
+D:/CLion projects/Project228/player.h
+functions.h
+D:/CLion projects/Project228/functions.h
+
+D:/CLion projects/Project228/main_headers.h
+SFML/Audio.hpp
+-
+SFML/System.hpp
+-
+SFML/Network.hpp
+-
+SFML/Graphics.hpp
+-
+SFML/Window.hpp
+-
+
 D:/CLion projects/Project228/player.cpp
 player.h
 D:/CLion projects/Project228/player.h
+iostream
+-
 
 D:/CLion projects/Project228/player.h
 utility

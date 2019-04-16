@@ -67,6 +67,8 @@ class Player {
   double cur_frame_ = 0.0;
 
   bool IsCantGo(int);
+  bool CheckMap(double, double, double, int, int,
+                const std::vector<std::vector<int>>&);
 };
 
 #endif //PROJECT228_PLAYER_H
