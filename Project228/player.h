@@ -26,7 +26,7 @@ class Player {
 
   void SetDirection(Direction);
 
-  void Move(double, const std::vector<std::vector<int>>&);
+  void Move(double);
 
   sf::Sprite* GetSprite() const;
 
@@ -65,10 +65,6 @@ class Player {
   sf::IntRect last_rect_;
 
   double cur_frame_ = 0.0;
-
-  bool IsCantGo(int);
-  bool CheckMap(double, double, double, int, int,
-                const std::vector<std::vector<int>>&);
 };
 
 #endif //PROJECT228_PLAYER_H

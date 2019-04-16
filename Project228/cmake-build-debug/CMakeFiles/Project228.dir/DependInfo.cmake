@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/CLion projects/Project228/main.cpp" "D:/CLion projects/Project228/cmake-build-debug/CMakeFiles/Project228.dir/main.cpp.obj"
-  "D:/CLion projects/Project228/player.cpp" "D:/CLion projects/Project228/cmake-build-debug/CMakeFiles/Project228.dir/player.cpp.obj"
+  "C:/Users/artem/Project228/Project228/main.cpp" "C:/Users/artem/Project228/Project228/cmake-build-debug/CMakeFiles/Project228.dir/main.cpp.obj"
+  "C:/Users/artem/Project228/Project228/player.cpp" "C:/Users/artem/Project228/Project228/cmake-build-debug/CMakeFiles/Project228.dir/player.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
