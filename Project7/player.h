@@ -1,9 +1,9 @@
 #ifndef PROJECT228_PLAYER_H
 #define PROJECT228_PLAYER_H
 
+#include "main_headers.h"
+#include "useful.h"
 #include <utility>
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
 
 enum class Direction {
   N = 0, 
@@ -29,14 +29,6 @@ class Player {
   double GetY() const;
 
  private:
-  struct Coordinate {
-    double x;
-    double y;
-
-    Coordinate(double x, double y)
-        : x(x)
-        , y(y) {}
-  };
 
   int exp_ = 0;
   int health_;

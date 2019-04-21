@@ -24,12 +24,7 @@ int main() {
 	sf::RenderWindow main_window(sf::VideoMode(width, height), "Project228");
 	view.reset(sf::FloatRect(0, 0, width, height));
 
-	sf::Music music;//создаем объект музыки
-	if (!music.openFromFile("sound/track1.wav")) return 0;//загружаем файл
-	music.setLoop(true);
-	music.play();//
-
-	Player player("hulk.png", 1700, 1900, 100, 100, 100);
+	Player player("img/hulk.png", 1700, 1900, 100, 100, 100);
 
 	sf::Clock timer_for_animation_;
 
@@ -45,21 +40,7 @@ int main() {
 				main_window.close();
 			}
 			if (player.IsAlive()) {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-					player.SetDirection(Direction::N);
-				}
-				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-					player.SetDirection(Direction::W);
-				}
-				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-					player.SetDirection(Direction::S);
-				}
-				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-					player.SetDirection(Direction::E);
-				}
-				else {
-					player.SetDirection(Direction::STAY);
-				}
+				KeyboardTreatment(&player);
 			}
 			player.Move(time, map_tiles);
 		}

@@ -5,6 +5,7 @@
 #include <fstream>
 #include "main_headers.h"
 #include "constants.h"
+#include "player.h"
 
 struct TileInfo {
   int x;
@@ -49,6 +50,24 @@ void DrawMap(sf::RenderWindow* window,
       map.setPosition(j * TILE_SIZE, i * TILE_SIZE);
       window->draw(map);
     }
+  }
+}
+
+void KeyboardTreatment(Player* player) {
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+    player->SetDirection(Direction::N);
+  }
+  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+    player->SetDirection(Direction::W);
+  }
+  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+    player->SetDirection(Direction::S);
+  }
+  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+    player->SetDirection(Direction::E);
+  }
+  else {
+    player->SetDirection(Direction::STAY);
   }
 }
 
