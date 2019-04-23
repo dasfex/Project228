@@ -17,7 +17,6 @@ QuestHero::QuestHero(
   image_->loadFromFile(image_file_);
   image_->createMaskFromColor(sf::Color(255, 255, 255));
   texture_->loadFromImage(*image_);
-
   sprite_->setTexture(*texture_);
   sf::IntRect rect(coor_for_img_.first, coor_for_img_.second, size_for_img_.first, size_for_img_.second);
   sprite_->setTextureRect(rect);
@@ -29,7 +28,7 @@ QuestHero::QuestHero(
   getline(get_text_after_quest, text_after_quest_);
 }
 
-sf::Sprite* QuestHero::GetSprite() const {
+const sf::Sprite* QuestHero::GetSprite() const {
   return sprite_;
 }
 

@@ -34,8 +34,8 @@ int main() {
     auto time = timer_for_animation_.getElapsedTime().asMilliseconds();
     timer_for_animation_.restart();
 
-    sf::Event event;
-    vector<sf::Keyboard::Key> pressed_keys;  // for cheats
+    sf::Event event{};
+    vector<sf::Keyboard::Key> pressed_keys; // for cheats
     while (main_window.pollEvent(event)) {
       if (event.type == sf::Event::Closed ||
           sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {

@@ -23,7 +23,7 @@ class Player {
 
   void Move(int, const std::vector<std::vector<int>>&);
 
-  sf::Sprite* GetSprite() const;
+  const sf::Sprite* GetSprite() const;
 
   double GetX() const;
   double GetY() const;

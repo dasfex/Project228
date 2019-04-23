@@ -15,7 +15,7 @@ class QuestHero {
             const std::string&, const std::string&,
             const std::string&, int, int, int, int, int);
 
-  sf::Sprite* GetSprite() const;
+  const sf::Sprite* GetSprite() const;
 
   const std::string& GetText();
   int GetTreatment() const;

@@ -42,7 +42,7 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
   quest_heroes.reserve(HEROES_CNT);
   for (int i = 0; i < HEROES_CNT; ++i) {
     std::string folder_name(1, char(i + 1 + '0'));
-    std::ifstream get_info("heroes/" + folder_name + "/main.txt");
+    std::ifstream get_info("files/heroes/" + folder_name + "/main.txt");
 //    double x, double y,
 //    string file_img,
 //    string file_for_quest,

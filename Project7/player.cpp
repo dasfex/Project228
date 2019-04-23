@@ -85,7 +85,7 @@ void Player::Move(int time, const std::vector<std::vector<int>>& map) {
   last_rect_ = rectangle;
 }
 
-sf::Sprite* Player::GetSprite() const {
+const sf::Sprite* Player::GetSprite() const {
   return sprite_;
 }
 
