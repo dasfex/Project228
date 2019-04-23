@@ -3,6 +3,7 @@
 #ifndef PROJECT228_QUEST_HERO_H
 #define PROJECT228_QUEST_HERO_H
 
+#include <fstream>
 #include <string>
 #include <utility>
 #include "main_headers.h"
@@ -10,18 +11,25 @@
 
 class QuestHero {
  public:
-  QuestHero(double, double, const sf::String&, const sf::String&,
-            const sf::String&, int, int, int, int, int);
+  QuestHero(double, double,
+            const std::string&, const std::string&,
+            const std::string&, int, int, int, int, int);
 
   double GetX() const;
   double GetY() const;
 
+  sf::Sprite* GetSprite() const;
+
+  const std::string& GetText();
+  int GetTreatment() const;
+  int GetReward() const;
+
  private:
   Coordinate coor_;
 
-  sf::String image_file_;
-  sf::String file_for_quest_;
-  sf::String file_after_quest_;
+  std::string image_file_;
+  std::string file_for_quest_;
+  std::string file_after_quest_;
 
   int reward_exp_;
 
@@ -36,6 +44,8 @@ class QuestHero {
   std::string text_after_quest_ = "";
 
   bool is_quest_ready = false;
+
+  int treatment_cnt_ = 0;
 };
 
 #endif //PROJECT228_QUEST_HERO_H

@@ -4,13 +4,15 @@
 #include "main_headers.h"
 #include "player.h"
 #include "functions.h"
+#include "quest_hero.h"
 
 using std::vector;
 
 int main() {
 	vector<vector<int>> map_tiles(MAP_HEIGHT_FIRST, vector<int>(MAP_WIDTH_FIRST));
 	vector<TileInfo> tiles(TILES_CNT);
-	GetAllInformation(map_tiles, tiles);
+	vector<QuestHero> quest_heroes;
+	GetAllInformation(map_tiles, tiles, quest_heroes);
 
 	sf::Image map_image;
 	map_image.loadFromFile("img/map.png");

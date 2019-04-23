@@ -2,9 +2,9 @@
 
 QuestHero::QuestHero(
     double x, double y,
-    const sf::String& file_img,
-    const sf::String& file_for_quest,
-    const sf::String& file_after_quest,
+    const std::string& file_img,
+    const std::string& file_for_quest,
+    const std::string& file_after_quest,
     int reward, int x_img, int y_img,
     int width_img, int height_img)
     : coor_(x, y)
@@ -20,11 +20,14 @@ QuestHero::QuestHero(
   texture_->loadFromImage(*image_);
 
   sprite_->setTexture(*texture_);
-  sf::IntRect rect(coor_for_img_.first, coor_for_img_.second, size_for_img_.first, size_for_img_.second)
+  sf::IntRect rect(coor_for_img_.first, coor_for_img_.second, size_for_img_.first, size_for_img_.second);
   sprite_->setTextureRect(rect);
   sprite_->setPosition(coor_.x, coor_.y);
 
-  //ifstream get_text_for_quest(fil)
+  std::ifstream get_text_for_quest(file_for_quest_);
+  getline(get_text_for_quest, text_for_quest_);
+  std::ifstream get_text_after_quest(file_after_quest_);
+  getline(get_text_after_quest, text_after_quest_);
 }
 
 double QuestHero::GetX() const {
@@ -33,4 +36,25 @@ double QuestHero::GetX() const {
 
 double QuestHero::GetY() const {
   return coor_.y;
+}
+
+sf::Sprite* QuestHero::GetSprite() const {
+  return sprite_;
+}
+
+const std::string& QuestHero::GetText() {
+  if (!is_quest_ready) {
+    return text_for_quest_;
+  } else {
+    ++treatment_cnt_;
+    return text_after_quest_;
+  }
+}
+
+int QuestHero::GetTreatment() const {
+  return treatment_cnt_;
+}
+
+int QuestHero::GetReward() const {
+  return reward_exp_;
 }

@@ -6,6 +6,7 @@
 #include "main_headers.h"
 #include "constants.h"
 #include "player.h"
+#include "quest_hero.h"
 
 struct TileInfo {
   int x;
@@ -22,7 +23,8 @@ std::istream& operator>>(std::istream& in, TileInfo& x) {
 }
 
 void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
-                       std::vector<TileInfo>& tiles) {
+                       std::vector<TileInfo>& tiles,
+                       std::vector<QuestHero>& quest_heroes) {
   std::ifstream get_map("files/main_map.txt");
   for (int i = 0; i < MAP_HEIGHT_FIRST; ++i) {
     for (int j = 0; j < MAP_WIDTH_FIRST; ++j) {
@@ -36,6 +38,25 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
     get_tiles >> nom;
     get_tiles >> tile;
   }
+
+  quest_heroes.reserve(HEROES_CNT);
+  for (int i = 0; i < HEROES_CNT; ++i) {
+    std::string file_name(1, char(i + '0'));
+    std::ifstream get_info("heroes/" + file_name + ".txt");
+//    double x, double y,
+//    const sf::String& file_img,
+//    const sf::String& file_for_quest,
+//    const sf::String& file_after_quest,
+//    int reward, int x_img, int y_img,
+//    int width_img, int height_img
+    double x, y;
+    std::string img, for_quest, after_quest;
+    int reward, x_img, y_img, width, height;
+    get_info >> x >> y >> img >> for_quest >> after_quest >>
+             reward >> x_img >> y_img >> width >> height;
+    quest_heroes.emplace_back(x, y, img, for_quest, after_quest,
+                              reward, x_img, y_img, width, height);
+  }
 }
 
 void DrawMap(sf::RenderWindow* window,
@@ -45,7 +66,7 @@ void DrawMap(sf::RenderWindow* window,
     for (int j = 0; j < MAP_WIDTH_FIRST; ++j) {
       int num = map_types[i][j] - 1;
       map.setTextureRect(sf::IntRect(tiles[num].x, tiles[num].y,
-                                      tiles[num].width, tiles[num].height));
+                                     tiles[num].width, tiles[num].height));
 
       map.setPosition(j * TILE_SIZE, i * TILE_SIZE);
       window->draw(map);
@@ -56,17 +77,13 @@ void DrawMap(sf::RenderWindow* window,
 void KeyboardTreatment(Player* player) {
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
     player->SetDirection(Direction::N);
-  }
-  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
     player->SetDirection(Direction::W);
-  }
-  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
     player->SetDirection(Direction::S);
-  }
-  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
     player->SetDirection(Direction::E);
-  }
-  else {
+  } else {
     player->SetDirection(Direction::STAY);
   }
 }
