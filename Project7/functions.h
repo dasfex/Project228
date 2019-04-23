@@ -26,8 +26,8 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
                        std::vector<TileInfo>& tiles,
                        std::vector<QuestHero>& quest_heroes) {
   std::ifstream get_map("files/main_map.txt");
-  for (int i = 0; i < MAP_HEIGHT_FIRST; ++i) {
-    for (int j = 0; j < MAP_WIDTH_FIRST; ++j) {
+  for (int i = 0; i < MAP_HEIGHT; ++i) {
+    for (int j = 0; j < MAP_WIDTH; ++j) {
       get_map >> map_tiles[i][j];
     }
   }
@@ -41,19 +41,20 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
 
   quest_heroes.reserve(HEROES_CNT);
   for (int i = 0; i < HEROES_CNT; ++i) {
-    std::string file_name(1, char(i + '0'));
-    std::ifstream get_info("heroes/" + file_name + ".txt");
+    std::string folder_name(1, char(i + 1 + '0'));
+    std::ifstream get_info("heroes/" + folder_name + "/main.txt");
 //    double x, double y,
-//    const sf::String& file_img,
-//    const sf::String& file_for_quest,
-//    const sf::String& file_after_quest,
+//    string file_img,
+//    string file_for_quest,
+//    string file_after_quest,
 //    int reward, int x_img, int y_img,
 //    int width_img, int height_img
     double x, y;
-    std::string img, for_quest, after_quest;
+    std::string img = "files/heroes/" + folder_name + "/hero.png",
+        for_quest = "files/heroes/" + folder_name + "/for_quest.txt",
+        after_quest = "files/heroes/" + folder_name + "/after_quest.txt";
     int reward, x_img, y_img, width, height;
-    get_info >> x >> y >> img >> for_quest >> after_quest >>
-             reward >> x_img >> y_img >> width >> height;
+    get_info >> x >> y >> reward >> x_img >> y_img >> width >> height;
     quest_heroes.emplace_back(x, y, img, for_quest, after_quest,
                               reward, x_img, y_img, width, height);
   }
@@ -62,8 +63,8 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
 void DrawMap(sf::RenderWindow* window,
              const std::vector<std::vector<int>>& map_types,
              const std::vector<TileInfo>& tiles, sf::Sprite& map) {
-  for (int i = 0; i < MAP_HEIGHT_FIRST; ++i) {
-    for (int j = 0; j < MAP_WIDTH_FIRST; ++j) {
+  for (int i = 0; i < MAP_HEIGHT; ++i) {
+    for (int j = 0; j < MAP_WIDTH; ++j) {
       int num = map_types[i][j] - 1;
       map.setTextureRect(sf::IntRect(tiles[num].x, tiles[num].y,
                                      tiles[num].width, tiles[num].height));
@@ -85,6 +86,12 @@ void KeyboardTreatment(Player* player) {
     player->SetDirection(Direction::E);
   } else {
     player->SetDirection(Direction::STAY);
+  }
+}
+
+void DrawHeroes(sf::RenderWindow* window, const std::vector<QuestHero>& heroes) {
+  for (const auto& hero : heroes) {
+    window->draw(*hero.GetSprite());
   }
 }
 

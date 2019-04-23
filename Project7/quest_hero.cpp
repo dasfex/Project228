@@ -7,8 +7,7 @@ QuestHero::QuestHero(
     const std::string& file_after_quest,
     int reward, int x_img, int y_img,
     int width_img, int height_img)
-    : coor_(x, y)
-    , image_file_(file_img)
+    : image_file_(file_img)
     , file_for_quest_(file_for_quest)
     , file_after_quest_(file_after_quest)
     , reward_exp_(reward)
@@ -22,20 +21,12 @@ QuestHero::QuestHero(
   sprite_->setTexture(*texture_);
   sf::IntRect rect(coor_for_img_.first, coor_for_img_.second, size_for_img_.first, size_for_img_.second);
   sprite_->setTextureRect(rect);
-  sprite_->setPosition(coor_.x, coor_.y);
+  sprite_->setPosition(x, y);
 
   std::ifstream get_text_for_quest(file_for_quest_);
   getline(get_text_for_quest, text_for_quest_);
   std::ifstream get_text_after_quest(file_after_quest_);
   getline(get_text_after_quest, text_after_quest_);
-}
-
-double QuestHero::GetX() const {
-  return coor_.x;
-}
-
-double QuestHero::GetY() const {
-  return coor_.y;
 }
 
 sf::Sprite* QuestHero::GetSprite() const {
