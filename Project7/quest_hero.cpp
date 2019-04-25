@@ -7,7 +7,8 @@ QuestHero::QuestHero(
     const std::string& file_after_quest,
     int reward, int x_img, int y_img,
     int width_img, int height_img)
-    : image_file_(file_img)
+    : coor_(x, y)
+    , image_file_(file_img)
     , file_for_quest_(file_for_quest)
     , file_after_quest_(file_after_quest)
     , reward_exp_(reward)
@@ -32,7 +33,15 @@ const sf::Sprite* QuestHero::GetSprite() const {
   return sprite_;
 }
 
-const std::string& QuestHero::GetText() {
+double QuestHero::GetX() const {
+  return coor_.x;
+}
+
+double QuestHero::GetY() const {
+  return coor_.y;
+}
+
+std::string QuestHero::GetText() {
   if (!is_quest_ready) {
     return text_for_quest_;
   } else {
@@ -44,7 +53,6 @@ const std::string& QuestHero::GetText() {
 int QuestHero::GetTreatment() const {
   return treatment_cnt_;
 }
-
 int QuestHero::GetReward() const {
   return reward_exp_;
 }

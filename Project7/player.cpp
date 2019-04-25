@@ -34,7 +34,8 @@ void Player::SetDirection(Direction new_dir) {
   dir_ = new_dir;
 }
 
-void Player::Move(int time, const std::vector<std::vector<int>>& map) {
+void Player::Move(int time, const std::vector<std::vector<int>>& map,
+                  const std::vector<QuestHero>& heroes) {
   speed_ = 0.3;  // 0.3
   cur_frame_ += 0.01 * time;
   if (cur_frame_ > 4) {
@@ -78,7 +79,7 @@ void Player::Move(int time, const std::vector<std::vector<int>>& map) {
   coor_.y += direct_speed_.y * time;
 
   int h = 54, w = 30;  // 36?
-  CheckMap(time, coor_.x, coor_.y, h, w, map);
+  CheckMap(time, coor_.x, coor_.y, h, w, map, heroes);
 
   sprite_->setPosition(coor_.x, coor_.y);
   sprite_->setTextureRect(rectangle);
@@ -97,12 +98,33 @@ double Player::GetY() const {
   return coor_.y;
 }
 
-bool Player::IsCantGo(int type) {
-  return (type >= 31 && type <= 43);
+bool Player::IsCantGo(int type, const std::vector<QuestHero>& heroes) const {
+  if (type >= 31 && type <= 43) {
+    return true;
+  }
+//  for (int i = 0; i < HEROES_CNT; ++i) {
+//    int hero_x = ceil(heroes[i].GetX()) / TILE_SIZE;
+//    int hero_y = ceil(heroes[i].GetY()) / TILE_SIZE;
+//    int player_x = ceil(coor_.x) / TILE_SIZE;
+//    int player_y = ceil(coor_.y) / TILE_SIZE;
+//    if (hero_x == player_x) {
+//      if (hero_y == player_y + 1 ||
+//          hero_y == player_y - 1) {
+//        return true;
+//      }
+//    } else if (hero_y == player_y) {
+//      if (hero_x == player_x + 1 ||
+//          hero_x == player_x - 1) {
+//        return true;
+//      }
+//    }
+//  }
+  return false;
 }
 
 void Player::CheckMap(double time, double x, double y, int h, int w,
-                      const std::vector<std::vector<int>>& map) {
+                      const std::vector<std::vector<int>>& map,
+                      const std::vector<QuestHero>& heroes) {
   x = ceil(x);
   y = ceil(y);
   int left_i = y / TILE_SIZE;
@@ -111,7 +133,7 @@ void Player::CheckMap(double time, double x, double y, int h, int w,
   int right_j = (x + w) / TILE_SIZE;
   for (int i = left_i; i <= right_i; ++i) {
     for (int j = left_j; j <= right_j; ++j) {
-      if (!IsCantGo(map[i][j])) continue;
+      if (!IsCantGo(map[i][j], heroes)) continue;
       coor_.y -= direct_speed_.y * time;
       coor_.x -= direct_speed_.x * time;
       return;

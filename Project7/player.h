@@ -1,12 +1,13 @@
 #ifndef PROJECT228_PLAYER_H
 #define PROJECT228_PLAYER_H
 
+#include "quest_hero.h"
 #include "main_headers.h"
 #include "useful.h"
 #include <utility>
 
 enum class Direction {
-  N = 0, 
+  N = 0,
   E,
   S,
   W,
@@ -21,7 +22,8 @@ class Player {
 
   void SetDirection(Direction);
 
-  void Move(int, const std::vector<std::vector<int>>&);
+  void Move(int, const std::vector<std::vector<int>>&,
+            const std::vector<QuestHero>&);
 
   const sf::Sprite* GetSprite() const;
 
@@ -52,9 +54,10 @@ class Player {
 
   double cur_frame_ = 0.0;
 
-  bool IsCantGo(int);
+  bool IsCantGo(int, const std::vector<QuestHero>&) const;
   void CheckMap(double, double, double, int, int,
-                const std::vector<std::vector<int>>&);
+                const std::vector<std::vector<int>>&,
+                const std::vector<QuestHero>&);
 };
 
 #endif //PROJECT228_PLAYER_H

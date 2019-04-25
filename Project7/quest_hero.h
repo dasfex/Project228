@@ -16,12 +16,15 @@ class QuestHero {
             const std::string&, int, int, int, int, int);
 
   const sf::Sprite* GetSprite() const;
+  double GetX() const;
+  double GetY() const;
 
-  const std::string& GetText();
+  std::string GetText();
   int GetTreatment() const;
   int GetReward() const;
 
  private:
+  const Coordinate coor_;
 
   std::string image_file_;
   std::string file_for_quest_;
