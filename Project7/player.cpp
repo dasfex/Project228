@@ -36,8 +36,8 @@ void Player::SetDirection(Direction new_dir) {
 
 void Player::Move(int time, const std::vector<std::vector<int>>& map,
                   const std::vector<QuestHero>& heroes) {
-  speed_ = 0.3;  // 0.3
-  cur_frame_ += 0.01 * time;
+  speed_ = 0.27;  // 0.3
+  cur_frame_ += 0.009 * time;
   if (cur_frame_ > 4) {
     cur_frame_ -= 4;
   }
@@ -98,6 +98,30 @@ double Player::GetY() const {
   return coor_.y;
 }
 
+std::vector<std::string> Player::GetActiveQuests() const {
+  return active_quests_;
+}
+
+void Player::AddNewQuest(const std::string& new_quest) {
+  active_quests_.push_back(new_quest);
+}
+
+int Player::GetExp() const {
+  return exp_;
+}
+
+int Player::GetHealth() const {
+  return health_;
+}
+
+int Player::Attack() const {
+  return attack_;
+}
+
+int Player::GetDefense() const {
+  return defense_;
+}
+
 bool Player::IsCantGo(int type, const std::vector<QuestHero>& heroes) const {
   if (type >= 31 && type <= 43) {
     return true;
@@ -121,7 +145,6 @@ bool Player::IsCantGo(int type, const std::vector<QuestHero>& heroes) const {
 //  }
   return false;
 }
-
 void Player::CheckMap(double time, double x, double y, int h, int w,
                       const std::vector<std::vector<int>>& map,
                       const std::vector<QuestHero>& heroes) {

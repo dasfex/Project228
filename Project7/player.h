@@ -30,6 +30,14 @@ class Player {
   double GetX() const;
   double GetY() const;
 
+  std::vector<std::string> GetActiveQuests() const;
+  void AddNewQuest(const std::string&);
+
+  int GetExp() const;
+  int GetHealth() const;
+  int Attack() const;
+  int GetDefense() const;
+
  private:
 
   int exp_ = 0;
@@ -53,6 +61,8 @@ class Player {
   sf::IntRect last_rect_;
 
   double cur_frame_ = 0.0;
+
+  std::vector<std::string> active_quests_= {};
 
   bool IsCantGo(int, const std::vector<QuestHero>&) const;
   void CheckMap(double, double, double, int, int,

@@ -19,13 +19,25 @@ int main() {
   sf::Text text("", text_font, 25);
 
   std::pair<bool, std::string> is_text(false, "");
+  bool is_show_missions = false;
 
-  sf::Image map_image;
-  map_image.loadFromFile("img/map.png");
-  sf::Texture map_texture;
-  map_texture.loadFromImage(map_image);
   sf::Sprite map_sprite;
+  sf::Sprite quests_background;
+  //  я честно пытался обернуть нижний блок в функцию,
+  //  но sfml не любит, когда создают указатели на sf::Sprite,
+  //  а по ссылке передавать просто ничего не работает,
+  //  так что просто оставим так.
+  sf::Image map_img;
+  map_img.loadFromFile("img/map.png");
+  sf::Texture map_texture;
+  map_texture.loadFromImage(map_img);
   map_sprite.setTexture(map_texture);
+  map_img.loadFromFile("img/missions.png");
+  sf::Texture quests_background_texture;
+  quests_background_texture.loadFromImage(map_img);
+  quests_background.setTexture(quests_background_texture);
+  quests_background.setTextureRect(sf::IntRect(0, 0, 340, 510));
+  //  конец стрёмного блока
 
   int width = 2176, height = 1536;
   sf::View view;
@@ -48,7 +60,8 @@ int main() {
         main_window.close();
       }
       if (player.IsAlive()) {
-        KeyboardTreatment(&player, quest_heroes, &is_text, &text);
+        KeyboardTreatment(&player, quest_heroes, &is_text,
+                            &text, is_show_missions);
       }
       player.Move(time, map_tiles, quest_heroes);
     }
@@ -61,6 +74,10 @@ int main() {
 
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
     DrawHeroes(&main_window, quest_heroes);
+    DrawMainInfo(&main_window, &player, text_font);
+    if (is_show_missions) {
+      DrawMissions(&main_window, player, quests_background, text_font, is_show_missions);
+    }
 
     main_window.draw(*player.GetSprite());
     main_window.draw(text);
