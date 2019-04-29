@@ -40,8 +40,8 @@ void DrawMainInfo(sf::RenderWindow* window,
 //  sf::Text quests("QUESTS", font, 70);
 //  quests.setFillColor(sf::Color::Black);
 //  quests.setP
-  health.setPosition(player->GetX() - 700, player->GetY() - 450);
-  exp.setPosition(player->GetX() - 400, player->GetY() - 450);
+  health.setPosition(player->GetCoor() - sf::Vector2f(700, 450));
+  exp.setPosition(player->GetCoor() - sf::Vector2f(400, 450));
   window->draw(health);
   window->draw(exp);
 }
@@ -59,12 +59,11 @@ void DrawMissions(sf::RenderWindow* window, Player& player,
       text.setFillColor(sf::Color::Black);
     }
   }
-  quests_background.setPosition(player.GetX() - 600, player.GetY() - 300);
+  quests_background.setPosition(player.GetCoor() - sf::Vector2f(600, 300));
   window->draw(quests_background);
-  int x_coor = player.GetX() - 580;
-  int y_coor = player.GetY() - 270;
-  for (int i = 0; i < quests.size(); ++i, y_coor += 23) {
-    quests[i].setPosition(x_coor, y_coor);
+  sf::Vector2f coor = player.GetCoor() - sf::Vector2f(580, 270);
+  for (int i = 0; i < quests.size(); ++i, coor.y += 23) {
+    quests[i].setPosition(coor);
     window->draw(quests[i]);
   }
 }

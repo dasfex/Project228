@@ -46,42 +46,36 @@ void Player::Move(int time, const std::vector<std::vector<int>>& map,
   switch (dir_) {
     case Direction::kNorth: {
       rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 168, 36, 54);
-      direct_speed_.x = 0;
-      direct_speed_.y = -speed_;
+      direct_speed_ = sf::Vector2f(0, -speed_);
       break;
     }
     case Direction::kSouth: {
       rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 1, 36, 54);
-      direct_speed_.x = 0;
-      direct_speed_.y = speed_;
+      direct_speed_ = sf::Vector2f(0, speed_);
       break;
     }
     case Direction::kEast: {
       rectangle = sf::IntRect(7 + 40 * int(cur_frame_), 111, 22, 54);
-      direct_speed_.x = speed_;
-      direct_speed_.y = 0;
+      direct_speed_ = sf::Vector2f(speed_, 0);
       break;
     }
     case Direction::kWest: {
       rectangle = sf::IntRect(9 + 40 * int(cur_frame_), 56, 22, 54);
-      direct_speed_.x = -speed_;
-      direct_speed_.y = 0;
+      direct_speed_ = sf::Vector2f(-speed_, 0);
       break;
     }
     case Direction::kStay: {
       rectangle = last_rect_;
-      direct_speed_.x = 0;
-      direct_speed_.y = 0;
+      direct_speed_ = sf::Vector2f(0, 0);
       return;
     }
   }
-  coor_.x += direct_speed_.x * time;
-  coor_.y += direct_speed_.y * time;
+  coor_ += sf::Vector2f(direct_speed_.x * time, direct_speed_.y * time);
 
   int h = 54, w = 30;  // 36?
   CheckMap(time, coor_.x, coor_.y, h, w, map, heroes);
 
-  sprite_->setPosition(coor_.x, coor_.y);
+  sprite_->setPosition(coor_);
   sprite_->setTextureRect(rectangle);
   last_rect_ = rectangle;
 }
@@ -90,12 +84,8 @@ const sf::Sprite* Player::GetSprite() const {
   return sprite_;
 }
 
-double Player::GetX() const {
-  return coor_.x;
-}
-
-double Player::GetY() const {
-  return coor_.y;
+sf::Vector2f Player::GetCoor() const {
+  return coor_;
 }
 
 std::vector<std::string> Player::GetActiveQuests() const {
@@ -169,8 +159,7 @@ void Player::CheckMap(double time, double x, double y, int h, int w,
   for (int i = left_i; i <= right_i; ++i) {
     for (int j = left_j; j <= right_j; ++j) {
       if (!IsCantGo(map[i][j], heroes)) continue;
-      coor_.y -= direct_speed_.y * time;
-      coor_.x -= direct_speed_.x * time;
+      coor_ -= sf::Vector2f(direct_speed_.x * time, direct_speed_.y * time);
       return;
     }
   }

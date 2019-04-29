@@ -67,9 +67,9 @@ int main() {
       player.Move(time, map_tiles, quest_heroes);
     }
 
-    view.setCenter(player.GetX(), player.GetY());
+    view.setCenter(player.GetCoor());
     main_window.setView(view);
-    text.setPosition(view.getCenter().x - 500, view.getCenter().y + 300);
+    text.setPosition(view.getCenter() + sf::Vector2f(-700, 300));
 
     main_window.clear(sf::Color(255, 255, 255));
 

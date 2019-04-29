@@ -30,8 +30,8 @@ int FindHeroNear(const Player* player,
   for (int k = 0; k < HEROES_CNT; ++k) {
     int hero_x = ceil(heroes[k].GetX()) / TILE_SIZE;
     int hero_y = ceil(heroes[k].GetY()) / TILE_SIZE;
-    int player_y = ceil(player->GetY()) / TILE_SIZE;
-    int player_x = ceil(player->GetX()) / TILE_SIZE;
+    int player_y = ceil(player->GetCoor().y) / TILE_SIZE;
+    int player_x = ceil(player->GetCoor().x) / TILE_SIZE;
     if (abs(player_x - hero_x) <= 1 && abs(player_y - hero_y) <= 1) {
       return k;
     }
@@ -40,7 +40,7 @@ int FindHeroNear(const Player* player,
 }
 
 void MakeText(std::pair<bool, std::string>* is_text, sf::Text* text,
-              bool flag = false, std::string str = " ") {
+              bool flag = false, std::string str = "") {
   is_text->first = flag;
   is_text->second = str;
   text->setString(is_text->second);

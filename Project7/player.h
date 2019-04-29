@@ -28,8 +28,7 @@ class Player {
 
   const sf::Sprite* GetSprite() const;
 
-  double GetX() const;
-  double GetY() const;
+  sf::Vector2f GetCoor() const;
 
   std::vector<std::string> GetActiveQuests() const;
   void AddNewQuest(const std::string&);
@@ -48,8 +47,8 @@ class Player {
   int health_;
   bool is_alive_ = true;
 
-  Coordinate coor_;
-  Coordinate direct_speed_ = {0, 0};
+  sf::Vector2f coor_;
+  sf::Vector2f direct_speed_ = {0, 0};
   double speed_ = 0;
 
   Direction dir_ = Direction::kStay;
