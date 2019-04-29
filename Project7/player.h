@@ -4,14 +4,15 @@
 #include "quest_hero.h"
 #include "main_headers.h"
 #include "useful.h"
+#include <algorithm>
 #include <utility>
 
 enum class Direction {
-  N = 0,
-  E,
-  S,
-  W,
-  STAY // на месте
+  kNorth,
+  kEast,
+  kSouth,
+  kWest,
+  kStay // на месте
 };
 
 class Player {
@@ -32,11 +33,14 @@ class Player {
 
   std::vector<std::string> GetActiveQuests() const;
   void AddNewQuest(const std::string&);
+  void DeleteQuest(const std::string&);
 
   int GetExp() const;
   int GetHealth() const;
   int Attack() const;
   int GetDefense() const;
+
+  void AddExp(int);
 
  private:
 
@@ -48,7 +52,7 @@ class Player {
   Coordinate direct_speed_ = {0, 0};
   double speed_ = 0;
 
-  Direction dir_ = Direction::STAY;
+  Direction dir_ = Direction::kStay;
 
   int attack_;
   int defense_;

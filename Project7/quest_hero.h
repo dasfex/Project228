@@ -13,15 +13,22 @@ class QuestHero {
  public:
   QuestHero(double, double,
             const std::string&, const std::string&,
-            const std::string&, int, int, int, int, int);
+            const std::string&, const std::string&,
+            int, int, int, int, int, int);
 
   const sf::Sprite* GetSprite() const;
   double GetX() const;
   double GetY() const;
 
-  std::string GetText();
-  int GetTreatment() const;
-  int GetReward() const;
+  std::string GetText() const;
+  std::string GetTask() const;
+  bool IsQuestReady() const;
+
+  int GiveReward();
+
+  void SetQuestReady();
+
+  int GetPassedQuest() const;
 
  private:
   const Coordinate coor_;
@@ -29,6 +36,7 @@ class QuestHero {
   std::string image_file_;
   std::string file_for_quest_;
   std::string file_after_quest_;
+  std::string file_for_quest_text_;
 
   int reward_exp_;
 
@@ -41,10 +49,14 @@ class QuestHero {
 
   std::string text_for_quest_ = "";
   std::string text_after_quest_ = "";
+  std::string task_text_ = "";
 
-  bool is_quest_ready = false;
+  bool is_quest_ready_ = false;
+  bool is_exp_given_ = false;
 
-  int treatment_cnt_ = 0;
+  //  хранит номер квеста, который завершает данный герой
+  //  если таковой имеется
+  int passed_quest_;
 };
 
 #endif //PROJECT228_QUEST_HERO_H

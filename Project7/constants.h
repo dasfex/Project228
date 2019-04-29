@@ -6,6 +6,6 @@ const int MAP_HEIGHT = 47;
 const int TILES_CNT = 45;
 const int TILE_SIZE = 64;
 
-const int HEROES_CNT = 2;
+const int HEROES_CNT = 3;
 
 #endif  // PROJECT228_CONSTANTS_H

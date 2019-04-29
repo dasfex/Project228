@@ -3,6 +3,7 @@
 #include <fstream>
 #include <chrono>
 #include <thread>
+#include "draw.h"
 #include "main_headers.h"
 #include "player.h"
 #include "functions.h"

@@ -88,11 +88,14 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
     double x, y;
     std::string img = "files/heroes/" + folder_name + "/hero.png",
         for_quest = "files/heroes/" + folder_name + "/for_quest.txt",
-        after_quest = "files/heroes/" + folder_name + "/after_quest.txt";
-    int reward, x_img, y_img, width, height;
-    get_info >> x >> y >> reward >> x_img >> y_img >> width >> height;
-    quest_heroes.emplace_back(x, y, img, for_quest, after_quest,
-                              reward, x_img, y_img, width, height);
+        after_quest = "files/heroes/" + folder_name + "/after_quest.txt",
+        quest_text = "files/heroes/" + folder_name + "/quest_text.txt";
+    int reward, x_img, y_img, width, height, passed_quest;
+    get_info >> x >> y >> reward >> x_img >> y_img >>
+             width >> height >> passed_quest;
+    quest_heroes.emplace_back(x, y, img, for_quest, after_quest, quest_text,
+                              reward, x_img, y_img, width,
+                              height, passed_quest);
   }
 
   font->loadFromFile("files/Samson.ttf");
@@ -103,100 +106,62 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
                        sf::Text* text, bool& is_show_missions) {
   int hero_ind = FindHeroNear(player, heroes);
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-    player->SetDirection(Direction::N);
+    player->SetDirection(Direction::kNorth);
     if (hero_ind == HEROES_CNT) {
       MakeText(is_text, text);
     }
     is_show_missions = false;
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-    player->SetDirection(Direction::W);
+    player->SetDirection(Direction::kWest);
     if (hero_ind == HEROES_CNT) {
       MakeText(is_text, text);
     }
     is_show_missions = false;
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-    player->SetDirection(Direction::S);
+    player->SetDirection(Direction::kSouth);
     if (hero_ind == HEROES_CNT) {
       MakeText(is_text, text);
     }
     is_show_missions = false;
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-    player->SetDirection(Direction::E);
+    player->SetDirection(Direction::kEast);
     if (hero_ind == HEROES_CNT) {
       MakeText(is_text, text);
     }
     is_show_missions = false;
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
-    player->SetDirection(Direction::STAY);
+    player->SetDirection(Direction::kStay);
     if (hero_ind < HEROES_CNT) {
       MakeText(is_text, text, true, heroes[hero_ind].GetText());
       std::vector<std::string> active_quests = player->GetActiveQuests();
-      if (!Find(active_quests, is_text->second)) {
-        player->AddNewQuest(is_text->second);
+      if (heroes[hero_ind].IsQuestReady() &&
+          heroes[hero_ind].GetPassedQuest() == 0) {
+        MakeText(is_text, text, true, heroes[hero_ind].GetText());
+        player->AddExp(heroes[hero_ind].GiveReward());
+        player->DeleteQuest(heroes[hero_ind].GetTask());
+        return;
+      }
+      if (heroes[hero_ind].IsQuestReady() &&
+          heroes[hero_ind].GetPassedQuest() != 0) {
+        MakeText(is_text, text, true, heroes[hero_ind].GetText());
+        return;
+      }
+      if (heroes[hero_ind].GetPassedQuest() == 0) {
+        if (!Find(active_quests, heroes[hero_ind].GetTask())) {
+          player->AddNewQuest(heroes[hero_ind].GetTask());
+        }
+      } else {
+        heroes[hero_ind].SetQuestReady();
+        heroes[heroes[hero_ind].GetPassedQuest() - 1].SetQuestReady();
       }
     }
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
     is_show_missions = true;
-   // player->SetDirection(Direction::STAY);
   } else {
-    player->SetDirection(Direction::STAY);
+    player->SetDirection(Direction::kStay);
     if (hero_ind == HEROES_CNT) {
       MakeText(is_text, text);
     }
-  }
-}
-
-void DrawHeroes(sf::RenderWindow* window, const std::vector<QuestHero>& heroes) {
-  for (const auto& hero : heroes) {
-    window->draw(*hero.GetSprite());
-  }
-}
-
-void DrawMap(sf::RenderWindow* window,
-             const std::vector<std::vector<int>>& map_types,
-             const std::vector<TileInfo>& tiles, sf::Sprite& map) {
-  for (int i = 0; i < MAP_HEIGHT; ++i) {
-    for (int j = 0; j < MAP_WIDTH; ++j) {
-      int num = map_types[i][j] - 1;
-      map.setTextureRect(sf::IntRect(tiles[num].x, tiles[num].y,
-                                     tiles[num].width, tiles[num].height));
-
-      map.setPosition(j * TILE_SIZE, i * TILE_SIZE);
-      window->draw(map);
-    }
-  }
-}
-
-void DrawMainInfo(sf::RenderWindow* window, Player* player, const sf::Font& font) {
-  sf::Text health("Health: " + std::to_string(player->GetHealth()), font, 50);
-  sf::Text exp("Exp: " + std::to_string(player->GetExp()), font, 50);
-  health.setColor(sf::Color::Black);
-  exp.setColor(sf::Color::Black);
-  health.setPosition(player->GetX() - 700, player->GetY() - 450);
-  exp.setPosition(player->GetX() - 400, player->GetY() - 450);
-  window->draw(health);
-  window->draw(exp);
-}
-
-void DrawMissions(sf::RenderWindow* window, Player& player,
-                  sf::Sprite& quests_background, const sf::Font& font, bool is_show_missions) {
-  std::vector<std::string> active_quests = player.GetActiveQuests();
-  std::vector<sf::Text> quests(active_quests.size(), sf::Text("", font, 20));
-  for (int i = 0; i < quests.size(); ++i) {
-    sf::Text& text = quests[i];
-    text.setString("");
-    if (is_show_missions) {
-      text.setString(active_quests[i]);
-      text.setColor(sf::Color::Black);
-    }
-  }
-  quests_background.setPosition(player.GetX() - 600, player.GetY() - 300);
-  window->draw(quests_background);
-  int x_coor = player.GetX() - 580;
-  int y_coor = player.GetY() - 270;
-  for (int i = 0; i < quests.size(); ++i, y_coor += 23) {
-    quests[i].setPosition(x_coor, y_coor);
-    window->draw(quests[i]);
   }
 }
 

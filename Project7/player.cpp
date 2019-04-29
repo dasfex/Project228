@@ -44,31 +44,31 @@ void Player::Move(int time, const std::vector<std::vector<int>>& map,
 
   sf::IntRect rectangle;
   switch (dir_) {
-    case Direction::N: {
+    case Direction::kNorth: {
       rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 168, 36, 54);
       direct_speed_.x = 0;
       direct_speed_.y = -speed_;
       break;
     }
-    case Direction::S: {
+    case Direction::kSouth: {
       rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 1, 36, 54);
       direct_speed_.x = 0;
       direct_speed_.y = speed_;
       break;
     }
-    case Direction::E: {
+    case Direction::kEast: {
       rectangle = sf::IntRect(7 + 40 * int(cur_frame_), 111, 22, 54);
       direct_speed_.x = speed_;
       direct_speed_.y = 0;
       break;
     }
-    case Direction::W: {
+    case Direction::kWest: {
       rectangle = sf::IntRect(9 + 40 * int(cur_frame_), 56, 22, 54);
       direct_speed_.x = -speed_;
       direct_speed_.y = 0;
       break;
     }
-    case Direction::STAY: {
+    case Direction::kStay: {
       rectangle = last_rect_;
       direct_speed_.x = 0;
       direct_speed_.y = 0;
@@ -106,6 +106,14 @@ void Player::AddNewQuest(const std::string& new_quest) {
   active_quests_.push_back(new_quest);
 }
 
+void Player::DeleteQuest(const std::string& quest) {
+  auto it = std::find(begin(active_quests_),
+                      end(active_quests_), quest);
+  if (it != end(active_quests_)) {
+    active_quests_.erase(it);
+  }
+}
+
 int Player::GetExp() const {
   return exp_;
 }
@@ -120,6 +128,10 @@ int Player::Attack() const {
 
 int Player::GetDefense() const {
   return defense_;
+}
+
+void Player::AddExp(int exp) {
+  exp_ += exp;
 }
 
 bool Player::IsCantGo(int type, const std::vector<QuestHero>& heroes) const {
