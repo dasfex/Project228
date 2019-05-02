@@ -18,6 +18,8 @@ int main() {
   sf::Font text_font;
   GetAllInformation(map_tiles, tiles, quest_heroes, &text_font);
   sf::Text text("", text_font, 25);
+  std::pair<bool, sf::Text> get_exp_text =
+      std::make_pair(false, sf::Text("", text_font, 25));
 
   std::pair<bool, std::string> is_text(false, "");
   bool is_show_missions = false;
@@ -62,7 +64,7 @@ int main() {
       }
       if (player.IsAlive()) {
         KeyboardTreatment(&player, quest_heroes, &is_text,
-                            &text, is_show_missions);
+                            &text, &get_exp_text, is_show_missions);
       }
       player.Move(time, map_tiles, quest_heroes);
     }
@@ -78,6 +80,9 @@ int main() {
     DrawMainInfo(&main_window, &player, text_font);
     if (is_show_missions) {
       DrawMissions(&main_window, player, quests_background, text_font, is_show_missions);
+    }
+    if (get_exp_text.first) {
+      DrawExp(&main_window, player, &get_exp_text);
     }
 
     main_window.draw(*player.GetSprite());
