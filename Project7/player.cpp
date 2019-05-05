@@ -36,7 +36,7 @@ void Player::SetDirection(Direction new_dir) {
 
 void Player::Move(int time, const std::vector<std::vector<int>>& map,
                   const std::vector<QuestHero>& heroes) {
-  speed_ = 0.27;  // 0.3
+  speed_ = 0.27;  // 0.27
   cur_frame_ += 0.009 * time;
   if (cur_frame_ > 4) {
     cur_frame_ -= 4;

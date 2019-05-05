@@ -47,7 +47,7 @@ int main() {
   sf::RenderWindow main_window(sf::VideoMode(width, height), "Project228");
   view.reset(sf::FloatRect(0, 0, width, height));
 
-  Player player("img/hulk.png", 1600, 2500, 100, 100, 100);
+  Player player("img/hulk.png", 1600, 2500, 100, 100, 100);   //  1600 2500
 
   sf::Clock timer_for_animation_;
 

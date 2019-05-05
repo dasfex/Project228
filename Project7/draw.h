@@ -11,6 +11,9 @@
 void DrawHeroes(sf::RenderWindow* window,
                 const std::vector<QuestHero>& heroes) {
   for (const auto& hero : heroes) {
+    if (!hero.IsHeroExist()) {
+      continue;
+    }
     window->draw(*hero.GetSprite());
   }
 }

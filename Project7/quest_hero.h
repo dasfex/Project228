@@ -14,7 +14,7 @@ class QuestHero {
   QuestHero(double, double,
             const std::string&, const std::string&,
             const std::string&, const std::string&,
-            int, int, int, int, int, int);
+            int, int, int, int, int, int, bool, bool);
 
   const sf::Sprite* GetSprite() const;
   double GetX() const;
@@ -23,6 +23,7 @@ class QuestHero {
   std::string GetText() const;
   std::string GetTask() const;
   bool IsQuestReady() const;
+  bool IsHeroExist() const;
 
   int GiveReward();
 
@@ -57,6 +58,14 @@ class QuestHero {
   //  хранит номер квеста, который завершает данный герой
   //  если таковой имеется
   int passed_quest_;
+
+  //  нужно ли менять картинку после выполнения квеста
+  bool is_change_img_;
+  //  файл с новыми координатами для новой картинки
+  std::string file_new_coor_ = "newcoor.txt";
+  //  нужно ли пропасть после окончания квеста
+  bool is_need_to_disappear_;
+  bool is_exist_ = true;
 };
 
 #endif //PROJECT228_QUEST_HERO_H

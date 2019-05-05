@@ -29,6 +29,9 @@ int FindHeroNear(const Player* player,
                  const std::vector<QuestHero>& heroes) {
   int h = 56, w = 30;  // размеры Халка
   for (int k = 0; k < HEROES_CNT; ++k) {
+    if (!heroes[k].IsHeroExist()) {
+      continue;
+    }
     int hero_x = ceil(heroes[k].GetX()) / TILE_SIZE;
     int hero_y = ceil(heroes[k].GetY()) / TILE_SIZE;
     int player_y = ceil(player->GetCoor().y) / TILE_SIZE;
@@ -92,11 +95,12 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
         after_quest = "files/heroes/" + folder_name + "/after_quest.txt",
         quest_text = "files/heroes/" + folder_name + "/quest_text.txt";
     int reward, x_img, y_img, width, height, passed_quest;
+    bool is_change_img, is_disappear;
     get_info >> x >> y >> reward >> x_img >> y_img >>
-             width >> height >> passed_quest;
+             width >> height >> passed_quest >> is_change_img >> is_disappear;
     quest_heroes.emplace_back(x, y, img, for_quest, after_quest, quest_text,
-                              reward, x_img, y_img, width,
-                              height, passed_quest);
+                              reward, x_img, y_img, width, height,
+                              passed_quest, is_change_img, is_disappear);
   }
 
   font->loadFromFile("files/Samson.ttf");
