@@ -1,33 +1,43 @@
-//
-// Created by pmetl on 06.05.2019.
-//
-
 #include "attack.h"
-#include "iostream"
-Bullet::Bullet(Player* player) : attack_value(player->Attack()), lifetime_(5),
-                                 direction(player->GetDirection()),
-                                 player_(player) {
-  bullet_image_.loadFromFile("img/bullet.png");
-  bullet_image_.createMaskFromColor(sf::Color(0, 0, 0));
-  sprite_ = new sf::Sprite;
+
+Bullet::Bullet()
+    : lifetime_(5) {
+  image_->loadFromFile("img/bullet.jpg");
+  image_->createMaskFromColor(sf::Color(0, 0, 0));
+  texture_->loadFromImage(*image_);
+  sprite_->setTexture(*texture_);
+  sprite_->setTextureRect(sf::IntRect(0, 0, img_size_.x, img_size_.y));
 }
-void Bullet::hit(Player* player) {
-  player->SetHealth(-attack_value + player->GetDefense() / 2);
-  delete this;
-}
-sf::Sprite* Bullet::GetSprite() {
+
+sf::Sprite* Bullet::GetSprite() const {
   return sprite_;
 }
-Bullet::Bullet(Player player) : attack_value(player.Attack()), lifetime_(5),
-                                direction(player.GetDirection()) {
-  bullet_image_.loadFromFile("img/bullet.png");
-  bullet_image_.createMaskFromColor(sf::Color(0, 0, 0));
-  sprite_ = new sf::Sprite;
-  player_ = &player;
+
+sf::Vector2f Bullet::GetCoor() const {
+  return coor_;
 }
+
 Bullet::~Bullet() {
-  player_->SetBullet();
-  std::cout <<"delete bullert"<< std::endl;
-};
+  delete image_;
+  delete texture_;
+  delete sprite_;
+}
+sf::Vector2f Bullet::GetNewCoor(sf::Vector2f coor,
+                                Direction dir, int dif) const {
+  switch (dir) {
+    case Direction::kNorth: {
+      return coor - sf::Vector2f(0, dif);
+    }
+    case Direction::kEast: {
+      return coor + sf::Vector2f(dif, 0);
+    }
+    case Direction::kSouth: {
+      return coor + sf::Vector2f(0, dif);
+    }
+    case Direction::kWest: {
+      return coor - sf::Vector2f(dif, 0);
+    }
+  }
+}
 
 

@@ -1,36 +1,32 @@
-//
-// Created by pmetl on 06.05.2019.
-//
-
 #ifndef PROJECT228_ATTACK_H
 #define PROJECT228_ATTACK_H
 
-#include "player.h"
+#include "useful.h"
 
 class Bullet {
  public:
 
-  explicit Bullet(Player* player);
-  explicit Bullet(Player player);
-  void hit(Player* player);
-  sf::Sprite* GetSprite();
+  Bullet();
+
+  sf::Sprite* GetSprite() const;
+  sf::Vector2f GetCoor() const;
+  sf::Vector2f GetNewCoor(sf::Vector2f, Direction, int) const;
+
   ~Bullet();
 
  private:
 
   int attack_value;
   int lifetime_;
-  int coordinate_x;
-  int coordinate_y;
+  sf::Vector2f coor_ = sf::Vector2f(0, 0);
 
-  const int weight = 16;
-  const int height = 16;
-  sf::Image bullet_image_;
+  const sf::Vector2i img_size_ = sf::Vector2i(16, 16);
 
-  const Direction direction;
+  sf::Image* image_ = new sf::Image;
+  sf::Texture* texture_ = new sf::Texture;
+  sf::Sprite* sprite_ = new sf::Sprite;
 
-  sf::Sprite* sprite_;
-  Player* player_;
+  Direction direction;
 };
 
 #endif //PROJECT228_ATTACK_H

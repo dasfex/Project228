@@ -1,20 +1,13 @@
 #ifndef PROJECT228_PLAYER_H
 #define PROJECT228_PLAYER_H
 
+#include "attack.h"
 #include "quest_hero.h"
 #include "main_headers.h"
 #include "useful.h"
 #include <algorithm>
 #include <cmath>
 #include <utility>
-
-enum class Direction {
-  kNorth,
-  kEast,
-  kSouth,
-  kWest,
-  kStay // на месте
-};
 
 class Player {
  public:
@@ -39,13 +32,15 @@ class Player {
   int GetHealth() const;
   int Attack() const;
   int GetDefense() const;
+  Bullet* GetBullet();
 
   void SetHealth(int);
-  Direction GetDirection();
+  Direction GetDirection() const;
+  Direction GetLastDirection() const;
 
-  void SetBullet();
-  bool GetBullet();
   void AddExp(int);
+
+  ~Player();
 
  private:
 
@@ -58,6 +53,7 @@ class Player {
   double speed_ = 0;
 
   Direction dir_ = Direction::kStay;
+  Direction last_dir_ = Direction::kStay;
 
   int attack_;
   int defense_;
@@ -73,7 +69,7 @@ class Player {
 
   std::vector<std::string> active_quests_= {};
 
-  bool active_bullet = false;
+  Bullet* bullet_ = new Bullet;
 
   bool IsCantGo(int, const std::vector<QuestHero>&) const;
   void CheckMap(double, double, double, int, int,

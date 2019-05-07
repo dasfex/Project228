@@ -30,6 +30,9 @@ int FindHeroNear(const Player* player,
                  const std::vector<QuestHero>& heroes) {
   int h = 56, w = 30;  // размеры Халка
   for (int k = 0; k < HEROES_CNT; ++k) {
+	if (!heroes[k].IsHeroExist()) {
+      continue;
+    }
     int hero_x = ceil(heroes[k].GetX()) / TILE_SIZE;
     int hero_y = ceil(heroes[k].GetY()) / TILE_SIZE;
     int player_y = ceil(player->GetCoor().y) / TILE_SIZE;
@@ -93,11 +96,12 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
         after_quest = "files/heroes/" + folder_name + "/after_quest.txt",
         quest_text = "files/heroes/" + folder_name + "/quest_text.txt";
     int reward, x_img, y_img, width, height, passed_quest;
+    bool is_change_img, is_disappear;
     get_info >> x >> y >> reward >> x_img >> y_img >>
-             width >> height >> passed_quest;
+             width >> height >> passed_quest >> is_change_img >> is_disappear;
     quest_heroes.emplace_back(x, y, img, for_quest, after_quest, quest_text,
-                              reward, x_img, y_img, width,
-                              height, passed_quest);
+                              reward, x_img, y_img, width, height,
+                              passed_quest, is_change_img, is_disappear);
   }
 
   font->loadFromFile("files/Samson.ttf");
@@ -105,7 +109,8 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
 
 void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
                        std::pair<bool, std::string>* is_text,
-                       sf::Text* text, bool& is_show_missions) {
+                       sf::Text* text, std::pair<bool, sf::Text>* exp_text,
+                       bool& is_show_missions, bool& is_show_bullet) {
   int hero_ind = FindHeroNear(player, heroes);
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
     player->SetDirection(Direction::kNorth);
@@ -139,7 +144,12 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
       if (heroes[hero_ind].IsQuestReady() &&
           heroes[hero_ind].GetPassedQuest() == 0) {
         MakeText(is_text, text, true, heroes[hero_ind].GetText());
-        player->AddExp(heroes[hero_ind].GiveReward());
+        exp_text->first = true;
+        int exp = heroes[hero_ind].GiveReward();
+        if (exp != 0) {
+          exp_text->second.setString(std::to_string(exp));
+          player->AddExp(exp);
+        }
         player->DeleteQuest(heroes[hero_ind].GetTask());
         return;
       }
@@ -160,7 +170,7 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
     is_show_missions = true;
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
-    player->SetBullet();
+    is_show_bullet = true;
   } else {
     player->SetDirection(Direction::kStay);
     if (hero_ind == HEROES_CNT) {

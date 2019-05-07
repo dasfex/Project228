@@ -18,9 +18,12 @@ int main() {
   sf::Font text_font;
   GetAllInformation(map_tiles, tiles, quest_heroes, &text_font);
   sf::Text text("", text_font, 25);
+  std::pair<bool, sf::Text> get_exp_text =
+      std::make_pair(false, sf::Text("", text_font, 25));
 
   std::pair<bool, std::string> is_text(false, "");
   bool is_show_missions = false;
+  bool is_show_bullet = false;
   sf::Sprite map_sprite;
   sf::Sprite quests_background;
   //  я честно пытался обернуть нижний блок в функцию,
@@ -44,7 +47,7 @@ int main() {
   sf::RenderWindow main_window(sf::VideoMode(width, height), "Project228");
   view.reset(sf::FloatRect(0, 0, width, height));
 
-  Player player("img/hulk.png", 1900, 1900, 100, 100, 100);
+  Player player("img/hulk.png", 1600, 2500, 100, 100, 100); //  1600 2500
 
   sf::Clock timer_for_animation_;
 
@@ -61,7 +64,8 @@ int main() {
       }
       if (player.IsAlive()) {
         KeyboardTreatment(&player, quest_heroes, &is_text,
-                            &text, is_show_missions);
+                          &text, &get_exp_text,
+                          is_show_missions, is_show_bullet);
       }
       player.Move(time, map_tiles, quest_heroes);
     }
@@ -76,10 +80,17 @@ int main() {
     DrawHeroes(&main_window, quest_heroes);
     DrawMainInfo(&main_window, &player, text_font);
     if (is_show_missions) {
-      DrawMissions(&main_window, player, quests_background, text_font, is_show_missions);
+      DrawMissions(&main_window,
+                   player,
+                   quests_background,
+                   text_font,
+                   is_show_missions);
     }
-    if(player.GetBullet()){
-      DrawBullet(&main_window,new Bullet(player));
+    if (get_exp_text.first) {
+      DrawExp(&main_window, player, &get_exp_text);
+    }
+    if (is_show_bullet) {
+      DrawBullet(&main_window, &player, is_show_bullet);
     }
     main_window.draw(*player.GetSprite());
     main_window.draw(text);
