@@ -36,7 +36,7 @@ void Player::SetDirection(Direction new_dir) {
 
 void Player::Move(int time, const std::vector<std::vector<int>>& map,
                   const std::vector<QuestHero>& heroes) {
-  speed_ = 0.27;  // 0.27
+  speed_ = 2.54;  // 0.3
   cur_frame_ += 0.009 * time;
   if (cur_frame_ > 4) {
     cur_frame_ -= 4;
@@ -163,4 +163,16 @@ void Player::CheckMap(double time, double x, double y, int h, int w,
       return;
     }
   }
+}
+void Player::SetHealth(int add_health) {
+  health_ += add_health;
+}
+Direction Player::GetDirection() {
+  return dir_;
+}
+void Player::SetBullet() {
+  active_bullet = !active_bullet;
+}
+bool Player::GetBullet() {
+  return active_bullet;
 }

@@ -5,6 +5,7 @@
 #include "main_headers.h"
 #include "useful.h"
 #include <algorithm>
+#include <cmath>
 #include <utility>
 
 enum class Direction {
@@ -39,6 +40,11 @@ class Player {
   int Attack() const;
   int GetDefense() const;
 
+  void SetHealth(int);
+  Direction GetDirection();
+
+  void SetBullet();
+  bool GetBullet();
   void AddExp(int);
 
  private:
@@ -66,6 +72,8 @@ class Player {
   double cur_frame_ = 0.0;
 
   std::vector<std::string> active_quests_= {};
+
+  bool active_bullet = false;
 
   bool IsCantGo(int, const std::vector<QuestHero>&) const;
   void CheckMap(double, double, double, int, int,

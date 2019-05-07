@@ -11,11 +11,12 @@
 void DrawHeroes(sf::RenderWindow* window,
                 const std::vector<QuestHero>& heroes) {
   for (const auto& hero : heroes) {
-    if (!hero.IsHeroExist()) {
-      continue;
-    }
     window->draw(*hero.GetSprite());
   }
+}
+
+void DrawBullet(sf::RenderWindow* window, Bullet* bullet){
+  window->draw(*bullet->GetSprite());
 }
 
 void DrawMap(sf::RenderWindow* window,
@@ -69,20 +70,6 @@ void DrawMissions(sf::RenderWindow* window, Player& player,
     quests[i].setPosition(coor);
     window->draw(quests[i]);
   }
-}
-
-void DrawExp(sf::RenderWindow* window, Player& player,
-    std::pair<bool, sf::Text>* get_exp_text) {
-  static int draw_cnt = 0;
-  ++draw_cnt;
-  static int dif = 20;
-  get_exp_text->second.setPosition(player.GetCoor() - sf::Vector2f(0, dif));
-  dif += 1;
-  if (draw_cnt == 200) {
-    draw_cnt = 0;
-    get_exp_text->first = false;
-  }
-  window->draw(get_exp_text->second);
 }
 
 #endif //NEWPROJECT228_DRAW_H
