@@ -24,6 +24,7 @@ class QuestHero {
   std::string GetTask() const;
   bool IsQuestReady() const;
   bool IsHeroExist() const;
+  bool IsExpGiven() const;
 
   int GiveReward();
 

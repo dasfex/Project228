@@ -111,6 +111,9 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
                        std::pair<bool, std::string>* is_text,
                        sf::Text* text, std::pair<bool, sf::Text>* exp_text,
                        bool& is_show_missions, bool& is_show_bullet) {
+  if (is_show_bullet) {
+    return;
+  }
   int hero_ind = FindHeroNear(player, heroes);
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
     player->SetDirection(Direction::kNorth);
@@ -142,13 +145,17 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
       MakeText(is_text, text, true, heroes[hero_ind].GetText());
       std::vector<std::string> active_quests = player->GetActiveQuests();
       if (heroes[hero_ind].IsQuestReady() &&
-          heroes[hero_ind].GetPassedQuest() == 0) {
+          heroes[hero_ind].GetPassedQuest() == 0 &&
+          !heroes[hero_ind].IsExpGiven()) {
         MakeText(is_text, text, true, heroes[hero_ind].GetText());
         exp_text->first = true;
         int exp = heroes[hero_ind].GiveReward();
+        std::cout << exp << std::endl;
         if (exp != 0) {
           exp_text->second.setString(std::to_string(exp));
           player->AddExp(exp);
+        } else if (!is_text->first) {
+          exp_text->second.setString("");
         }
         player->DeleteQuest(heroes[hero_ind].GetTask());
         return;
@@ -170,6 +177,7 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
     is_show_missions = true;
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
+    player->SetDirection(Direction::kStay);
     is_show_bullet = true;
   } else {
     player->SetDirection(Direction::kStay);

@@ -66,6 +66,10 @@ bool QuestHero::IsHeroExist() const {
   return is_exist_;
 }
 
+bool QuestHero::IsExpGiven() const {
+  return is_exp_given_;
+}
+
 int QuestHero::GiveReward() {
   if (is_quest_ready_ && !is_exp_given_) {
     is_exp_given_ = true;

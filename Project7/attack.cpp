@@ -2,8 +2,8 @@
 
 Bullet::Bullet()
     : lifetime_(5) {
-  image_->loadFromFile("img/bullet.jpg");
-  image_->createMaskFromColor(sf::Color(0, 0, 0));
+  image_->loadFromFile("img/bulllet.png");
+  image_->createMaskFromColor(sf::Color(255, 255, 255));
   texture_->loadFromImage(*image_);
   sprite_->setTexture(*texture_);
   sprite_->setTextureRect(sf::IntRect(0, 0, img_size_.x, img_size_.y));
@@ -22,6 +22,7 @@ Bullet::~Bullet() {
   delete texture_;
   delete sprite_;
 }
+
 sf::Vector2f Bullet::GetNewCoor(sf::Vector2f coor,
                                 Direction dir, int dif) const {
   switch (dir) {
