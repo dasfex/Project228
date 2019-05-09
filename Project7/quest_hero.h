@@ -24,6 +24,7 @@ class QuestHero {
   std::string GetTask() const;
   bool IsQuestReady() const;
   bool IsHeroExist() const;
+  bool IsExpGiven() const;
 
   int GiveReward();
 
@@ -58,7 +59,7 @@ class QuestHero {
   //  хранит номер квеста, который завершает данный герой
   //  если таковой имеется
   int passed_quest_;
-
+  
   //  нужно ли менять картинку после выполнения квеста
   bool is_change_img_;
   //  файл с новыми координатами для новой картинки

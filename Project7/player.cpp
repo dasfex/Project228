@@ -36,7 +36,7 @@ void Player::SetDirection(Direction new_dir) {
 
 void Player::Move(int time, const std::vector<std::vector<int>>& map,
                   const std::vector<QuestHero>& heroes) {
-  speed_ = 0.27;  // 0.27
+  speed_ = 1;  // 0.27
   cur_frame_ += 0.009 * time;
   if (cur_frame_ > 4) {
     cur_frame_ -= 4;
@@ -47,21 +47,25 @@ void Player::Move(int time, const std::vector<std::vector<int>>& map,
     case Direction::kNorth: {
       rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 168, 36, 54);
       direct_speed_ = sf::Vector2f(0, -speed_);
+      last_dir_ = Direction::kNorth;
       break;
     }
     case Direction::kSouth: {
       rectangle = sf::IntRect(2 + 40 * int(cur_frame_), 1, 36, 54);
       direct_speed_ = sf::Vector2f(0, speed_);
+      last_dir_ = Direction::kSouth;
       break;
     }
     case Direction::kEast: {
       rectangle = sf::IntRect(7 + 40 * int(cur_frame_), 111, 22, 54);
       direct_speed_ = sf::Vector2f(speed_, 0);
+      last_dir_ = Direction::kEast;
       break;
     }
     case Direction::kWest: {
       rectangle = sf::IntRect(9 + 40 * int(cur_frame_), 56, 22, 54);
       direct_speed_ = sf::Vector2f(-speed_, 0);
+      last_dir_ = Direction::kWest;
       break;
     }
     case Direction::kStay: {
@@ -163,4 +167,26 @@ void Player::CheckMap(double time, double x, double y, int h, int w,
       return;
     }
   }
+}
+
+void Player::SetHealth(int add_health) {
+  health_ += add_health;
+}
+
+Direction Player::GetDirection() const {
+  return dir_;
+}
+
+Direction Player::GetLastDirection() const {
+  return last_dir_;
+}
+
+Player::~Player() {
+  delete image_;
+  delete texture_;
+  delete sprite_;
+  delete bullet_;
+}
+Bullet* Player::GetBullet() {
+  return bullet_;
 }
