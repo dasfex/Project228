@@ -30,7 +30,7 @@ int FindHeroNear(const Player* player,
                  const std::vector<QuestHero>& heroes) {
   int h = 56, w = 30;  // размеры Халка
   for (int k = 0; k < HEROES_CNT; ++k) {
-	if (!heroes[k].IsHeroExist()) {
+    if (!heroes[k].IsHeroExist()) {
       continue;
     }
     int hero_x = ceil(heroes[k].GetX()) / TILE_SIZE;
@@ -165,7 +165,8 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
         MakeText(is_text, text, true, heroes[hero_ind].GetText());
         return;
       }
-      if (heroes[hero_ind].GetPassedQuest() == 0) {
+      if (heroes[hero_ind].GetPassedQuest() == 0 &&
+          !heroes[hero_ind].IsExpGiven()) {
         if (!Find(active_quests, heroes[hero_ind].GetTask())) {
           player->AddNewQuest(heroes[hero_ind].GetTask());
         }
