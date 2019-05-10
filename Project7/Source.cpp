@@ -8,7 +8,7 @@
 #include "player.h"
 #include "functions.h"
 #include "quest_hero.h"
-#include "attack.h"
+#include "bullet.h"
 using std::vector;
 
 int main() {

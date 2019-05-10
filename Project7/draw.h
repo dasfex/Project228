@@ -55,9 +55,6 @@ void DrawMainInfo(sf::RenderWindow* window,
   sf::Text exp("Exp: " + std::to_string(player->GetExp()), font, 50);
   health.setFillColor(sf::Color::Black);
   exp.setFillColor(sf::Color::Black);
-//  sf::Text quests("QUESTS", font, 70);
-//  quests.setFillColor(sf::Color::Black);
-//  quests.setP
   health.setPosition(player->GetCoor() - sf::Vector2f(700, 450));
   exp.setPosition(player->GetCoor() - sf::Vector2f(400, 450));
   window->draw(health);
@@ -79,7 +76,12 @@ void DrawMissions(sf::RenderWindow* window, Player& player,
   }
   quests_background.setPosition(player.GetCoor() - sf::Vector2f(600, 300));
   window->draw(quests_background);
+  sf::Text quests_text("QUESTS", font, 35);
+  quests_text.setFillColor(sf::Color::Black);
   sf::Vector2f coor = player.GetCoor() - sf::Vector2f(580, 270);
+  quests_text.setPosition(coor + sf::Vector2f(100, -20));
+  coor += sf::Vector2f(0, 23);
+  window->draw(quests_text);
   for (int i = 0; i < quests.size(); ++i, coor.y += 23) {
     quests[i].setPosition(coor);
     window->draw(quests[i]);

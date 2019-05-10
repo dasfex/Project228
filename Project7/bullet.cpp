@@ -1,4 +1,4 @@
-#include "attack.h"
+#include "bullet.h"
 
 Bullet::Bullet()
     : lifetime_(5) {
@@ -27,16 +27,16 @@ sf::Vector2f Bullet::GetNewCoor(sf::Vector2f coor,
                                 Direction dir, int dif) const {
   switch (dir) {
     case Direction::kNorth: {
-      return coor - sf::Vector2f(0, dif);
+      return coor - sf::Vector2f(-3, dif + 3);
     }
     case Direction::kEast: {
-      return coor + sf::Vector2f(dif, 0);
+      return coor + sf::Vector2f(dif + 5, 15);
     }
     case Direction::kSouth: {
-      return coor + sf::Vector2f(0, dif);
+      return coor + sf::Vector2f(5, dif + 50);
     }
     case Direction::kWest: {
-      return coor - sf::Vector2f(dif, 0);
+      return coor - sf::Vector2f(dif, -15);
     }
   }
 }

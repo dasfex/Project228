@@ -8,7 +8,7 @@
 #include "constants.h"
 #include "player.h"
 #include "quest_hero.h"
-#include "attack.h"
+#include "bullet.h"
 #include "draw.h"
 struct TileInfo {
   int x;
@@ -84,12 +84,6 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
   for (int i = 0; i < HEROES_CNT; ++i) {
     std::string folder_name(1, char(i + 1 + '0'));
     std::ifstream get_info("files/heroes/" + folder_name + "/main.txt");
-//    double x, double y,
-//    string file_img,
-//    string file_for_quest,
-//    string file_after_quest,
-//    int reward, int x_img, int y_img,
-//    int width_img, int height_img
     double x, y;
     std::string img = "files/heroes/" + folder_name + "/hero.png",
         for_quest = "files/heroes/" + folder_name + "/for_quest.txt",

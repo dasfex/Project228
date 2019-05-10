@@ -1,7 +1,7 @@
 #ifndef PROJECT228_PLAYER_H
 #define PROJECT228_PLAYER_H
 
-#include "attack.h"
+#include "bullet.h"
 #include "quest_hero.h"
 #include "main_headers.h"
 #include "useful.h"
