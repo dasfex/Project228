@@ -22,6 +22,8 @@ class QuestHero {
 
   std::string GetText() const;
   std::string GetTask() const;
+  sf::Vector2i GetImgSize() const;
+
   bool IsQuestReady() const;
   bool IsHeroExist() const;
   bool IsExpGiven() const;

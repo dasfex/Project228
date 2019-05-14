@@ -57,6 +57,10 @@ std::string QuestHero::GetTask() const {
   return task_text_;
 }
 
+sf::Vector2i QuestHero::GetImgSize() const {
+	return size_for_img_;
+}
+
 bool QuestHero::IsQuestReady() const {
   return is_quest_ready_;
 }
