@@ -53,6 +53,11 @@ int main() {
 
   sf::Clock timer_for_animation_;
 
+  sf::Music music;
+  music.openFromFile("music.wav");
+  music.setLoop(true);
+  music.play();
+
   while (main_window.isOpen()) {
     auto time = timer_for_animation_.getElapsedTime().asMilliseconds();
     timer_for_animation_.restart();

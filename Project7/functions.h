@@ -219,13 +219,8 @@ void ChangeEnemies(std::vector<Enemy>& enemies,
   for (size_t i = 0; i < kENEMIES_CNT; ++i) {
     Enemy& enemy = enemies[i];
     if (how_much_changed[i] > time_for_change[i]) {
-      Direction new_dir = enemy.GetLastDirection();
-      while (new_dir == enemy.GetLastDirection()/* ||
-          !enemy.IsCorrect(new_dir)*/) {
-        new_dir = GetNewDir(rand() % 4);
-      }
-      enemy.SetDirection(new_dir);
-      time_for_change[i] = rand() % 200 + 100;
+      enemy.ChangeDir();
+      time_for_change[i] = 200;
       how_much_changed[i] = 0;
     }
     ++how_much_changed[i];

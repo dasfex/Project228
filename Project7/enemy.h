@@ -13,13 +13,11 @@ class Enemy {
         const std::string&, int, int,
         int, int, int, int, int, int, int);
 
-  void SetDirection(Direction);
-
   const sf::Sprite* GetSprite() const;
   double GetX() const;
   double GetY() const;
   bool IsOnBound() const;
-  bool IsCorrect(Direction) const;
+  void ChangeDir();
 
   int GiveReward();
 

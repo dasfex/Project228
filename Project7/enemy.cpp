@@ -32,11 +32,6 @@ Enemy::Enemy(
   sprite_->setPosition(x, y);
 }
 
-void Enemy::SetDirection(Direction new_dir) {
-  last_dir_ = dir_;
-  dir_ = new_dir;
-}
-
 Direction Enemy::GetLastDirection() const {
   return last_dir_;
 }
@@ -56,6 +51,7 @@ double Enemy::GetY() const {
 int Enemy::GiveReward() {
   return reward_exp_;
 }
+
 void Enemy::Move(int time, const std::vector<std::vector<int>>& map) {
   float speed = 0.06;  // 0.06
   cur_frame_ += 0.009 * time;
@@ -140,35 +136,32 @@ bool Enemy::IsOnBound() const {
       right_j == coor_map_tile_right_.y;
 }
 
-bool Enemy::IsCorrect(Direction dir) const {
+void Enemy::ChangeDir() {
+  static std::mt19937 rand(static_cast<unsigned int>(time(nullptr)));
   int h = 54, w = 30;
   double x = ceil(coor_.x);
   double y = ceil(coor_.y);
-  int left_i = x / TILE_SIZE;
-  int right_i = (y + h) / TILE_SIZE;
-  int left_j = x / TILE_SIZE;
-  int right_j = (x + w) / TILE_SIZE;
-  switch (dir) {
+  int new_dir = rand() % 3;
+  switch (last_dir_) {
+    case Direction::kStay: {
+      dir_ = Direction::kEast;
+      break;
+    }
     case Direction::kNorth: {
-      if (abs(left_i - coor_map_tile_left_.x) == 0) {
-        return false;
-      }
-    }
-    case Direction::kSouth: {
-      if (abs(right_i - coor_map_tile_right_.x) == 0) {
-        return false;
-      }
-    }
-    case Direction::kWest: {
-      if (abs(left_i - coor_map_tile_left_.y) == 0) {
-        return false;
-      }
+      dir_ = Direction::kWest;
+      break;
     }
     case Direction::kEast: {
-      if (abs(right_i - coor_map_tile_right_.y) == 0) {
-        return false;
-      }
+      dir_ = Direction::kNorth;
+      break;
+    }
+    case Direction::kWest: {
+      dir_ = Direction::kSouth;
+      break;
+    }
+    case Direction::kSouth: {
+      dir_ = Direction::kEast;
+      break;
     }
   }
-  return true;
 }
