@@ -4,6 +4,9 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <random>
+#include "useful.h"
+#include "enemy.h"
 #include "main_headers.h"
 #include "constants.h"
 #include "player.h"
@@ -60,11 +63,21 @@ bool Find(const std::vector<std::string>& vec, const std::string& str) {
   return false;
 }
 
+Direction GetNewDir(size_t n) {
+  switch (n) {
+    case 0: return Direction::kNorth;
+    case 1: return Direction::kSouth;
+    case 2: return Direction::kEast;
+    case 3: return Direction::kWest;
+  }
+}
+
 }
 
 void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
                        std::vector<TileInfo>& tiles,
                        std::vector<QuestHero>& quest_heroes,
+                       std::vector<Enemy>& enemies,
                        sf::Font* font) {
   std::ifstream get_map("files/main_map.txt");
   for (int i = 0; i < MAP_HEIGHT; ++i) {
@@ -96,6 +109,20 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
     quest_heroes.emplace_back(x, y, img, for_quest, after_quest, quest_text,
                               reward, x_img, y_img, width, height,
                               passed_quest, is_change_img, is_disappear);
+  }
+
+  enemies.reserve(kENEMIES_CNT);
+  for (int i = 0; i < kENEMIES_CNT; ++i) {
+    std::string folder_name(1, char(i + 1 + '0'));
+    std::ifstream get_info("files/enemy/" + folder_name + "/main.txt");
+    double x, y;
+    std::string img = "files/enemy/" + folder_name + "/hero.png";
+    int reward, x_img, y_img, width, height,
+        health, defense, attack, passed_quest;
+    get_info >> x >> y >> reward >> x_img >> y_img >>
+             width >> height >> health >> defense >> attack >> passed_quest;
+    enemies.emplace_back(x, y, img, reward, x_img, y_img, width, height,
+                         health, defense, attack, passed_quest);
   }
 
   font->loadFromFile("files/Samson.ttf");
@@ -144,7 +171,6 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
         MakeText(is_text, text, true, heroes[hero_ind].GetText());
         exp_text->first = true;
         int exp = heroes[hero_ind].GiveReward();
-        std::cout << exp << std::endl;
         if (exp != 0) {
           exp_text->second.setString(std::to_string(exp));
           player->AddExp(exp);
@@ -179,6 +205,34 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
     if (hero_ind == HEROES_CNT) {
       MakeText(is_text, text);
     }
+  }
+}
+
+void ChangeEnemies(std::vector<Enemy>& enemies,
+                   const std::vector<std::vector<int>>& map) {
+  static std::mt19937 rand(static_cast<unsigned int>(time(nullptr)));
+  static sf::Clock timer_for_animation;
+  static std::vector<int> how_much_changed(kENEMIES_CNT, 1);
+  static std::vector<int> time_for_change(kENEMIES_CNT);
+  double time = timer_for_animation.getElapsedTime().asMilliseconds();
+  timer_for_animation.restart();
+  for (size_t i = 0; i < kENEMIES_CNT; ++i) {
+    Enemy& enemy = enemies[i];
+    if (how_much_changed[i] > time_for_change[i]) {
+      Direction new_dir = enemy.GetLastDirection();
+      while (new_dir == enemy.GetLastDirection()/* ||
+          !enemy.IsCorrect(new_dir)*/) {
+        new_dir = GetNewDir(rand() % 4);
+      }
+      enemy.SetDirection(new_dir);
+      time_for_change[i] = rand() % 200 + 100;
+      how_much_changed[i] = 0;
+    }
+    ++how_much_changed[i];
+    if (enemy.IsOnBound()) {
+      how_much_changed[i] = time_for_change[i] + 1;
+    }
+    enemy.Move(time, map);
   }
 }
 

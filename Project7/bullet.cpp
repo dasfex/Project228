@@ -40,5 +40,3 @@ sf::Vector2f Bullet::GetNewCoor(sf::Vector2f coor,
     }
   }
 }
-
-

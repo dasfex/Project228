@@ -2,6 +2,7 @@
 #define NEWPROJECT228_DRAW_H
 
 #include "constants.h"
+#include "enemy.h"
 #include "main_headers.h"
 #include "functions.h"
 #include "quest_hero.h"
@@ -101,6 +102,13 @@ void DrawExp(sf::RenderWindow* window, Player& player,
     get_exp_text->first = false;
   }
   window->draw(get_exp_text->second);
+}
+
+void DrawEnemies(sf::RenderWindow* window,
+    const std::vector<Enemy>& enemies) {
+  for (const auto& enemy : enemies) {
+    window->draw(*enemy.GetSprite());
+  }
 }
 
 #endif //NEWPROJECT228_DRAW_H

@@ -33,7 +33,7 @@ class QuestHero {
   int GetPassedQuest() const;
 
  private:
-  const Coordinate coor_;
+  const sf::Vector2f coor_;
 
   std::string image_file_;
   std::string file_for_quest_;
@@ -42,8 +42,8 @@ class QuestHero {
 
   int reward_exp_;
 
-  std::pair<int, int> coor_for_img_;
-  std::pair<int, int> size_for_img_;
+  sf::Vector2i coor_for_img_;
+  sf::Vector2i size_for_img_;
 
   sf::Image* image_ = new sf::Image;
   sf::Texture* texture_ = new sf::Texture;

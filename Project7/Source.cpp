@@ -3,6 +3,7 @@
 #include <fstream>
 #include <chrono>
 #include <thread>
+#include "enemy.h"
 #include "draw.h"
 #include "main_headers.h"
 #include "player.h"
@@ -15,8 +16,9 @@ int main() {
   vector<vector<int>> map_tiles(MAP_HEIGHT, vector<int>(MAP_WIDTH));
   vector<TileInfo> tiles(TILES_CNT);
   vector<QuestHero> quest_heroes;
+  vector<Enemy> enemies;
   sf::Font text_font;
-  GetAllInformation(map_tiles, tiles, quest_heroes, &text_font);
+  GetAllInformation(map_tiles, tiles, quest_heroes, enemies, &text_font);
   sf::Text text("", text_font, 25);
   std::pair<bool, sf::Text> get_exp_text =
       std::make_pair(false, sf::Text("", text_font, 25));
@@ -47,7 +49,7 @@ int main() {
   sf::RenderWindow main_window(sf::VideoMode(width, height), "Project228");
   view.reset(sf::FloatRect(0, 0, width, height));
 
-  Player player("img/hulk.png", 1600, 2500, 100, 100, 100); //  1600 2500
+  Player player("img/hulk.png", 2500, 3000, 100, 100, 100); //  1600 2500
 
   sf::Clock timer_for_animation_;
 
@@ -76,7 +78,10 @@ int main() {
 
     main_window.clear(sf::Color(255, 255, 255));
 
+    ChangeEnemies(enemies, map_tiles);
+
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
+    DrawEnemies(&main_window, enemies);
     DrawHeroes(&main_window, quest_heroes);
     DrawMainInfo(&main_window, &player, text_font);
     if (is_show_missions) {
