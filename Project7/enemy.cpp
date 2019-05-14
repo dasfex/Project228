@@ -32,10 +32,6 @@ Enemy::Enemy(
   sprite_->setPosition(x, y);
 }
 
-Direction Enemy::GetLastDirection() const {
-  return last_dir_;
-}
-
 const sf::Sprite* Enemy::GetSprite() const {
   return sprite_;
 }
@@ -130,37 +126,104 @@ bool Enemy::IsOnBound() const {
   int right_i = (y + h) / TILE_SIZE;
   int left_j = x / TILE_SIZE;
   int right_j = (x + w) / TILE_SIZE;
-  return left_i == coor_map_tile_left_.x ||
-      left_j == coor_map_tile_left_.y ||
-      right_i == coor_map_tile_right_.x ||
-      right_j == coor_map_tile_right_.y;
+  return left_i == coor_map_tile_left_.y ||
+      left_j == coor_map_tile_left_.x ||
+      right_i == coor_map_tile_right_.y ||
+      right_j == coor_map_tile_right_.x;
 }
 
 void Enemy::ChangeDir() {
   static std::mt19937 rand(static_cast<unsigned int>(time(nullptr)));
-  int h = 54, w = 30;
-  double x = ceil(coor_.x);
-  double y = ceil(coor_.y);
   int new_dir = rand() % 3;
-  switch (last_dir_) {
+  switch (dir_) {
     case Direction::kStay: {
-      dir_ = Direction::kEast;
+      new_dir = rand() % 4;
+      switch (new_dir) {
+        case 0: {
+          dir_ = Direction::kNorth;
+          break;
+        }
+        case 1: {
+          dir_ = Direction::kSouth;
+          break;
+        }
+        case 2: {
+          dir_ = Direction::kEast;
+          break;
+        }
+        case 3: {
+          dir_ = Direction::kWest;
+          break;
+        }
+      }
       break;
     }
     case Direction::kNorth: {
-      dir_ = Direction::kWest;
+      switch (new_dir) {
+        case 0: {
+          dir_ = Direction::kWest;
+          break;
+        }
+        case 1: {
+          dir_ = Direction::kSouth;
+          break;
+        }
+        case 2: {
+          dir_ = Direction::kEast;
+          break;
+        }
+      }
       break;
     }
     case Direction::kEast: {
-      dir_ = Direction::kNorth;
+      switch (new_dir) {
+        case 0: {
+          dir_ = Direction::kNorth;
+          break;
+        }
+        case 1: {
+          dir_ = Direction::kSouth;
+          break;
+        }
+        case 2: {
+          dir_ = Direction::kWest;
+          break;
+        }
+      }
       break;
     }
     case Direction::kWest: {
-      dir_ = Direction::kSouth;
+      switch (new_dir) {
+        case 0: {
+          dir_ = Direction::kNorth;
+          break;
+        }
+        case 1: {
+          dir_ = Direction::kSouth;
+          break;
+        }
+        case 2: {
+          dir_ = Direction::kEast;
+          break;
+        }
+      }
       break;
     }
     case Direction::kSouth: {
-      dir_ = Direction::kEast;
+      switch (new_dir) {
+        case 0: {
+          dir_ = Direction::kNorth;
+          break;
+        }
+        case 1: {
+          dir_ = Direction::kWest;
+          break;
+        }
+        case 2: {
+          dir_ = Direction::kEast;
+          break;
+        }
+      }
       break;
     }
   }

@@ -214,18 +214,18 @@ void ChangeEnemies(std::vector<Enemy>& enemies,
   static sf::Clock timer_for_animation;
   static std::vector<int> how_much_changed(kENEMIES_CNT, 1);
   static std::vector<int> time_for_change(kENEMIES_CNT);
-  double time = timer_for_animation.getElapsedTime().asMilliseconds();
+  float time = timer_for_animation.getElapsedTime().asMilliseconds();
   timer_for_animation.restart();
   for (size_t i = 0; i < kENEMIES_CNT; ++i) {
     Enemy& enemy = enemies[i];
     if (how_much_changed[i] > time_for_change[i]) {
       enemy.ChangeDir();
-      time_for_change[i] = 200;
+      time_for_change[i] = rand() % 200 + 100;
       how_much_changed[i] = 0;
     }
     ++how_much_changed[i];
     if (enemy.IsOnBound()) {
-      how_much_changed[i] = time_for_change[i] + 1;
+      how_much_changed[i] = time_for_change[i] - 20;
     }
     enemy.Move(time, map);
   }

@@ -5,6 +5,7 @@
 #include "main_headers.h"
 #include "useful.h"
 #include <string>
+#include <random>
 
 class Enemy {
  public:
@@ -20,8 +21,6 @@ class Enemy {
   void ChangeDir();
 
   int GiveReward();
-
-  Direction GetLastDirection() const;
 
   void Move(int, const std::vector<std::vector<int>>&);
 
