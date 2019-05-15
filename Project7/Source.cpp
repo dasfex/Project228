@@ -50,7 +50,7 @@ int main() {
   sf::RenderWindow main_window(sf::VideoMode(width, height), "Project228");
   view.reset(sf::FloatRect(0, 0, width, height));
 
-  Player player("img/hulk.png", 1600, 2500, 100, 100, 100); //  1600 2500
+  Player player("img/hulk.png", 1600, 2500, 100, 10, 100); //  1600 2500
 
   sf::Clock timer_for_animation_;
 
@@ -98,7 +98,7 @@ int main() {
                    is_show_missions);
     }
     if (is_show_bullet) {
-      DrawBullet(&main_window, &player, is_show_bullet);
+      DrawBullet(&main_window, &player, is_show_bullet, enemies);
     }
     if (is_level_up){
       DrawBuff(&main_window, player);
