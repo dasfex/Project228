@@ -7,6 +7,8 @@ Bullet::Bullet()
   texture_->loadFromImage(*image_);
   sprite_->setTexture(*texture_);
   sprite_->setTextureRect(sf::IntRect(0, 0, img_size_.x, img_size_.y));
+
+  sound_->openFromFile("files/bulletsound.wav");
 }
 
 sf::Sprite* Bullet::GetSprite() const {
@@ -21,6 +23,11 @@ Bullet::~Bullet() {
   delete image_;
   delete texture_;
   delete sprite_;
+  delete sound_;
+}
+
+sf::Music* Bullet::GetSound() const {
+  return sound_;
 }
 
 sf::Vector2f Bullet::GetNewCoor(sf::Vector2f coor,

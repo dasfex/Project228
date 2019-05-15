@@ -2,6 +2,7 @@
 #define PROJECT228_PLAYER_H
 
 #include "bullet.h"
+#include "enemy.h"
 #include "quest_hero.h"
 #include "main_headers.h"
 #include "useful.h"
@@ -20,7 +21,7 @@ class Player {
   void SetDirection(Direction);
 
   void Move(int, const std::vector<std::vector<int>>&,
-            const std::vector<QuestHero>&);
+            const std::vector<QuestHero>&, const std::vector<Enemy>&);
 
   const sf::Sprite* GetSprite() const;
 
@@ -77,10 +78,11 @@ class Player {
 
   Bullet* bullet_ = new Bullet;
 
-  bool IsCantGo(int, const std::vector<QuestHero>&) const;
+  bool IsCantGo(int) const;
   void CheckMap(double, double, double, int, int,
                 const std::vector<std::vector<int>>&,
-                const std::vector<QuestHero>&);
+                const std::vector<QuestHero>&,
+                const std::vector<Enemy>&);
 };
 
 #endif //PROJECT228_PLAYER_H

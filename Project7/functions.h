@@ -13,6 +13,7 @@
 #include "quest_hero.h"
 #include "bullet.h"
 #include "draw.h"
+
 struct TileInfo {
   int x;
   int y;
@@ -120,10 +121,13 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
     std::string img = "files/enemy/" + folder_name + "/hero.png";
     int reward, x_img, y_img, width, height,
         health, defense, attack, passed_quest;
+    int is_gorizontal;
     get_info >> x >> y >> reward >> x_img >> y_img >>
-             width >> height >> health >> defense >> attack >> passed_quest;
+             width >> height >> health >> defense >> attack >>
+             passed_quest >> is_gorizontal;
     enemies.emplace_back(x, y, img, reward, x_img, y_img, width, height,
-                         health, defense, attack, passed_quest);
+                         health, defense, attack,
+                         passed_quest, static_cast<bool>(is_gorizontal));
   }
 
   font->loadFromFile("files/Samson.ttf");
@@ -213,6 +217,7 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
     player->SetDirection(Direction::kStay);
     is_show_bullet = true;
+    player->GetBullet()->GetSound()->play();
   } else {
     player->SetDirection(Direction::kStay);
     if (hero_ind == HEROES_CNT) {
@@ -222,30 +227,22 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
 }
 
 void ChangeEnemies(std::vector<Enemy>& enemies,
-                   const std::vector<std::vector<int>>& map) {
+                   const std::vector<std::vector<int>>& map,
+                   sf::Vector2f player_coor) {
   static std::mt19937 rand(static_cast<unsigned int>(time(nullptr)));
   static sf::Clock timer_for_animation;
   static std::vector<int> how_much_changed(kENEMIES_CNT, 1);
   static std::vector<int> time_for_change(kENEMIES_CNT);
-  double time = timer_for_animation.getElapsedTime().asMilliseconds();
+  float time = timer_for_animation.getElapsedTime().asMilliseconds();
   timer_for_animation.restart();
   for (size_t i = 0; i < kENEMIES_CNT; ++i) {
     Enemy& enemy = enemies[i];
-    if (how_much_changed[i] > time_for_change[i]) {
-      Direction new_dir = enemy.GetLastDirection();
-      while (new_dir == enemy.GetLastDirection()/* ||
-          !enemy.IsCorrect(new_dir)*/) {
-        new_dir = GetNewDir(rand() % 4);
-      }
-      enemy.SetDirection(new_dir);
-      time_for_change[i] = rand() % 200 + 100;
-      how_much_changed[i] = 0;
+    if (time_for_change[i] == 0) {
+      enemy.ChangeDir();
+      time_for_change[i] = 300;
     }
-    ++how_much_changed[i];
-    if (enemy.IsOnBound()) {
-      how_much_changed[i] = time_for_change[i] + 1;
-    }
-    enemy.Move(time, map);
+    --time_for_change[i];
+    enemy.Move(time, map, player_coor, true);
   }
 }
 
