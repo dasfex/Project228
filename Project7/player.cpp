@@ -35,7 +35,8 @@ void Player::SetDirection(Direction new_dir) {
 }
 
 void Player::Move(int time, const std::vector<std::vector<int>>& map,
-                  const std::vector<QuestHero>& heroes) {
+                  const std::vector<QuestHero>& heroes,
+                  const std::vector<Enemy>& enemies) {
   speed_ = 1;  // 0.27
   cur_frame_ += 0.009 * time;
   if (cur_frame_ > 4) {
@@ -77,7 +78,7 @@ void Player::Move(int time, const std::vector<std::vector<int>>& map,
   coor_ += sf::Vector2f(direct_speed_.x * time, direct_speed_.y * time);
 
   int h = 54, w = 30;  // 36?
-  CheckMap(time, coor_.x, coor_.y, h, w, map, heroes);
+  CheckMap(time, coor_.x, coor_.y, h, w, map, heroes, enemies);
 
   sprite_->setPosition(coor_);
   sprite_->setTextureRect(rectangle);
@@ -125,59 +126,78 @@ int Player::GetDefense() const {
 }
 
 void Player::AddExp(int exp) {
-  exp_ += exp; 
+  exp_ += exp;
 }
 
-bool Player::IsCantGo(int type, const std::vector<QuestHero>& heroes) const {
-  if (type >= 31 && type <= 43) {
-    return true;
-  }
-  return false;
+bool Player::IsCantGo(int type) const {
+  return type >= 31 && type <= 43;
 }
+
 void Player::CheckMap(double time, double x, double y, int h, int w,
-	const std::vector<std::vector<int>>& map,
-	const std::vector<QuestHero>& heroes) {
-	x = ceil(x);
-	y = ceil(y);
-	// left top angle is (0, 0)
-	// y - on right
-	// x - on down
-	int left_i = y;
-	int right_i = (y + h);
-	int left_j = x;
-	int right_j = (x + w);
+                      const std::vector<std::vector<int>>& map,
+                      const std::vector<QuestHero>& heroes,
+                      const std::vector<Enemy>& enemies) {
+  x = ceil(x);
+  y = ceil(y);
+  // left top angle is (0, 0)
+  // y - on right
+  // x - on down
+  int left_i = y;
+  int right_i = (y + h);
+  int left_j = x;
+  int right_j = (x + w);
 
-	bool is_bad_pos = false;
-	for (int k = 0; k < HEROES_CNT; ++k) {
-		int hero_left_i = ceil(heroes[k].GetY());
-		// [0, 1] : 0 - width = y
-		int hero_right_i = ceil(heroes[k].GetY() + heroes[k].GetImgSize().x);
-		int hero_left_j = ceil(heroes[k].GetX());
-		// [0, 1] : 1 - height = x
-		int hero_right_j = ceil(heroes[k].GetX() + heroes[k].GetImgSize().y);
-		
-		for (int i = left_i; i < right_i; ++i) {
-			for (int j = left_j; j < right_j; ++j) {
-				is_bad_pos |= hero_left_i <= i && i <= hero_right_i
-					&& hero_left_j <= j && j <= hero_right_j;
-			}
-		}
-	}
+  bool is_bad_pos = false;
+  for (int k = 0; k < HEROES_CNT; ++k) {
+    int hero_left_i = ceil(heroes[k].GetY());
+    // [0, 1] : 0 - width = y
+    int hero_right_i = ceil(heroes[k].GetY() + heroes[k].GetImgSize().x);
+    int hero_left_j = ceil(heroes[k].GetX());
+    // [0, 1] : 1 - height = x
+    int hero_right_j = ceil(heroes[k].GetX() + heroes[k].GetImgSize().y);
 
-	left_i /= TILE_SIZE;
-	right_i /= TILE_SIZE;
-	left_j /= TILE_SIZE;
-	right_j /= TILE_SIZE;
+    for (int i = left_i; i < right_i; ++i) {
+      for (int j = left_j; j < right_j; ++j) {
+        is_bad_pos |=
+            hero_left_i <= i && i <= hero_right_i
+                && hero_left_j <= j && j <= hero_right_j;
+      }
+    }
+  }
 
-	for (int i = left_i; i <= right_i; ++i) {
-		for (int j = left_j; j <= right_j; ++j) {
-			is_bad_pos |= IsCantGo(map[i][j], heroes);
-		}
-	}
+  for (int k = 0; k < kENEMIES_CNT; ++k) {
+    int enemie_left_i = ceil(enemies[k].GetCoor().y);
+    // [0, 1] : 0 - width = y
+    int enemie_right_i =
+        ceil(enemies[k].GetCoor().y + enemies[k].GetImgSize().x);
+    int enemie_left_j = ceil(enemies[k].GetCoor().x);
+    // [0, 1] : 1 - height = x
+    int enemie_right_j =
+        ceil(enemies[k].GetCoor().x + enemies[k].GetImgSize().y);
 
-	if (is_bad_pos) {
-		coor_ -= sf::Vector2f(direct_speed_.x * time, direct_speed_.y * time);
-	}
+    for (int i = left_i; i < right_i; ++i) {
+      for (int j = left_j; j < right_j; ++j) {
+        is_bad_pos |=
+            enemie_left_i <= i && i <= enemie_right_i
+                && enemie_left_j <= j && j <= enemie_right_j;
+      }
+    }
+  }
+
+  left_i /= TILE_SIZE;
+  right_i /= TILE_SIZE;
+  left_j /= TILE_SIZE;
+  right_j /= TILE_SIZE;
+
+  for (int i = left_i; i <= right_i; ++i) {
+    for (int j = left_j; j <= right_j; ++j) {
+      is_bad_pos |= IsCantGo(map[i][j]);
+    }
+  }
+
+  if (is_bad_pos) {
+    coor_ -= sf::Vector2f(direct_speed_.x * time, direct_speed_.y * time);
+  }
 }
 
 void Player::SetHealth(int add_health) {

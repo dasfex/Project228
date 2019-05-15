@@ -12,17 +12,17 @@ class Enemy {
 
   Enemy(double, double,
         const std::string&, int, int,
-        int, int, int, int, int, int, int);
+        int, int, int, int, int, int, int, bool);
 
   const sf::Sprite* GetSprite() const;
-  double GetX() const;
-  double GetY() const;
-  bool IsOnBound() const;
+  sf::Vector2f GetCoor() const;
+  sf::Vector2i GetImgSize() const;
   void ChangeDir();
 
   int GiveReward();
 
-  void Move(int, const std::vector<std::vector<int>>&);
+  void Move(int, const std::vector<std::vector<int>>&,
+            sf::Vector2f, bool = false);
 
  private:
 
@@ -43,9 +43,6 @@ class Enemy {
   sf::Texture* texture_ = new sf::Texture;
   sf::Sprite* sprite_ = new sf::Sprite;
 
-  sf::Vector2i coor_map_tile_left_;
-  sf::Vector2i coor_map_tile_right_;
-
   //  пока не знаю, нужно ли
   bool is_exp_given_ = false;
 
@@ -61,10 +58,11 @@ class Enemy {
   double cur_frame_ = 0;
   sf::IntRect last_rect_ = sf::IntRect(0, 0, 0, 0);
   sf::Vector2f direct_speed_ = sf::Vector2f(0, 0);
+  bool is_gorizonatal_;
 
   bool IsCantGo(int) const;
   void CheckMap(double, double, double, int, int,
-                const std::vector<std::vector<int>>&);
+                const std::vector<std::vector<int>>&, bool, sf::Vector2f);
 };
 
 #endif //NEWPROJECT228_ENEMY_H

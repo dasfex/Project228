@@ -49,7 +49,7 @@ int main() {
   sf::RenderWindow main_window(sf::VideoMode(width, height), "Project228");
   view.reset(sf::FloatRect(0, 0, width, height));
 
-  Player player("img/hulk.png", 2500, 3000, 100, 100, 100); //  1600 2500
+  Player player("img/hulk.png", 1600, 2500, 100, 100, 100); //  1600 2500
 
   sf::Clock timer_for_animation_;
 
@@ -74,7 +74,7 @@ int main() {
                           &text, &get_exp_text,
                           is_show_missions, is_show_bullet);
       }
-      player.Move(time, map_tiles, quest_heroes);
+      player.Move(time, map_tiles, quest_heroes, enemies);
     }
 
     view.setCenter(player.GetCoor());
@@ -83,7 +83,7 @@ int main() {
 
     main_window.clear(sf::Color(255, 255, 255));
 
-    ChangeEnemies(enemies, map_tiles);
+    ChangeEnemies(enemies, map_tiles, player.GetCoor());
 
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
     DrawEnemies(&main_window, enemies);
