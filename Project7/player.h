@@ -8,6 +8,8 @@
 #include "useful.h"
 #include <algorithm>
 #include <cmath>
+
+#include <cmath>
 #include <utility>
 
 class Player {
@@ -34,6 +36,10 @@ class Player {
   int Attack() const;
   int GetDefense() const;
   Bullet* GetBullet();
+  void LevelUp();
+  int GetLevel();
+  void SetAttack(int attack);
+  void SetDefense(int defense);
 
   void SetHealth(int);
   Direction GetDirection() const;
@@ -58,7 +64,7 @@ class Player {
 
   int attack_;
   int defense_;
-
+  int level_ = 1;
   sf::String file_;
   sf::Image* image_ = new sf::Image;
   sf::Texture* texture_ = new sf::Texture;
