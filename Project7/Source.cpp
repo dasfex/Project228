@@ -26,6 +26,7 @@ int main() {
   std::pair<bool, std::string> is_text(false, "");
   bool is_show_missions = false;
   bool is_show_bullet = false;
+  bool is_level_up = false;
   sf::Sprite map_sprite;
   sf::Sprite quests_background;
   //  я честно пытался обернуть нижний блок в функцию,
@@ -67,7 +68,7 @@ int main() {
       if (player.IsAlive()) {
         KeyboardTreatment(&player, quest_heroes, &is_text,
                           &text, &get_exp_text,
-                          is_show_missions, is_show_bullet);
+                          is_show_missions, is_show_bullet, is_level_up);
       }
       player.Move(time, map_tiles, quest_heroes);
     }
@@ -96,6 +97,9 @@ int main() {
     }
     if (is_show_bullet) {
       DrawBullet(&main_window, &player, is_show_bullet);
+    }
+    if (is_level_up){
+      DrawBuff(&main_window, player);
     }
     main_window.draw(*player.GetSprite());
     main_window.draw(text);

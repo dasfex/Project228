@@ -22,9 +22,9 @@ void DrawHeroes(sf::RenderWindow* window,
 void DrawBullet(sf::RenderWindow* window, Player* player, bool& is_show_bullet) {
   static int dif = 0;
   sf::Vector2f new_coor = player->GetBullet()->GetNewCoor(
-        player->GetCoor(),
-        player->GetLastDirection(),
-        dif);
+      player->GetCoor(),
+      player->GetLastDirection(),
+      dif);
   player->GetBullet()->GetSprite()->setPosition(new_coor);
   ++dif;
   if (dif == 200) {
@@ -105,10 +105,22 @@ void DrawExp(sf::RenderWindow* window, Player& player,
 }
 
 void DrawEnemies(sf::RenderWindow* window,
-    const std::vector<Enemy>& enemies) {
+                 const std::vector<Enemy>& enemies) {
   for (const auto& enemy : enemies) {
     window->draw(*enemy.GetSprite());
   }
 }
+
+void DrawBuff(sf::RenderWindow* window, Player& player) {
+  sf::Image level_up;
+  level_up.loadFromFile("img/level.png");
+  sf::Texture level_texture;
+  level_texture.loadFromImage(level_up);
+  sf::Sprite level_sprite;
+  level_sprite.setTexture(level_texture);
+  level_sprite.setPosition(player.GetCoor() - sf::Vector2f(200, 200));
+  window->draw(level_sprite);
+}
+
 
 #endif //NEWPROJECT228_DRAW_H

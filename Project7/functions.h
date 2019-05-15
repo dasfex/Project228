@@ -69,6 +69,7 @@ Direction GetNewDir(size_t n) {
     case 1: return Direction::kSouth;
     case 2: return Direction::kEast;
     case 3: return Direction::kWest;
+    default: return Direction::kStay;
   }
 }
 
@@ -131,8 +132,18 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
 void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
                        std::pair<bool, std::string>* is_text,
                        sf::Text* text, std::pair<bool, sf::Text>* exp_text,
-                       bool& is_show_missions, bool& is_show_bullet) {
+                       bool& is_show_missions, bool& is_show_bullet, bool& is_level_up) {
   if (is_show_bullet) {
+    return;
+  }
+  if (is_level_up) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
+      player->SetAttack(10);
+      is_level_up = false;
+    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)) {
+      player->SetDefense(10);
+      is_level_up = false;
+    }
     return;
   }
   int hero_ind = FindHeroNear(player, heroes);
@@ -174,6 +185,8 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
         if (exp != 0) {
           exp_text->second.setString(std::to_string(exp));
           player->AddExp(exp);
+          is_level_up = true;
+
         } else if (!is_text->first) {
           exp_text->second.setString("");
         }

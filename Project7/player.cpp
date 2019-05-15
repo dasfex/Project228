@@ -190,3 +190,18 @@ Player::~Player() {
 Bullet* Player::GetBullet() {
   return bullet_;
 }
+void Player::LevelUp() {
+  level_ ++;
+  attack_ += 3;
+  defense_ += 5;
+
+}
+int Player::GetLevel() {
+  return level_;
+}
+void Player::SetAttack(int attack) {
+  attack_ += attack;
+}
+void Player::SetDefense(int defense) {
+    defense_ += defense;
+}
