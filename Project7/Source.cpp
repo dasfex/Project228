@@ -98,7 +98,7 @@ int main() {
                    is_show_missions);
     }
     if (is_show_bullet) {
-      DrawBullet(&main_window, &player, is_show_bullet, enemies);
+      DrawBullet(&main_window, &player, is_show_bullet, enemies, get_exp_text);
     }
     if (is_level_up){
       DrawBuff(&main_window, player);
