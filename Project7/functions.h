@@ -217,7 +217,6 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
     player->SetDirection(Direction::kStay);
     is_show_bullet = true;
-    player->GetBullet()->GetSound()->play();
   } else {
     player->SetDirection(Direction::kStay);
     if (hero_ind == HEROES_CNT) {
@@ -231,7 +230,6 @@ void ChangeEnemies(std::vector<Enemy>& enemies,
                    sf::Vector2f player_coor) {
   static std::mt19937 rand(static_cast<unsigned int>(time(nullptr)));
   static sf::Clock timer_for_animation;
-  static std::vector<int> how_much_changed(kENEMIES_CNT, 1);
   static std::vector<int> time_for_change(kENEMIES_CNT);
   float time = timer_for_animation.getElapsedTime().asMilliseconds();
   timer_for_animation.restart();

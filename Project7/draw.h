@@ -105,8 +105,12 @@ void DrawExp(sf::RenderWindow* window, Player& player,
 }
 
 void DrawEnemies(sf::RenderWindow* window,
-                 const std::vector<Enemy>& enemies) {
+                 const std::vector<Enemy>& enemies,
+                 sf::Font font) {
   for (const auto& enemy : enemies) {
+    sf::Text text(std::to_string(enemy.GetHealth()), font, 15);
+    text.setPosition(enemy.GetCoor() - sf::Vector2f(-5, 16));
+    window->draw(text);
     window->draw(*enemy.GetSprite());
   }
 }

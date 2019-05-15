@@ -184,3 +184,7 @@ void Enemy::ChangeDir() {
     }
   }
 }
+
+int Enemy::GetHealth() const {
+  return health_;
+}

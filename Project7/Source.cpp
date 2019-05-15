@@ -87,7 +87,7 @@ int main() {
     ChangeEnemies(enemies, map_tiles, player.GetCoor());
 
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
-    DrawEnemies(&main_window, enemies);
+    DrawEnemies(&main_window, enemies, text_font);
     DrawHeroes(&main_window, quest_heroes);
     DrawMainInfo(&main_window, &player, text_font);
     if (is_show_missions) {

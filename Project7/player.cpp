@@ -147,6 +147,9 @@ void Player::CheckMap(double time, double x, double y, int h, int w,
 
   bool is_bad_pos = false;
   for (int k = 0; k < HEROES_CNT; ++k) {
+    if (!heroes[k].IsHeroExist()) {
+      continue;
+    }
     int hero_left_i = ceil(heroes[k].GetY());
     // [0, 1] : 0 - width = y
     int hero_right_i = ceil(heroes[k].GetY() + heroes[k].GetImgSize().x);

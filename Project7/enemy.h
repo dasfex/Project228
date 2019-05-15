@@ -17,6 +17,9 @@ class Enemy {
   const sf::Sprite* GetSprite() const;
   sf::Vector2f GetCoor() const;
   sf::Vector2i GetImgSize() const;
+  int GetHealth() const;
+
+  void CheckBullet(sf::Vector2f);
   void ChangeDir();
 
   int GiveReward();
