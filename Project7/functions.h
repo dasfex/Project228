@@ -4,12 +4,16 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <random>
+#include "useful.h"
+#include "enemy.h"
 #include "main_headers.h"
 #include "constants.h"
 #include "player.h"
 #include "quest_hero.h"
-#include "attack.h"
+#include "bullet.h"
 #include "draw.h"
+
 struct TileInfo {
   int x;
   int y;
@@ -60,11 +64,21 @@ bool Find(const std::vector<std::string>& vec, const std::string& str) {
   return false;
 }
 
+Direction GetNewDir(size_t n) {
+  switch (n) {
+    case 0: return Direction::kNorth;
+    case 1: return Direction::kSouth;
+    case 2: return Direction::kEast;
+    case 3: return Direction::kWest;
+  }
+}
+
 }
 
 void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
                        std::vector<TileInfo>& tiles,
                        std::vector<QuestHero>& quest_heroes,
+                       std::vector<Enemy>& enemies,
                        sf::Font* font) {
   std::ifstream get_map("files/main_map.txt");
   for (int i = 0; i < MAP_HEIGHT; ++i) {
@@ -84,12 +98,6 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
   for (int i = 0; i < HEROES_CNT; ++i) {
     std::string folder_name(1, char(i + 1 + '0'));
     std::ifstream get_info("files/heroes/" + folder_name + "/main.txt");
-//    double x, double y,
-//    string file_img,
-//    string file_for_quest,
-//    string file_after_quest,
-//    int reward, int x_img, int y_img,
-//    int width_img, int height_img
     double x, y;
     std::string img = "files/heroes/" + folder_name + "/hero.png",
         for_quest = "files/heroes/" + folder_name + "/for_quest.txt",
@@ -102,6 +110,23 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
     quest_heroes.emplace_back(x, y, img, for_quest, after_quest, quest_text,
                               reward, x_img, y_img, width, height,
                               passed_quest, is_change_img, is_disappear);
+  }
+
+  enemies.reserve(kENEMIES_CNT);
+  for (int i = 0; i < kENEMIES_CNT; ++i) {
+    std::string folder_name(1, char(i + 1 + '0'));
+    std::ifstream get_info("files/enemy/" + folder_name + "/main.txt");
+    double x, y;
+    std::string img = "files/enemy/" + folder_name + "/hero.png";
+    int reward, x_img, y_img, width, height,
+        health, defense, attack, passed_quest;
+    int is_gorizontal;
+    get_info >> x >> y >> reward >> x_img >> y_img >>
+             width >> height >> health >> defense >> attack >>
+             passed_quest >> is_gorizontal;
+    enemies.emplace_back(x, y, img, reward, x_img, y_img, width, height,
+                         health, defense, attack,
+                         passed_quest, static_cast<bool>(is_gorizontal));
   }
 
   font->loadFromFile("files/Samson.ttf");
@@ -150,7 +175,6 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
         MakeText(is_text, text, true, heroes[hero_ind].GetText());
         exp_text->first = true;
         int exp = heroes[hero_ind].GiveReward();
-        std::cout << exp << std::endl;
         if (exp != 0) {
           exp_text->second.setString(std::to_string(exp));
           player->AddExp(exp);
@@ -180,11 +204,32 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
     player->SetDirection(Direction::kStay);
     is_show_bullet = true;
+    player->GetBullet()->GetSound()->play();
   } else {
     player->SetDirection(Direction::kStay);
     if (hero_ind == HEROES_CNT) {
       MakeText(is_text, text);
     }
+  }
+}
+
+void ChangeEnemies(std::vector<Enemy>& enemies,
+                   const std::vector<std::vector<int>>& map,
+                   sf::Vector2f player_coor) {
+  static std::mt19937 rand(static_cast<unsigned int>(time(nullptr)));
+  static sf::Clock timer_for_animation;
+  static std::vector<int> how_much_changed(kENEMIES_CNT, 1);
+  static std::vector<int> time_for_change(kENEMIES_CNT);
+  float time = timer_for_animation.getElapsedTime().asMilliseconds();
+  timer_for_animation.restart();
+  for (size_t i = 0; i < kENEMIES_CNT; ++i) {
+    Enemy& enemy = enemies[i];
+    if (time_for_change[i] == 0) {
+      enemy.ChangeDir();
+      time_for_change[i] = 300;
+    }
+    --time_for_change[i];
+    enemy.Move(time, map, player_coor, true);
   }
 }
 

@@ -3,20 +3,22 @@
 #include <fstream>
 #include <chrono>
 #include <thread>
+#include "enemy.h"
 #include "draw.h"
 #include "main_headers.h"
 #include "player.h"
 #include "functions.h"
 #include "quest_hero.h"
-#include "attack.h"
+#include "bullet.h"
 using std::vector;
 
 int main() {
   vector<vector<int>> map_tiles(MAP_HEIGHT, vector<int>(MAP_WIDTH));
   vector<TileInfo> tiles(TILES_CNT);
   vector<QuestHero> quest_heroes;
+  vector<Enemy> enemies;
   sf::Font text_font;
-  GetAllInformation(map_tiles, tiles, quest_heroes, &text_font);
+  GetAllInformation(map_tiles, tiles, quest_heroes, enemies, &text_font);
   sf::Text text("", text_font, 25);
   std::pair<bool, sf::Text> get_exp_text =
       std::make_pair(false, sf::Text("", text_font, 25));
@@ -51,6 +53,11 @@ int main() {
 
   sf::Clock timer_for_animation_;
 
+  sf::Music music;
+  music.openFromFile("music.wav");
+  music.setLoop(true);
+  music.play();
+
   while (main_window.isOpen()) {
     auto time = timer_for_animation_.getElapsedTime().asMilliseconds();
     timer_for_animation_.restart();
@@ -67,7 +74,7 @@ int main() {
                           &text, &get_exp_text,
                           is_show_missions, is_show_bullet);
       }
-      player.Move(time, map_tiles, quest_heroes);
+      player.Move(time, map_tiles, quest_heroes, enemies);
     }
 
     view.setCenter(player.GetCoor());
@@ -76,7 +83,10 @@ int main() {
 
     main_window.clear(sf::Color(255, 255, 255));
 
+    ChangeEnemies(enemies, map_tiles, player.GetCoor());
+
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
+    DrawEnemies(&main_window, enemies);
     DrawHeroes(&main_window, quest_heroes);
     DrawMainInfo(&main_window, &player, text_font);
     if (is_show_missions) {

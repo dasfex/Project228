@@ -25,8 +25,7 @@ QuestHero::QuestHero(
   image_->createMaskFromColor(sf::Color(255, 255, 255));
   texture_->loadFromImage(*image_);
   sprite_->setTexture(*texture_);
-  sf::IntRect rect(coor_for_img_.first, coor_for_img_.second, 
-					size_for_img_.first, size_for_img_.second);
+  sf::IntRect rect(coor_for_img_, size_for_img_);
   sprite_->setTextureRect(rect);
   sprite_->setPosition(x, y);
 
@@ -58,6 +57,10 @@ std::string QuestHero::GetTask() const {
   return task_text_;
 }
 
+sf::Vector2i QuestHero::GetImgSize() const {
+	return size_for_img_;
+}
+
 bool QuestHero::IsQuestReady() const {
   return is_quest_ready_;
 }
@@ -85,11 +88,10 @@ int QuestHero::GiveReward() {
       sprite_->setTexture(*texture_);
 
       std::ifstream new_coor(file_new_coor_);
-      new_coor >> coor_for_img_.first >> coor_for_img_.second;
-      new_coor >> size_for_img_.first >> size_for_img_.second;
+      new_coor >> coor_for_img_.x >> coor_for_img_.y;
+      new_coor >> size_for_img_.x >> size_for_img_.y;
 
-      sf::IntRect rect(coor_for_img_.first, coor_for_img_.second,
-                       size_for_img_.first, size_for_img_.second);
+      sf::IntRect rect(coor_for_img_, size_for_img_);
       sprite_->setTextureRect(rect);
     }
     return reward_exp_;
