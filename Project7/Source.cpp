@@ -97,9 +97,6 @@ int main() {
                    text_font,
                    is_show_missions);
     }
-    if (get_exp_text.first) {
-      DrawExp(&main_window, player, &get_exp_text);
-    }
     if (is_show_bullet) {
       DrawBullet(&main_window, &player, is_show_bullet);
     }
@@ -107,6 +104,9 @@ int main() {
       DrawBuff(&main_window, player);
     }
     main_window.draw(*player.GetSprite());
+    if (get_exp_text.first) {
+      DrawExp(&main_window, player, &get_exp_text);
+    }
     main_window.draw(text);
 
     main_window.display();

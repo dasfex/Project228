@@ -118,7 +118,7 @@ void DrawBuff(sf::RenderWindow* window, Player& player) {
   level_texture.loadFromImage(level_up);
   sf::Sprite level_sprite;
   level_sprite.setTexture(level_texture);
-  level_sprite.setPosition(player.GetCoor() - sf::Vector2f(200, 200));
+  level_sprite.setPosition(player.GetCoor() - sf::Vector2f(600, 200));
   window->draw(level_sprite);
 }
 
