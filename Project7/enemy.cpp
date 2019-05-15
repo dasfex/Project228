@@ -6,6 +6,8 @@
 
 #include "enemy.h"
 #include "constants.h"
+#include <cmath>
+
 Enemy::Enemy(
     double x, double y,
     const std::string& file_img,

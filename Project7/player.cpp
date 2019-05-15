@@ -1,8 +1,6 @@
 #include "constants.h"
 #include "player.h"
 
-#include <iostream>
-
 Player::Player(
     const sf::String& file,
     double x,
@@ -218,6 +216,24 @@ Player::~Player() {
   delete sprite_;
   delete bullet_;
 }
+
 Bullet* Player::GetBullet() {
   return bullet_;
+}
+
+void Player::LevelUp() {
+  level_ ++;
+  attack_ += 3;
+  defense_ += 5;
+}
+
+int Player::GetLevel() {
+  return level_;
+}
+
+void Player::SetAttack(int attack) {
+  attack_ += attack;
+}
+void Player::SetDefense(int defense) {
+    defense_ += defense;
 }
