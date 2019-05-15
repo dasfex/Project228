@@ -115,7 +115,7 @@ int Player::GetHealth() const {
   return health_;
 }
 
-int Player::Attack() const {
+int Player::GetAttack() const {
   return attack_;
 }
 
@@ -147,6 +147,9 @@ void Player::CheckMap(double time, double x, double y, int h, int w,
 
   bool is_bad_pos = false;
   for (int k = 0; k < HEROES_CNT; ++k) {
+    if (!heroes[k].IsHeroExist()) {
+      continue;
+    }
     int hero_left_i = ceil(heroes[k].GetY());
     // [0, 1] : 0 - width = y
     int hero_right_i = ceil(heroes[k].GetY() + heroes[k].GetImgSize().x);
@@ -163,23 +166,24 @@ void Player::CheckMap(double time, double x, double y, int h, int w,
     }
   }
 
-  for (int k = 0; k < kENEMIES_CNT; ++k) {
-    int enemie_left_i = ceil(enemies[k].GetCoor().y);
-    // [0, 1] : 0 - width = y
-    int enemie_right_i =
-        ceil(enemies[k].GetCoor().y + enemies[k].GetImgSize().x);
-    int enemie_left_j = ceil(enemies[k].GetCoor().x);
-    // [0, 1] : 1 - height = x
-    int enemie_right_j =
-        ceil(enemies[k].GetCoor().x + enemies[k].GetImgSize().y);
+  for (const auto& enemy : enemies) {
+	  if (!enemy.IsExist()) continue;
+	  int enemie_left_i = ceil(enemy.GetCoor().y);
+	  // [0, 1] : 0 - width = y
+	  int enemie_right_i =
+		  ceil(enemy.GetCoor().y + enemy.GetImgSize().x);
+	  int enemie_left_j = ceil(enemy.GetCoor().x);
+	  // [0, 1] : 1 - height = x
+	  int enemie_right_j =
+		  ceil(enemy.GetCoor().x + enemy.GetImgSize().y);
 
-    for (int i = left_i; i < right_i; ++i) {
-      for (int j = left_j; j < right_j; ++j) {
-        is_bad_pos |=
-            enemie_left_i <= i && i <= enemie_right_i
-                && enemie_left_j <= j && j <= enemie_right_j;
-      }
-    }
+	  for (int i = left_i; i < right_i; ++i) {
+		  for (int j = left_j; j < right_j; ++j) {
+			  is_bad_pos |=
+				  enemie_left_i <= i && i <= enemie_right_i
+				  && enemie_left_j <= j && j <= enemie_right_j;
+		  }
+	  }
   }
 
   left_i /= TILE_SIZE;

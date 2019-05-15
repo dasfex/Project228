@@ -33,7 +33,7 @@ class Player {
 
   int GetExp() const;
   int GetHealth() const;
-  int Attack() const;
+  int GetAttack() const;
   int GetDefense() const;
   Bullet* GetBullet();
   void LevelUp();
