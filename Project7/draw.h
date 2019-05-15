@@ -19,17 +19,55 @@ void DrawHeroes(sf::RenderWindow* window,
   }
 }
 
-void DrawBullet(sf::RenderWindow* window, Player* player, bool& is_show_bullet) {
+void DrawBullet(sf::RenderWindow* window,
+                Player* player,
+                bool& is_show_bullet,
+                std::vector<Enemy>& enemies,
+                std::pair<bool, sf::Text>& get_exp_text) {
   static int dif = 0;
   sf::Vector2f new_coor = player->GetBullet()->GetNewCoor(
       player->GetCoor(),
       player->GetLastDirection(),
       dif);
   player->GetBullet()->GetSprite()->setPosition(new_coor);
-  ++dif;
+
+  int left_i = new_coor.y;
+  int right_i = new_coor.y + 1;
+  int left_j = new_coor.x;
+  int right_j = new_coor.x + 1;
+
+  for (auto& enemy : enemies) {
+    if (!enemy.IsExist()) continue;
+    int hero_left_i = ceil(enemy.GetCoor().y);
+    // [0, 1] : 0 - width = y
+    int hero_right_i = ceil(enemy.GetCoor().y) + enemy.GetImgSize().x;
+    int hero_left_j = ceil(enemy.GetCoor().x);
+    // [0, 1] : 1 - height = x
+    int hero_right_j = ceil(enemy.GetCoor().x) + enemy.GetImgSize().y;
+
+    for (int i = left_i; i < right_i; ++i) {
+      for (int j = left_j; j < right_j; ++j) {
+        if (hero_left_i <= i && i <= hero_right_i
+            && hero_left_j <= j && j <= hero_right_j) {
+          is_show_bullet = false;
+          dif = 0;
+          if (enemy.SubtractHealth(player->GetAttack())) {
+            player->AddExp(enemy.GiveReward());
+            get_exp_text.first = true;
+            get_exp_text.second.setString(
+                std::to_string(enemy.GiveReward()));
+          }
+          return;
+        }
+      }
+    }
+  }
+
+  dif += 2;
   if (dif == 200) {
     dif = 0;
     is_show_bullet = false;
+    return;
   }
   window->draw(*player->GetBullet()->GetSprite());
 }
@@ -54,12 +92,24 @@ void DrawMainInfo(sf::RenderWindow* window,
                   const sf::Font& font) {
   sf::Text health("Health: " + std::to_string(player->GetHealth()), font, 50);
   sf::Text exp("Exp: " + std::to_string(player->GetExp()), font, 50);
+  sf::Text level("Level: " + std::to_string(player->GetLevel()), font, 50);
+  sf::Text attack("Attack: " + std::to_string(player->GetAttack()), font, 50);
+  sf::Text defense("Defense: " + std::to_string(player->GetDefense()), font, 50);
   health.setFillColor(sf::Color::Black);
   exp.setFillColor(sf::Color::Black);
+  level.setFillColor(sf::Color::Black);
+  attack.setFillColor(sf::Color::Black);
+  defense.setFillColor(sf::Color::Black);
   health.setPosition(player->GetCoor() - sf::Vector2f(700, 450));
-  exp.setPosition(player->GetCoor() - sf::Vector2f(400, 450));
+  exp.setPosition(player->GetCoor() - sf::Vector2f(425, 450));
+  level.setPosition(player->GetCoor() - sf::Vector2f(275, 450));
+  attack.setPosition(player->GetCoor() - sf::Vector2f(80, 450));
+  defense.setPosition(player->GetCoor() - sf::Vector2f(-170, 450));
   window->draw(health);
   window->draw(exp);
+  window->draw(level);
+  window->draw(attack);
+  window->draw(defense);
 }
 
 void DrawMissions(sf::RenderWindow* window, Player& player,
@@ -105,8 +155,13 @@ void DrawExp(sf::RenderWindow* window, Player& player,
 }
 
 void DrawEnemies(sf::RenderWindow* window,
-                 const std::vector<Enemy>& enemies) {
+                 const std::vector<Enemy>& enemies,
+                 sf::Font font) {
   for (const auto& enemy : enemies) {
+    if (!enemy.IsExist()) continue;
+    sf::Text text(std::to_string(enemy.GetHealth()), font, 15);
+    text.setPosition(enemy.GetCoor() - sf::Vector2f(-5, 16));
+    window->draw(text);
     window->draw(*enemy.GetSprite());
   }
 }
@@ -118,9 +173,8 @@ void DrawBuff(sf::RenderWindow* window, Player& player) {
   level_texture.loadFromImage(level_up);
   sf::Sprite level_sprite;
   level_sprite.setTexture(level_texture);
-  level_sprite.setPosition(player.GetCoor() - sf::Vector2f(200, 200));
+  level_sprite.setPosition(player.GetCoor() - sf::Vector2f(600, 200));
   window->draw(level_sprite);
 }
-
 
 #endif //NEWPROJECT228_DRAW_H

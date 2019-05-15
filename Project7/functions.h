@@ -97,7 +97,7 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
 
   quest_heroes.reserve(HEROES_CNT);
   for (int i = 0; i < HEROES_CNT; ++i) {
-    std::string folder_name(1, char(i + 1 + '0'));
+    std::string folder_name(std::to_string(i + 1));
     std::ifstream get_info("files/heroes/" + folder_name + "/main.txt");
     double x, y;
     std::string img = "files/heroes/" + folder_name + "/hero.png",
@@ -115,7 +115,7 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
 
   enemies.reserve(kENEMIES_CNT);
   for (int i = 0; i < kENEMIES_CNT; ++i) {
-    std::string folder_name(1, char(i + 1 + '0'));
+    std::string folder_name(std::to_string(i + 1));
     std::ifstream get_info("files/enemy/" + folder_name + "/main.txt");
     double x, y;
     std::string img = "files/enemy/" + folder_name + "/hero.png";
@@ -189,7 +189,9 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
         if (exp != 0) {
           exp_text->second.setString(std::to_string(exp));
           player->AddExp(exp);
-          is_level_up = true;
+          if (player->GetLevel() * 100 < player->GetExp()) {
+            is_level_up = true;
+          }
 
         } else if (!is_text->first) {
           exp_text->second.setString("");
@@ -217,7 +219,6 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
     player->SetDirection(Direction::kStay);
     is_show_bullet = true;
-    player->GetBullet()->GetSound()->play();
   } else {
     player->SetDirection(Direction::kStay);
     if (hero_ind == HEROES_CNT) {
@@ -231,7 +232,6 @@ void ChangeEnemies(std::vector<Enemy>& enemies,
                    sf::Vector2f player_coor) {
   static std::mt19937 rand(static_cast<unsigned int>(time(nullptr)));
   static sf::Clock timer_for_animation;
-  static std::vector<int> how_much_changed(kENEMIES_CNT, 1);
   static std::vector<int> time_for_change(kENEMIES_CNT);
   float time = timer_for_animation.getElapsedTime().asMilliseconds();
   timer_for_animation.restart();

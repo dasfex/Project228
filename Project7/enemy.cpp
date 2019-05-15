@@ -43,7 +43,7 @@ sf::Vector2f Enemy::GetCoor() const {
   return coor_;
 }
 
-int Enemy::GiveReward() {
+int Enemy::GiveReward() const {
   return reward_exp_;
 }
 
@@ -183,4 +183,22 @@ void Enemy::ChangeDir() {
       }
     }
   }
+}
+
+int Enemy::GetHealth() const {
+  return health_;
+}
+
+bool Enemy::SubtractHealth(int attack) {
+	health_ -= attack;  // dddd
+	if (health_ <= 0) {
+		is_exist_ = false;
+		return true;
+	}
+	
+	return false;
+}
+
+bool Enemy::IsExist() const {
+	return is_exist_;
 }

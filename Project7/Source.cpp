@@ -50,7 +50,7 @@ int main() {
   sf::RenderWindow main_window(sf::VideoMode(width, height), "Project228");
   view.reset(sf::FloatRect(0, 0, width, height));
 
-  Player player("img/hulk.png", 1600, 2500, 100, 100, 100); //  1600 2500
+  Player player("img/hulk.png", 1600, 2500, 100, 10, 100); //  1600 2500
 
   sf::Clock timer_for_animation_;
 
@@ -87,7 +87,7 @@ int main() {
     ChangeEnemies(enemies, map_tiles, player.GetCoor());
 
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
-    DrawEnemies(&main_window, enemies);
+    DrawEnemies(&main_window, enemies, text_font);
     DrawHeroes(&main_window, quest_heroes);
     DrawMainInfo(&main_window, &player, text_font);
     if (is_show_missions) {
@@ -97,16 +97,16 @@ int main() {
                    text_font,
                    is_show_missions);
     }
-    if (get_exp_text.first) {
-      DrawExp(&main_window, player, &get_exp_text);
-    }
     if (is_show_bullet) {
-      DrawBullet(&main_window, &player, is_show_bullet);
+      DrawBullet(&main_window, &player, is_show_bullet, enemies, get_exp_text);
     }
     if (is_level_up){
       DrawBuff(&main_window, player);
     }
     main_window.draw(*player.GetSprite());
+    if (get_exp_text.first) {
+      DrawExp(&main_window, player, &get_exp_text);
+    }
     main_window.draw(text);
 
     main_window.display();
