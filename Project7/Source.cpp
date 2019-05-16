@@ -96,7 +96,7 @@ int main() {
 
     main_window.clear(sf::Color(255, 255, 255));
 
-    ChangeEnemies(enemies, map_tiles, player.GetCoor(), is_show_bot_bullet);
+    ChangeEnemies(enemies, map_tiles, player.GetCoor(), time, is_show_bot_bullet);
 
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
     DrawEnemies(&main_window, enemies, text_font);
