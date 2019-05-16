@@ -19,7 +19,7 @@ class Enemy {
   sf::Vector2i GetImgSize() const;
   int GetHealth() const;
 
-  void CheckBullet(sf::Vector2f);
+  Bullet* GetBullet() const;
   void ChangeDir();
 
   int GiveReward() const;

@@ -1,5 +1,6 @@
 #include "constants.h"
 #include "player.h"
+#include <iostream>
 
 Player::Player(
     const sf::String& file,
@@ -32,9 +33,9 @@ void Player::SetDirection(Direction new_dir) {
   dir_ = new_dir;
 }
 
-void Player::Move(int time, const std::vector<std::vector<int>>& map,
+void Player::Move(sf::RenderWindow* window, int time, const std::vector<std::vector<int>>& map,
                   const std::vector<QuestHero>& heroes,
-                  const std::vector<Enemy>& enemies) {
+                   std::vector<Enemy>& enemies, std::pair<bool, std::pair<int, Direction>>& is_show_bot_bullet) {
   speed_ = 1;  // 0.27
   cur_frame_ += 0.009 * time;
   if (cur_frame_ > 4) {
@@ -75,6 +76,10 @@ void Player::Move(int time, const std::vector<std::vector<int>>& map,
   }
   coor_ += sf::Vector2f(direct_speed_.x * time, direct_speed_.y * time);
 
+  //enemies[0].DrawBullet(window, Direction::kNorth);
+  
+
+  
   int h = 54, w = 30;  // 36?
   CheckMap(time, coor_.x, coor_.y, h, w, map, heroes, enemies);
 
@@ -240,4 +245,13 @@ void Player::SetAttack(int attack) {
 }
 void Player::SetDefense(int defense) {
     defense_ += defense;
+}
+
+
+bool Player::SubtractHealth(int health) {
+	health_ -= health;
+	if (health_ < 0) {
+		health_ = 3123112;
+	}
+	return false;
 }

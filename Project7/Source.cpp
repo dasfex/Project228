@@ -24,6 +24,8 @@ int main() {
       std::make_pair(false, sf::Text("", text_font, 25));
 
   std::pair<bool, std::string> is_text(false, "");
+  std::pair<bool, std::pair<int, Direction>> is_show_bot_bullet;
+  is_show_bot_bullet.first = false;
   bool is_show_missions = false;
   bool is_show_bullet = false;
   bool is_level_up = false;
@@ -64,7 +66,7 @@ int main() {
     timer_for_animation_.restart();
 
     sf::Event event{};
-    vector<sf::Keyboard::Key> pressed_keys; // for cheats
+
     while (main_window.pollEvent(event)) {
       if (event.type == sf::Event::Closed ||
           sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
@@ -75,16 +77,15 @@ int main() {
                           &text, &get_exp_text,
                           is_show_missions, is_show_bullet, is_level_up);
       }
-      player.Move(time, map_tiles, quest_heroes, enemies);
+	  player.Move(&main_window, time, map_tiles, quest_heroes, enemies, is_show_bot_bullet);
     }
-
     view.setCenter(player.GetCoor());
     main_window.setView(view);
     text.setPosition(view.getCenter() + sf::Vector2f(-700, 300));
 
     main_window.clear(sf::Color(255, 255, 255));
 
-    ChangeEnemies(enemies, map_tiles, player.GetCoor());
+    ChangeEnemies(enemies, map_tiles, player.GetCoor(), is_show_bot_bullet);
 
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
     DrawEnemies(&main_window, enemies, text_font);
@@ -98,9 +99,12 @@ int main() {
                    is_show_missions);
     }
     if (is_show_bullet) {
-      DrawBullet(&main_window, &player, is_show_bullet, enemies, get_exp_text);
+      DrawBullet(&main_window, &player, is_show_bullet, enemies, get_exp_text, is_level_up);
     }
-    if (is_level_up){
+	if (is_show_bot_bullet.first) {
+		DrawBotBullet(&main_window, is_show_bot_bullet, enemies, &player);
+	}
+    if (is_level_up) {
       DrawBuff(&main_window, player);
     }
     main_window.draw(*player.GetSprite());
@@ -112,5 +116,6 @@ int main() {
     main_window.display();
   }
 
+  system("pause");
   return 0;
 }

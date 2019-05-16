@@ -190,7 +190,8 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
           exp_text->second.setString(std::to_string(exp));
           player->AddExp(exp);
           if (player->GetLevel() * 100 < player->GetExp()) {
-            is_level_up = true;
+			  is_level_up = true;
+			  player->LevelUp();
           }
 
         } else if (!is_text->first) {
@@ -229,7 +230,8 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
 
 void ChangeEnemies(std::vector<Enemy>& enemies,
                    const std::vector<std::vector<int>>& map,
-                   sf::Vector2f player_coor) {
+                   sf::Vector2f player_coor,
+	std::pair<bool, std::pair<int, Direction>>& is_show_bot_bullet) {
   static std::mt19937 rand(static_cast<unsigned int>(time(nullptr)));
   static sf::Clock timer_for_animation;
   static std::vector<int> time_for_change(kENEMIES_CNT);
@@ -243,6 +245,45 @@ void ChangeEnemies(std::vector<Enemy>& enemies,
     }
     --time_for_change[i];
     enemy.Move(time, map, player_coor, true);
+  }
+
+
+  for (int i = 0; i < kENEMIES_CNT; ++i)  {
+	  Enemy& enemy = enemies[i];
+	  if (!enemy.IsExist()) continue;
+	  int hero_left_i = ceil(enemy.GetCoor().y);
+	  int hero_left_j = ceil(enemy.GetCoor().x);
+	  int left_i = ceil(player_coor.y);
+	  int left_j = ceil(player_coor.x);
+	  // east = right
+	  int d = left_j - hero_left_j;
+	  if (abs(hero_left_i - left_i) < 40 && d > 0 && d < 200) {
+		  is_show_bot_bullet.first = true;
+		  is_show_bot_bullet.second.first = i;
+		  is_show_bot_bullet.second.second = Direction::kEast;
+	  }
+	  // west = left
+	  d = -d;
+	  if (abs(hero_left_i - left_i) < 40 && d > 0 && d < 200) {
+		  is_show_bot_bullet.first = true;
+		  is_show_bot_bullet.second.first = i;
+		  is_show_bot_bullet.second.second = Direction::kWest;
+	  }
+	  // north = up
+	  d = hero_left_i - left_i;
+	  std::cout << d << " " << abs(hero_left_j - left_j) << "\n";
+	  if (abs(hero_left_j - left_j) < 40 && d > 0 && d < 200) {
+		  is_show_bot_bullet.first = true;
+		  is_show_bot_bullet.second.first = i;
+		  is_show_bot_bullet.second.second = Direction::kNorth;
+	  }
+	  // south = down
+	  d = -d;
+	  if (abs(hero_left_j - left_j) < 40 && d > 0 && d < 200) {
+		  is_show_bot_bullet.first = true;
+		  is_show_bot_bullet.second.first = i;
+		  is_show_bot_bullet.second.second = Direction::kSouth;
+	  }
   }
 }
 
