@@ -34,7 +34,7 @@ void Player::Move(sf::RenderWindow *window, int time,
                   const std::vector<QuestHero> &heroes,
                   std::vector<Enemy> &enemies, std::pair<bool,
     std::pair<int, Direction>> &is_show_bot_bullet) {
-  speed_ = 1;  // 0.27
+  speed_ = 0.27;  // 0.27
   cur_frame_ += 0.009 * time;
   if (cur_frame_ > 4) {
     cur_frame_ -= 4;
