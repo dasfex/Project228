@@ -20,6 +20,37 @@ void CheckMousePos(int num, int &ret, int x_1, int y_1, int x_2, int y_2,
   }
 }
 
+void GameEnd(sf::RenderWindow *window,
+             sf::Music *music,
+             std::string music_path,
+             std::string img_path,
+             int x,
+             int y,
+             sf::Clock *timer) {
+
+  auto play_time = timer->getElapsedTime().asMilliseconds() + 13000;
+  music->stop();
+  music->openFromFile(music_path);
+  music->play();
+  sf::Texture game_over_texture;
+  game_over_texture.loadFromFile(img_path);
+  sf::Sprite game_over(game_over_texture);
+
+  if (music_path == "files/music/game_over.wav") {
+    game_over.setScale(1.05, 1.05);
+  } else {
+    game_over.setScale(2, 2);
+  }
+  game_over.setPosition(x, y);
+
+  while (play_time >= timer->getElapsedTime().asMilliseconds()) {
+    window->draw(game_over);
+    window->display();
+  }
+
+  exit(0);
+}
+
 void Settings(sf::RenderWindow *window, sf::Music *music,
               sf::Music *menu_music, int coor_x, int coor_y) {
 
@@ -45,12 +76,12 @@ void Settings(sf::RenderWindow *window, sf::Music *music,
   type_music_2_texture.loadFromFile("img/MusicGame.png");
 
   std::string path = "files/music/";
-  vector<std::string> all_music = { path + "Exclusive.wav",
-                                    path + "IndianaJhons.wav",
-                                    path + "LPNumb.wav",
-                                    path + "Shooting_Stars.wav",
-                                    path + "LPNobodyListen.wav",
-                                    path + "GameOfThrone.wav" };
+  vector<std::string> all_music = {path + "Exclusive.wav",
+                                   path + "IndianaJhons.wav",
+                                   path + "LPNumb.wav",
+                                   path + "Shooting_Stars.wav",
+                                   path + "LPNobodyListen.wav",
+                                   path + "GameOfThrone.wav"};
 
   sf::Sprite settings(setting_background), music_1(music_texture1),
       music_2(music_texture2), music_3(music_texture3), music_4(music_texture4),
@@ -65,14 +96,13 @@ void Settings(sf::RenderWindow *window, sf::Music *music,
 
   int x = 240 + coor_y;
 
-  for(int i = 0 ; i < 7; i++) {
+  for (int i = 0; i < 7; i++) {
     musics1[i].setScale(2, 2);
     musics2[i].setScale(2, 2);
     if (i < 5) {
       musics1[i].setPosition(200 + coor_x, x);
       musics2[i].setPosition(1200 + coor_x, x);
-    }
-    else {
+    } else {
       musics1[i].setPosition(180 + coor_x, x);
       musics2[i].setPosition(1180 + coor_x, x);
     }
@@ -98,8 +128,7 @@ void Settings(sf::RenderWindow *window, sf::Music *music,
       if (i < 5) {
         CheckMousePos(i - 2, music_num, 200, x, 550, 130, window, &musics1[i - 1], 139, 0, 0);
         CheckMousePos(i + 4, music_num, 1200, x, 550, 130, window, &musics2[i - 1], 139, 0, 0);
-      }
-      else {
+      } else {
         CheckMousePos(i - 2, music_num, 180, x, 550, 130, window, &musics1[i - 1], 139, 0, 0);
         CheckMousePos(i + 4, music_num, 1180, x, 550, 130, window, &musics2[i - 1], 139, 0, 0);
       }
@@ -119,6 +148,19 @@ void Settings(sf::RenderWindow *window, sf::Music *music,
       }
     }
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F9)) {
+      volume = 0;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10)) {
+      volume = 50;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11)) {
+      volume = 100;
+    }
+
+    music->setVolume(volume);
+    menu_music->setVolume(volume);
+
     window->draw(settings);
     vol.setString("Volume: " + std::to_string(volume));
     window->draw(vol);
@@ -135,7 +177,6 @@ void Settings(sf::RenderWindow *window, sf::Music *music,
   }
 }
 
-
 void Menu(sf::RenderWindow *window, sf::Music *music, sf::Music *menu_music,
           int coor_x = 0, int coor_y = 0) {
 
@@ -143,8 +184,11 @@ void Menu(sf::RenderWindow *window, sf::Music *music, sf::Music *menu_music,
 
   if (!is_menu_was_open) {
     menu_music->openFromFile("files/music/LPNumb.wav");
+    music->openFromFile("files/music/GameOfThrone.wav");
     menu_music->setVolume(volume);
     music->setVolume(volume);
+  } else {
+    music->stop();
   }
 
   menu_music->setLoop(true);
@@ -165,7 +209,7 @@ void Menu(sf::RenderWindow *window, sf::Music *music, sf::Music *menu_music,
       menu_3(menu_texture3), menu_4(menu_texture4),
       background(menu_background);
 
-  vector<sf::Sprite> menu_batton = { menu_1, menu_2, menu_3, menu_4 };
+  vector<sf::Sprite> menu_batton = {menu_1, menu_2, menu_3, menu_4};
   bool is_menu_open = true;
   int menu_num = 0;
 
@@ -235,6 +279,7 @@ void Menu(sf::RenderWindow *window, sf::Music *music, sf::Music *menu_music,
     }
   }
 
+  music->play();
   is_menu_was_open = true;
 }
 
