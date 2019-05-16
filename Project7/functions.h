@@ -5,15 +5,15 @@
 #include <fstream>
 #include <cmath>
 #include <random>
-#include "useful.h"
+#include "bullet.h"
+#include "constants.h"
+#include "draw.h"
 #include "enemy.h"
 #include "main_headers.h"
-#include "constants.h"
+#include "menu.h"
 #include "player.h"
 #include "quest_hero.h"
-#include "bullet.h"
-#include "draw.h"
-#include "menu.h"
+#include "useful.h"
 
 struct TileInfo {
   int x;
@@ -21,17 +21,17 @@ struct TileInfo {
   int width;
   int height;
 
-  friend std::istream &operator>>(std::istream &in, TileInfo &x);
+  friend std::istream &operator>>(std::istream& in, TileInfo& x);
 };
 
-std::istream &operator>>(std::istream &in, TileInfo &x) {
+std::istream &operator>>(std::istream& in, TileInfo& x) {
   in >> x.x >> x.y >> x.width >> x.height;
   return in;
 }
 
 // анонимный namespace, чтобы нельзя было вызвать функцию из другого файла
 namespace {
-int FindHeroNear(const Player *player,
+int FindHeroNear(const Player* player,
                  const std::vector<QuestHero> &heroes) {
   int h = 56, w = 30;  // размеры Халка
   for (int k = 0; k < HEROES_CNT; ++k) {
@@ -49,15 +49,15 @@ int FindHeroNear(const Player *player,
   return HEROES_CNT;
 }
 
-void MakeText(std::pair<bool, std::string> *is_text, sf::Text *text,
+void MakeText(std::pair<bool, std::string>* is_text, sf::Text* text,
               bool flag = false, std::string str = "") {
   is_text->first = flag;
   is_text->second = str;
   text->setString(is_text->second);
 }
 
-bool Find(const std::vector<std::string> &vec, const std::string &str) {
-  for (const auto &x : vec) {
+bool Find(const std::vector<std::string>& vec, const std::string& str) {
+  for (const auto& x : vec) {
     if (x == str) {
       return true;
     }
@@ -77,11 +77,11 @@ Direction GetNewDir(size_t n) {
 
 }
 
-void GetAllInformation(std::vector<std::vector<int>> &map_tiles,
-                       std::vector<TileInfo> &tiles,
-                       std::vector<QuestHero> &quest_heroes,
-                       std::vector<Enemy> &enemies,
-                       sf::Font *font) {
+void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
+                       std::vector<TileInfo>& tiles,
+                       std::vector<QuestHero>& quest_heroes,
+                       std::vector<Enemy>& enemies,
+                       sf::Font* font) {
   std::ifstream get_map("files/main_map.txt");
   for (int i = 0; i < MAP_HEIGHT; ++i) {
     for (int j = 0; j < MAP_WIDTH; ++j) {
@@ -90,7 +90,7 @@ void GetAllInformation(std::vector<std::vector<int>> &map_tiles,
   }
 
   std::fstream get_tiles("files/sprite coordinates.txt");
-  for (auto &tile : tiles) {
+  for (auto& tile : tiles) {
     int nom;
     get_tiles >> nom;
     get_tiles >> tile;
@@ -134,11 +134,11 @@ void GetAllInformation(std::vector<std::vector<int>> &map_tiles,
   font->loadFromFile("files/Samson.ttf");
 }
 
-void KeyboardTreatment(Player *player, std::vector<QuestHero> &heroes,
-                       std::pair<bool, std::string> *is_text,
-                       sf::Text *text, std::pair<bool, sf::Text> *exp_text,
-                       bool &is_show_missions, bool &is_show_bullet,
-                       bool &is_level_up, bool &is_menu) {
+void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
+                       std::pair<bool, std::string>* is_text,
+                       sf::Text* text, std::pair<bool, sf::Text>* exp_text,
+                       bool& is_show_missions, bool& is_show_bullet,
+                       bool& is_level_up, bool& is_menu) {
   if (is_show_bullet) {
     return;
   }
@@ -233,10 +233,11 @@ void KeyboardTreatment(Player *player, std::vector<QuestHero> &heroes,
   }
 }
 
-void ChangeEnemies(std::vector<Enemy> &enemies,
-                   const std::vector<std::vector<int>> &map,
+void ChangeEnemies(std::vector<Enemy>& enemies,
+                   const std::vector<std::vector<int>>& map,
                    sf::Vector2f player_coor, float time_,
-                   std::pair<bool, std::pair<int, Direction>> &is_show_bot_bullet) {
+                   std::pair<bool,
+                   std::pair<int, Direction>>& is_show_bot_bullet) {
   static std::mt19937 rand(static_cast<unsigned int>(time(nullptr)));
   static std::vector<int> time_for_change(kENEMIES_CNT);
   for (size_t i = 0; i < kENEMIES_CNT; ++i) {

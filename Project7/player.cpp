@@ -1,15 +1,19 @@
+#include <iostream>
 #include "constants.h"
 #include "player.h"
-#include <iostream>
 
 Player::Player(
-    const sf::String &file,
+    const sf::String& file,
     double x,
     double y,
     int health,
     int attack,
     int defense)
-    : health_(health), coor_(x, y), attack_(attack), defense_(defense), file_(file) {
+    : health_(health),
+    coor_(x, y),
+    attack_(attack),
+    defense_(defense),
+    file_(file) {
 
   image_->loadFromFile(file_);
   image_->createMaskFromColor(sf::Color(255, 255, 255));
@@ -29,11 +33,11 @@ void Player::SetDirection(Direction new_dir) {
   dir_ = new_dir;
 }
 
-void Player::Move(sf::RenderWindow *window, int time,
-                  const std::vector<std::vector<int>> &map,
-                  const std::vector<QuestHero> &heroes,
-                  std::vector<Enemy> &enemies, std::pair<bool,
-    std::pair<int, Direction>> &is_show_bot_bullet) {
+void Player::Move(sf::RenderWindow* window, int time,
+                  const std::vector<std::vector<int>>& map,
+                  const std::vector<QuestHero>& heroes,
+                  std::vector<Enemy>& enemies, std::pair<bool,
+    std::pair<int, Direction>>& is_show_bot_bullet) {
   speed_ = 0.27;  // 0.27
   cur_frame_ += 0.009 * time;
   if (cur_frame_ > 4) {
@@ -74,11 +78,7 @@ void Player::Move(sf::RenderWindow *window, int time,
   }
   coor_ += sf::Vector2f(direct_speed_.x * time, direct_speed_.y * time);
 
-  //enemies[0].DrawBullet(window, Direction::kNorth);
-
-
-
-  int h = 54, w = 30;  // 36?
+  int h = 54, w = 30;
   CheckMap(time, coor_.x, coor_.y, h, w, map, heroes, enemies);
 
   sprite_->setPosition(coor_);
@@ -86,7 +86,7 @@ void Player::Move(sf::RenderWindow *window, int time,
   last_rect_ = rectangle;
 }
 
-const sf::Sprite *Player::GetSprite() const {
+const sf::Sprite* Player::GetSprite() const {
   return sprite_;
 }
 
@@ -98,11 +98,11 @@ std::vector<std::string> Player::GetActiveQuests() const {
   return active_quests_;
 }
 
-void Player::AddNewQuest(const std::string &new_quest) {
+void Player::AddNewQuest(const std::string& new_quest) {
   active_quests_.push_back(new_quest);
 }
 
-void Player::DeleteQuest(const std::string &quest) {
+void Player::DeleteQuest(const std::string& quest) {
   auto it = std::find(begin(active_quests_),
                       end(active_quests_), quest);
   if (it != end(active_quests_)) {
@@ -135,11 +135,12 @@ bool Player::IsCantGo(int type) const {
 }
 
 void Player::CheckMap(double time, double x, double y, int h, int w,
-                      const std::vector<std::vector<int>> &map,
-                      const std::vector<QuestHero> &heroes,
-                      const std::vector<Enemy> &enemies) {
+                      const std::vector<std::vector<int>>& map,
+                      const std::vector<QuestHero>& heroes,
+                      const std::vector<Enemy>& enemies) {
   x = ceil(x);
   y = ceil(y);
+
   // left top angle is (0, 0)
   // y - on right
   // x - on down
@@ -224,7 +225,7 @@ Player::~Player() {
   delete bullet_;
 }
 
-Bullet *Player::GetBullet() {
+Bullet* Player::GetBullet() {
   return bullet_;
 }
 

@@ -1,16 +1,16 @@
-#include <iostream>
-#include <vector>
-#include <fstream>
 #include <chrono>
+#include <fstream>
+#include <iostream>
 #include <thread>
-#include "enemy.h"
-#include "draw.h"
-#include "main_headers.h"
-#include "player.h"
-#include "functions.h"
-#include "quest_hero.h"
+#include <vector>
 #include "bullet.h"
+#include "draw.h"
+#include "enemy.h"
+#include "functions.h"
+#include "main_headers.h"
 #include "menu.h"
+#include "player.h"
+#include "quest_hero.h"
 
 using std::vector;
 
@@ -33,6 +33,7 @@ int main() {
   bool is_level_up = false;
   sf::Sprite map_sprite;
   sf::Sprite quests_background;
+
   //  я честно пытался обернуть нижний блок в функцию,
   //  но sfml не любит, когда создают указатели на sf::Sprite,
   //  а по ссылке передавать просто ничего не работает,
