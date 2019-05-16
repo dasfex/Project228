@@ -10,6 +10,8 @@
 #include "functions.h"
 #include "quest_hero.h"
 #include "bullet.h"
+#include "menu.h"
+
 using std::vector;
 
 int main() {
@@ -50,16 +52,16 @@ int main() {
   int width = 2176, height = 1536;
   sf::View view;
   sf::RenderWindow main_window(sf::VideoMode(width, height), "Project228");
+  sf::Music music, menu_music;
+  music.openFromFile("files/music/GameOfThrone.wav");
+  music.setLoop(true);
+  Menu(&main_window, &music, &menu_music);
+  music.play();
   view.reset(sf::FloatRect(0, 0, width, height));
 
   Player player("img/hulk.png", 1600, 2500, 100, 10, 100); //  1600 2500
 
   sf::Clock timer_for_animation_;
-
-  sf::Music music;
-  music.openFromFile("music.wav");
-  music.setLoop(true);
-  music.play();
 
   while (main_window.isOpen()) {
     auto time = timer_for_animation_.getElapsedTime().asMilliseconds();
@@ -68,17 +70,26 @@ int main() {
     sf::Event event{};
 
     while (main_window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed ||
-          sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+      bool is_menu = false;
+      if (event.type == sf::Event::Closed) {
         main_window.close();
       }
       if (player.IsAlive()) {
         KeyboardTreatment(&player, quest_heroes, &is_text,
                           &text, &get_exp_text,
-                          is_show_missions, is_show_bullet, is_level_up);
+                          is_show_missions, is_show_bullet, is_level_up,
+                          is_menu);
       }
-	  player.Move(&main_window, time, map_tiles, quest_heroes, enemies, is_show_bot_bullet);
+      if (is_menu) {
+        music.stop();
+        Menu(&main_window, &music, &menu_music, player.GetCoor().x - 1100, player.GetCoor().y - 800);
+        music.play();
+        time = 0;
+        timer_for_animation_.restart();
+      }
+      player.Move(&main_window, time, map_tiles, quest_heroes, enemies, is_show_bot_bullet);
     }
+
     view.setCenter(player.GetCoor());
     main_window.setView(view);
     text.setPosition(view.getCenter() + sf::Vector2f(-700, 300));
@@ -101,9 +112,9 @@ int main() {
     if (is_show_bullet) {
       DrawBullet(&main_window, &player, is_show_bullet, enemies, get_exp_text, is_level_up);
     }
-	if (is_show_bot_bullet.first) {
-		DrawBotBullet(&main_window, is_show_bot_bullet, enemies, &player);
-	}
+    if (is_show_bot_bullet.first) {
+      DrawBotBullet(&main_window, is_show_bot_bullet, enemies, &player);
+    }
     if (is_level_up) {
       DrawBuff(&main_window, player);
     }
