@@ -137,8 +137,8 @@ void GetAllInformation(std::vector<std::vector<int>> &map_tiles,
 void KeyboardTreatment(Player *player, std::vector<QuestHero> &heroes,
                        std::pair<bool, std::string> *is_text,
                        sf::Text *text, std::pair<bool, sf::Text> *exp_text,
-                       bool &is_show_missions, bool &is_show_bullet, bool &is_level_up,
-                       bool &is_menu) {
+                       bool &is_show_missions, bool &is_show_bullet,
+                       bool &is_level_up, bool &is_menu) {
   if (is_show_bullet) {
     return;
   }
@@ -152,6 +152,7 @@ void KeyboardTreatment(Player *player, std::vector<QuestHero> &heroes,
     }
     return;
   }
+
   int hero_ind = FindHeroNear(player, heroes);
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
     player->SetDirection(Direction::kNorth);

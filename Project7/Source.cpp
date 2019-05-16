@@ -53,10 +53,9 @@ int main() {
   sf::View view;
   sf::RenderWindow main_window(sf::VideoMode(width, height), "Project228");
   sf::Music music, menu_music;
-  music.openFromFile("files/music/GameOfThrone.wav");
   music.setLoop(true);
   Menu(&main_window, &music, &menu_music);
-  music.play();
+  //music.play();
   view.reset(sf::FloatRect(0, 0, width, height));
 
   Player player("img/hulk.png", 1600, 2500, 100, 10, 100); //  1600 2500
@@ -81,13 +80,15 @@ int main() {
                           is_menu);
       }
       if (is_menu) {
-        music.stop();
-        Menu(&main_window, &music, &menu_music, player.GetCoor().x - 1100, player.GetCoor().y - 800);
-        music.play();
+        //music.stop();
+        Menu(&main_window, &music, &menu_music, player.GetCoor().x - 1100,
+             player.GetCoor().y - 800);
+        //music.play();
         time = 0;
         timer_for_animation_.restart();
       }
-      player.Move(&main_window, time, map_tiles, quest_heroes, enemies, is_show_bot_bullet);
+      player.Move(&main_window, time, map_tiles, quest_heroes, enemies,
+                  is_show_bot_bullet);
     }
 
     view.setCenter(player.GetCoor());
@@ -96,7 +97,8 @@ int main() {
 
     main_window.clear(sf::Color(255, 255, 255));
 
-    ChangeEnemies(enemies, map_tiles, player.GetCoor(), time, is_show_bot_bullet);
+    ChangeEnemies(enemies, map_tiles, player.GetCoor(), time,
+                  is_show_bot_bullet);
 
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
     DrawEnemies(&main_window, enemies, text_font);
@@ -110,7 +112,8 @@ int main() {
                    is_show_missions);
     }
     if (is_show_bullet) {
-      DrawBullet(&main_window, &player, is_show_bullet, enemies, get_exp_text, is_level_up);
+      DrawBullet(&main_window, &player, is_show_bullet, enemies, get_exp_text,
+                 is_level_up);
     }
     if (is_show_bot_bullet.first) {
       DrawBotBullet(&main_window, is_show_bot_bullet, enemies, &player);
@@ -122,11 +125,28 @@ int main() {
     if (get_exp_text.first) {
       DrawExp(&main_window, player, &get_exp_text);
     }
+
+    if (!player.IsAlive()) {
+      auto play_time = timer_for_animation_.getElapsedTime().asMilliseconds() + 10000;
+      music.stop();
+      music.openFromFile("files/music/game_over.wav");
+      music.play();
+      sf::Texture ggwp;
+      ggwp.loadFromFile("img/game_over2.jpg");
+      sf::Sprite game_over(ggwp);
+      game_over.setScale(1.05, 1.05);
+      game_over.setPosition(player.GetCoor().x - 1000, player.GetCoor().y - 600);
+      while (play_time >= timer_for_animation_.getElapsedTime().asMilliseconds()) {
+        main_window.draw(game_over);
+        main_window.display();
+      }
+      return 0;
+    }
+
     main_window.draw(text);
 
     main_window.display();
   }
 
-  system("pause");
   return 0;
 }
