@@ -59,7 +59,7 @@ int main() {
   music.play();
   view.reset(sf::FloatRect(0, 0, width, height));
 
-  Player player("img/hulk.png", 1600, 2500, 100, 10, 100); //  1600 2500
+  Player player("img/hulk.png", 1600, 2500, 100, 10, 8); //  1600 2500
 
   sf::Clock timer_for_animation_;
 
@@ -68,7 +68,6 @@ int main() {
     timer_for_animation_.restart();
 
     sf::Event event{};
-
     while (main_window.pollEvent(event)) {
       bool is_menu = false;
       if (event.type == sf::Event::Closed) {
@@ -82,12 +81,21 @@ int main() {
       }
       if (is_menu) {
         music.stop();
-        Menu(&main_window, &music, &menu_music, player.GetCoor().x - 1100, player.GetCoor().y - 800);
+        Menu(&main_window,
+             &music,
+             &menu_music,
+             player.GetCoor().x - 1100,
+             player.GetCoor().y - 800);
         music.play();
         time = 0;
         timer_for_animation_.restart();
       }
-      player.Move(&main_window, time, map_tiles, quest_heroes, enemies, is_show_bot_bullet);
+      player.Move(&main_window,
+                  time,
+                  map_tiles,
+                  quest_heroes,
+                  enemies,
+                  is_show_bot_bullet);
     }
 
     view.setCenter(player.GetCoor());
@@ -96,7 +104,11 @@ int main() {
 
     main_window.clear(sf::Color(255, 255, 255));
 
-    ChangeEnemies(enemies, map_tiles, player.GetCoor(), time, is_show_bot_bullet);
+    ChangeEnemies(enemies,
+                  map_tiles,
+                  player.GetCoor(),
+                  time,
+                  is_show_bot_bullet);
 
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
     DrawEnemies(&main_window, enemies, text_font);
@@ -110,7 +122,8 @@ int main() {
                    is_show_missions);
     }
     if (is_show_bullet) {
-      DrawBullet(&main_window, &player, is_show_bullet, enemies, get_exp_text, is_level_up);
+      DrawBullet(&main_window, &player, is_show_bullet, enemies,
+                 quest_heroes, get_exp_text, is_level_up);
     }
     if (is_show_bot_bullet.first) {
       DrawBotBullet(&main_window, is_show_bot_bullet, enemies, &player);
@@ -127,6 +140,5 @@ int main() {
     main_window.display();
   }
 
-  system("pause");
   return 0;
 }

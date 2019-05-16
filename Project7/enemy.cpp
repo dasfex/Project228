@@ -207,3 +207,11 @@ bool Enemy::SubtractHealth(int attack) {
 bool Enemy::IsExist() const {
 	return is_exist_;
 }
+
+int Enemy::GetAttack() const {
+  return attack_;
+}
+
+int Enemy::GetPassedQuest() const {
+  return passed_quest_;
+}

@@ -23,6 +23,7 @@ void DrawBullet(sf::RenderWindow* window,
                 Player* player,
                 bool& is_show_bullet,
                 std::vector<Enemy>& enemies,
+                std::vector<QuestHero>& heroes,
                 std::pair<bool, sf::Text>& get_exp_text,
 				bool& is_level_up) {
   static int dif = 0;
@@ -57,6 +58,9 @@ void DrawBullet(sf::RenderWindow* window,
             get_exp_text.first = true;
             get_exp_text.second.setString(
                 std::to_string(enemy.GiveReward()));
+            if (enemy.GetPassedQuest() != 0) {
+              heroes[enemy.GetPassedQuest()].SetQuestReady();
+            }
 			if (player->GetLevel() * 100 < player->GetExp()) {
 				is_level_up = true;
 				player->LevelUp();
@@ -185,10 +189,10 @@ void DrawBuff(sf::RenderWindow* window, Player& player) {
 void DrawBotBullet(sf::RenderWindow* window,
 	std::pair<bool, std::pair<int, Direction>>& is_show_bot_bullet,
 	std::vector<Enemy>& enemies, Player* player) {
-	int i = is_show_bot_bullet.second.first;
+	int ind = is_show_bot_bullet.second.first;
 	static int dif = 0;
-	sf::Vector2f new_coor = enemies[i].GetBullet()->GetNewCoor(
-		enemies[i].GetCoor(),
+	sf::Vector2f new_coor = enemies[ind].GetBullet()->GetNewCoor(
+		enemies[ind].GetCoor(),
 		is_show_bot_bullet.second.second,
 		dif);
 
@@ -210,20 +214,20 @@ void DrawBotBullet(sf::RenderWindow* window,
 				&& hero_left_j <= j && j <= hero_right_j) {
 				is_show_bot_bullet.first = false;
 				dif = 0;
-				player->SubtractHealth(5);
+				player->SubtractHealth(enemies[ind].GetAttack());
 				return;
 			}
 		}
 	}
 
-	enemies[i].GetBullet()->GetSprite()->setPosition(new_coor);
+	enemies[ind].GetBullet()->GetSprite()->setPosition(new_coor);
 	dif += 2;
 	if (dif == 200) {
 		dif = 0;
 		is_show_bot_bullet.first = false;
 		return;
 	}
-	window->draw(*enemies[i].GetBullet()->GetSprite());
+	window->draw(*enemies[ind].GetBullet()->GetSprite());
 }
 
 #endif //NEWPROJECT228_DRAW_H
