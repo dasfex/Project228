@@ -20,8 +20,9 @@ class Player {
 
   void SetDirection(Direction);
 
-  void Move(int, const std::vector<std::vector<int>>&,
-            const std::vector<QuestHero>&, const std::vector<Enemy>&);
+  void Move(sf::RenderWindow*, int, const std::vector<std::vector<int>>&,
+            const std::vector<QuestHero>&, std::vector<Enemy>&, 
+	  std::pair<bool, std::pair<int, Direction>>&);
 
   const sf::Sprite* GetSprite() const;
 
@@ -42,6 +43,7 @@ class Player {
   void SetDefense(int defense);
 
   void SetHealth(int);
+  bool SubtractHealth(int health);
   Direction GetDirection() const;
   Direction GetLastDirection() const;
 

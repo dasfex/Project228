@@ -10,6 +10,8 @@
 #include "functions.h"
 #include "quest_hero.h"
 #include "bullet.h"
+#include "menu.h"
+
 using std::vector;
 
 int main() {
@@ -24,6 +26,8 @@ int main() {
       std::make_pair(false, sf::Text("", text_font, 25));
 
   std::pair<bool, std::string> is_text(false, "");
+  std::pair<bool, std::pair<int, Direction>> is_show_bot_bullet;
+  is_show_bot_bullet.first = false;
   bool is_show_missions = false;
   bool is_show_bullet = false;
   bool is_level_up = false;
@@ -48,34 +52,44 @@ int main() {
   int width = 2176, height = 1536;
   sf::View view;
   sf::RenderWindow main_window(sf::VideoMode(width, height), "Project228");
+  sf::Music music, menu_music;
+  music.setLoop(true);
+  Menu(&main_window, &music, &menu_music);
   view.reset(sf::FloatRect(0, 0, width, height));
 
-  Player player("img/hulk.png", 1600, 2500, 100, 10, 100); //  1600 2500
+  Player player("img/hulk.png", 1600, 2500, 100, 10, 8); //  1600 2500
 
   sf::Clock timer_for_animation_;
-
-  sf::Music music;
-  music.openFromFile("music.wav");
-  music.setLoop(true);
-  music.play();
 
   while (main_window.isOpen()) {
     auto time = timer_for_animation_.getElapsedTime().asMilliseconds();
     timer_for_animation_.restart();
 
     sf::Event event{};
-    vector<sf::Keyboard::Key> pressed_keys; // for cheats
     while (main_window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed ||
-          sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+      bool is_menu = false;
+      if (event.type == sf::Event::Closed) {
         main_window.close();
       }
       if (player.IsAlive()) {
         KeyboardTreatment(&player, quest_heroes, &is_text,
                           &text, &get_exp_text,
-                          is_show_missions, is_show_bullet, is_level_up);
+                          is_show_missions, is_show_bullet, is_level_up,
+                          is_menu);
       }
-      player.Move(time, map_tiles, quest_heroes, enemies);
+      if (is_menu) {
+        music.stop();
+        Menu(&main_window,
+             &music,
+             &menu_music,
+             player.GetCoor().x - 1100,
+             player.GetCoor().y - 800);
+        music.play();
+        time = 0;
+        timer_for_animation_.restart();
+      }
+      player.Move(&main_window, time, map_tiles, quest_heroes, enemies,
+                  is_show_bot_bullet);
     }
 
     view.setCenter(player.GetCoor());
@@ -84,7 +98,8 @@ int main() {
 
     main_window.clear(sf::Color(255, 255, 255));
 
-    ChangeEnemies(enemies, map_tiles, player.GetCoor());
+    ChangeEnemies(enemies, map_tiles, player.GetCoor(), time,
+                  is_show_bot_bullet);
 
     DrawMap(&main_window, map_tiles, tiles, map_sprite);
     DrawEnemies(&main_window, enemies, text_font);
@@ -98,15 +113,32 @@ int main() {
                    is_show_missions);
     }
     if (is_show_bullet) {
-      DrawBullet(&main_window, &player, is_show_bullet, enemies, get_exp_text);
+      DrawBullet(&main_window, &player, is_show_bullet, enemies,
+                 quest_heroes, get_exp_text, is_level_up);
     }
-    if (is_level_up){
+    if (is_show_bot_bullet.first) {
+      DrawBotBullet(&main_window, is_show_bot_bullet, enemies, &player);
+    }
+    if (is_level_up) {
       DrawBuff(&main_window, player);
     }
     main_window.draw(*player.GetSprite());
     if (get_exp_text.first) {
       DrawExp(&main_window, player, &get_exp_text);
     }
+
+    if (!player.IsAlive()) {
+      GameEnd(&main_window, &music, "files/music/game_over.wav",
+              "img/game_over.jpg", player.GetCoor().x - 1000,
+              player.GetCoor().y - 600, &timer_for_animation_);
+    }
+
+    if (quest_heroes[3].IsQuestReady()) {
+      GameEnd(&main_window, &music, "files/music/congratulation.wav",
+              "img/congratulation.jpg", player.GetCoor().x - 1000,
+              player.GetCoor().y - 600, &timer_for_animation_);
+    }
+
     main_window.draw(text);
 
     main_window.display();

@@ -1,18 +1,15 @@
 #include "constants.h"
 #include "player.h"
+#include <iostream>
 
 Player::Player(
-    const sf::String& file,
+    const sf::String &file,
     double x,
     double y,
     int health,
     int attack,
     int defense)
-    : health_(health)
-    , coor_(x, y)
-    , attack_(attack)
-    , defense_(defense)
-    , file_(file) {
+    : health_(health), coor_(x, y), attack_(attack), defense_(defense), file_(file) {
 
   image_->loadFromFile(file_);
   image_->createMaskFromColor(sf::Color(255, 255, 255));
@@ -32,9 +29,11 @@ void Player::SetDirection(Direction new_dir) {
   dir_ = new_dir;
 }
 
-void Player::Move(int time, const std::vector<std::vector<int>>& map,
-                  const std::vector<QuestHero>& heroes,
-                  const std::vector<Enemy>& enemies) {
+void Player::Move(sf::RenderWindow *window, int time,
+                  const std::vector<std::vector<int>> &map,
+                  const std::vector<QuestHero> &heroes,
+                  std::vector<Enemy> &enemies, std::pair<bool,
+    std::pair<int, Direction>> &is_show_bot_bullet) {
   speed_ = 1;  // 0.27
   cur_frame_ += 0.009 * time;
   if (cur_frame_ > 4) {
@@ -75,6 +74,10 @@ void Player::Move(int time, const std::vector<std::vector<int>>& map,
   }
   coor_ += sf::Vector2f(direct_speed_.x * time, direct_speed_.y * time);
 
+  //enemies[0].DrawBullet(window, Direction::kNorth);
+
+
+
   int h = 54, w = 30;  // 36?
   CheckMap(time, coor_.x, coor_.y, h, w, map, heroes, enemies);
 
@@ -83,7 +86,7 @@ void Player::Move(int time, const std::vector<std::vector<int>>& map,
   last_rect_ = rectangle;
 }
 
-const sf::Sprite* Player::GetSprite() const {
+const sf::Sprite *Player::GetSprite() const {
   return sprite_;
 }
 
@@ -95,11 +98,11 @@ std::vector<std::string> Player::GetActiveQuests() const {
   return active_quests_;
 }
 
-void Player::AddNewQuest(const std::string& new_quest) {
+void Player::AddNewQuest(const std::string &new_quest) {
   active_quests_.push_back(new_quest);
 }
 
-void Player::DeleteQuest(const std::string& quest) {
+void Player::DeleteQuest(const std::string &quest) {
   auto it = std::find(begin(active_quests_),
                       end(active_quests_), quest);
   if (it != end(active_quests_)) {
@@ -132,9 +135,9 @@ bool Player::IsCantGo(int type) const {
 }
 
 void Player::CheckMap(double time, double x, double y, int h, int w,
-                      const std::vector<std::vector<int>>& map,
-                      const std::vector<QuestHero>& heroes,
-                      const std::vector<Enemy>& enemies) {
+                      const std::vector<std::vector<int>> &map,
+                      const std::vector<QuestHero> &heroes,
+                      const std::vector<Enemy> &enemies) {
   x = ceil(x);
   y = ceil(y);
   // left top angle is (0, 0)
@@ -166,24 +169,24 @@ void Player::CheckMap(double time, double x, double y, int h, int w,
     }
   }
 
-  for (const auto& enemy : enemies) {
-	  if (!enemy.IsExist()) continue;
-	  int enemie_left_i = ceil(enemy.GetCoor().y);
-	  // [0, 1] : 0 - width = y
-	  int enemie_right_i =
-		  ceil(enemy.GetCoor().y + enemy.GetImgSize().x);
-	  int enemie_left_j = ceil(enemy.GetCoor().x);
-	  // [0, 1] : 1 - height = x
-	  int enemie_right_j =
-		  ceil(enemy.GetCoor().x + enemy.GetImgSize().y);
+  for (const auto &enemy : enemies) {
+    if (!enemy.IsExist()) continue;
+    int enemie_left_i = ceil(enemy.GetCoor().y);
+    // [0, 1] : 0 - width = y
+    int enemie_right_i =
+        ceil(enemy.GetCoor().y + enemy.GetImgSize().x);
+    int enemie_left_j = ceil(enemy.GetCoor().x);
+    // [0, 1] : 1 - height = x
+    int enemie_right_j =
+        ceil(enemy.GetCoor().x + enemy.GetImgSize().y);
 
-	  for (int i = left_i; i < right_i; ++i) {
-		  for (int j = left_j; j < right_j; ++j) {
-			  is_bad_pos |=
-				  enemie_left_i <= i && i <= enemie_right_i
-				  && enemie_left_j <= j && j <= enemie_right_j;
-		  }
-	  }
+    for (int i = left_i; i < right_i; ++i) {
+      for (int j = left_j; j < right_j; ++j) {
+        is_bad_pos |=
+            enemie_left_i <= i && i <= enemie_right_i
+                && enemie_left_j <= j && j <= enemie_right_j;
+      }
+    }
   }
 
   left_i /= TILE_SIZE;
@@ -221,12 +224,12 @@ Player::~Player() {
   delete bullet_;
 }
 
-Bullet* Player::GetBullet() {
+Bullet *Player::GetBullet() {
   return bullet_;
 }
 
 void Player::LevelUp() {
-  level_ ++;
+  level_++;
   attack_ += 3;
   defense_ += 5;
 }
@@ -239,5 +242,14 @@ void Player::SetAttack(int attack) {
   attack_ += attack;
 }
 void Player::SetDefense(int defense) {
-    defense_ += defense;
+  defense_ += defense;
+}
+
+bool Player::SubtractHealth(int health) {
+  health_ -= health;
+  if (health_ <= 0) {
+    health = 0;
+    is_alive_ = false;
+  }
+  return false;
 }

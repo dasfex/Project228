@@ -18,10 +18,11 @@ class Enemy {
   sf::Vector2f GetCoor() const;
   sf::Vector2i GetImgSize() const;
   int GetHealth() const;
+  int GetAttack() const;
+  Bullet* GetBullet() const;
+  int GetPassedQuest() const;
 
-  void CheckBullet(sf::Vector2f);
   void ChangeDir();
-
   int GiveReward() const;
   bool SubtractHealth(int attack);
 

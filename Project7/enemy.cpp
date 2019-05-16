@@ -151,6 +151,11 @@ sf::Vector2i Enemy::GetImgSize() const {
   return size_for_img_;
 }
 
+Bullet * Enemy::GetBullet() const
+{
+	return bullet_;
+}
+
 void Enemy::ChangeDir() {
   if (is_gorizonatal_) {
     switch (dir_) {
@@ -201,4 +206,12 @@ bool Enemy::SubtractHealth(int attack) {
 
 bool Enemy::IsExist() const {
 	return is_exist_;
+}
+
+int Enemy::GetAttack() const {
+  return attack_;
+}
+
+int Enemy::GetPassedQuest() const {
+  return passed_quest_;
 }

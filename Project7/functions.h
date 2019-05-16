@@ -13,6 +13,7 @@
 #include "quest_hero.h"
 #include "bullet.h"
 #include "draw.h"
+#include "menu.h"
 
 struct TileInfo {
   int x;
@@ -20,18 +21,18 @@ struct TileInfo {
   int width;
   int height;
 
-  friend std::istream& operator>>(std::istream& in, TileInfo& x);
+  friend std::istream &operator>>(std::istream &in, TileInfo &x);
 };
 
-std::istream& operator>>(std::istream& in, TileInfo& x) {
+std::istream &operator>>(std::istream &in, TileInfo &x) {
   in >> x.x >> x.y >> x.width >> x.height;
   return in;
 }
 
 // анонимный namespace, чтобы нельзя было вызвать функцию из другого файла
 namespace {
-int FindHeroNear(const Player* player,
-                 const std::vector<QuestHero>& heroes) {
+int FindHeroNear(const Player *player,
+                 const std::vector<QuestHero> &heroes) {
   int h = 56, w = 30;  // размеры Халка
   for (int k = 0; k < HEROES_CNT; ++k) {
     if (!heroes[k].IsHeroExist()) {
@@ -48,15 +49,15 @@ int FindHeroNear(const Player* player,
   return HEROES_CNT;
 }
 
-void MakeText(std::pair<bool, std::string>* is_text, sf::Text* text,
+void MakeText(std::pair<bool, std::string> *is_text, sf::Text *text,
               bool flag = false, std::string str = "") {
   is_text->first = flag;
   is_text->second = str;
   text->setString(is_text->second);
 }
 
-bool Find(const std::vector<std::string>& vec, const std::string& str) {
-  for (const auto& x : vec) {
+bool Find(const std::vector<std::string> &vec, const std::string &str) {
+  for (const auto &x : vec) {
     if (x == str) {
       return true;
     }
@@ -76,11 +77,11 @@ Direction GetNewDir(size_t n) {
 
 }
 
-void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
-                       std::vector<TileInfo>& tiles,
-                       std::vector<QuestHero>& quest_heroes,
-                       std::vector<Enemy>& enemies,
-                       sf::Font* font) {
+void GetAllInformation(std::vector<std::vector<int>> &map_tiles,
+                       std::vector<TileInfo> &tiles,
+                       std::vector<QuestHero> &quest_heroes,
+                       std::vector<Enemy> &enemies,
+                       sf::Font *font) {
   std::ifstream get_map("files/main_map.txt");
   for (int i = 0; i < MAP_HEIGHT; ++i) {
     for (int j = 0; j < MAP_WIDTH; ++j) {
@@ -89,7 +90,7 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
   }
 
   std::fstream get_tiles("files/sprite coordinates.txt");
-  for (auto& tile : tiles) {
+  for (auto &tile : tiles) {
     int nom;
     get_tiles >> nom;
     get_tiles >> tile;
@@ -133,10 +134,11 @@ void GetAllInformation(std::vector<std::vector<int>>& map_tiles,
   font->loadFromFile("files/Samson.ttf");
 }
 
-void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
-                       std::pair<bool, std::string>* is_text,
-                       sf::Text* text, std::pair<bool, sf::Text>* exp_text,
-                       bool& is_show_missions, bool& is_show_bullet, bool& is_level_up) {
+void KeyboardTreatment(Player *player, std::vector<QuestHero> &heroes,
+                       std::pair<bool, std::string> *is_text,
+                       sf::Text *text, std::pair<bool, sf::Text> *exp_text,
+                       bool &is_show_missions, bool &is_show_bullet,
+                       bool &is_level_up, bool &is_menu) {
   if (is_show_bullet) {
     return;
   }
@@ -150,6 +152,7 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
     }
     return;
   }
+
   int hero_ind = FindHeroNear(player, heroes);
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
     player->SetDirection(Direction::kNorth);
@@ -191,6 +194,7 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
           player->AddExp(exp);
           if (player->GetLevel() * 100 < player->GetExp()) {
             is_level_up = true;
+            player->LevelUp();
           }
 
         } else if (!is_text->first) {
@@ -219,6 +223,8 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
     player->SetDirection(Direction::kStay);
     is_show_bullet = true;
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+    is_menu = true;
   } else {
     player->SetDirection(Direction::kStay);
     if (hero_ind == HEROES_CNT) {
@@ -227,22 +233,57 @@ void KeyboardTreatment(Player* player, std::vector<QuestHero>& heroes,
   }
 }
 
-void ChangeEnemies(std::vector<Enemy>& enemies,
-                   const std::vector<std::vector<int>>& map,
-                   sf::Vector2f player_coor) {
+void ChangeEnemies(std::vector<Enemy> &enemies,
+                   const std::vector<std::vector<int>> &map,
+                   sf::Vector2f player_coor, float time_,
+                   std::pair<bool, std::pair<int, Direction>> &is_show_bot_bullet) {
   static std::mt19937 rand(static_cast<unsigned int>(time(nullptr)));
-  static sf::Clock timer_for_animation;
   static std::vector<int> time_for_change(kENEMIES_CNT);
-  float time = timer_for_animation.getElapsedTime().asMilliseconds();
-  timer_for_animation.restart();
   for (size_t i = 0; i < kENEMIES_CNT; ++i) {
-    Enemy& enemy = enemies[i];
+    Enemy &enemy = enemies[i];
     if (time_for_change[i] == 0) {
       enemy.ChangeDir();
       time_for_change[i] = 300;
     }
     --time_for_change[i];
-    enemy.Move(time, map, player_coor, true);
+    enemy.Move(time_, map, player_coor, true);
+  }
+
+  for (int i = 0; i < kENEMIES_CNT; ++i) {
+    Enemy &enemy = enemies[i];
+    if (!enemy.IsExist()) continue;
+    int hero_left_i = ceil(enemy.GetCoor().y);
+    int hero_left_j = ceil(enemy.GetCoor().x);
+    int left_i = ceil(player_coor.y);
+    int left_j = ceil(player_coor.x);
+    // east = right
+    int d = left_j - hero_left_j;
+    if (abs(hero_left_i - left_i) < 40 && d > 0 && d < 200) {
+      is_show_bot_bullet.first = true;
+      is_show_bot_bullet.second.first = i;
+      is_show_bot_bullet.second.second = Direction::kEast;
+    }
+    // west = left
+    d = -d;
+    if (abs(hero_left_i - left_i) < 40 && d > 0 && d < 200) {
+      is_show_bot_bullet.first = true;
+      is_show_bot_bullet.second.first = i;
+      is_show_bot_bullet.second.second = Direction::kWest;
+    }
+    // north = up
+    d = hero_left_i - left_i;
+    if (abs(hero_left_j - left_j) < 40 && d > 0 && d < 200) {
+      is_show_bot_bullet.first = true;
+      is_show_bot_bullet.second.first = i;
+      is_show_bot_bullet.second.second = Direction::kNorth;
+    }
+    // south = down
+    d = -d;
+    if (abs(hero_left_j - left_j) < 40 && d > 0 && d < 200) {
+      is_show_bot_bullet.first = true;
+      is_show_bot_bullet.second.first = i;
+      is_show_bot_bullet.second.second = Direction::kSouth;
+    }
   }
 }
 
