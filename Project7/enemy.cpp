@@ -190,7 +190,7 @@ int Enemy::GetHealth() const {
 }
 
 bool Enemy::SubtractHealth(int attack) {
-	health_ -= attack;
+	health_ -= attack - defense_ / 2;
 	if (health_ <= 0) {
 		is_exist_ = false;
 		return true;

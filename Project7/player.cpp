@@ -247,7 +247,7 @@ void Player::SetDefense(int defense) {
 }
 
 bool Player::SubtractHealth(int health) {
-  health_ -= health;
+  health_ -= health - defense_ / 2;
   if (health_ <= 0) {
     health = 0;
     is_alive_ = false;
