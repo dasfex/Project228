@@ -1,15 +1,16 @@
 #ifndef PROJECT228_PLAYER_H
 #define PROJECT228_PLAYER_H
 
-#include <algorithm>
-#include <cmath>
-#include <utility>
 #include "bullet.h"
 #include "enemy.h"
-#include "main_headers.h"
 #include "quest_hero.h"
+#include "main_headers.h"
 #include "useful.h"
+#include <algorithm>
+#include <cmath>
 
+#include <cmath>
+#include <utility>
 
 class Player {
  public:

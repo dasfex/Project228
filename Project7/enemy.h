@@ -1,11 +1,11 @@
 #ifndef NEWPROJECT228_ENEMY_H
 #define NEWPROJECT228_ENEMY_H
 
-#include <random>
-#include <string>
 #include "bullet.h"
 #include "main_headers.h"
 #include "useful.h"
+#include <string>
+#include <random>
 
 class Enemy {
  public:

@@ -1,7 +1,12 @@
-#include <cmath>
+//
+// Created by Vanya Khodor on 14.05.2019.
+//
+
 #include <iostream>
-#include "constants.h"
+
 #include "enemy.h"
+#include "constants.h"
+#include <cmath>
 
 Enemy::Enemy(
     double x, double y,
@@ -84,7 +89,7 @@ void Enemy::Move(int time, const std::vector<std::vector<int>>& map,
   }
   coor_ += sf::Vector2f(direct_speed_.x * time, direct_speed_.y * time);
 
-  int h = 54, w = 30;
+  int h = 54, w = 30;  // 36?
   CheckMap(time, coor_.x, coor_.y, h, w, map, bot, player_coor);
 
   sprite_->setPosition(coor_);
@@ -190,7 +195,7 @@ int Enemy::GetHealth() const {
 }
 
 bool Enemy::SubtractHealth(int attack) {
-	health_ -= attack;
+	health_ -= attack;  // dddd
 	if (health_ <= 0) {
 		is_exist_ = false;
 		return true;

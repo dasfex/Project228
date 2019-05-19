@@ -1,16 +1,16 @@
-#include <chrono>
-#include <fstream>
 #include <iostream>
-#include <thread>
 #include <vector>
-#include "bullet.h"
-#include "draw.h"
+#include <fstream>
+#include <chrono>
+#include <thread>
 #include "enemy.h"
-#include "functions.h"
+#include "draw.h"
 #include "main_headers.h"
-#include "menu.h"
 #include "player.h"
+#include "functions.h"
 #include "quest_hero.h"
+#include "bullet.h"
+#include "menu.h"
 
 using std::vector;
 
@@ -33,7 +33,6 @@ int main() {
   bool is_level_up = false;
   sf::Sprite map_sprite;
   sf::Sprite quests_background;
-
   //  я честно пытался обернуть нижний блок в функцию,
   //  но sfml не любит, когда создают указатели на sf::Sprite,
   //  а по ссылке передавать просто ничего не работает,
@@ -133,7 +132,7 @@ int main() {
               "img/game_over.jpg", player.GetCoor().x - 1000,
               player.GetCoor().y - 600, &timer_for_animation_);
     }
-
+	//quest_heroes[3].SetQuestReady();
     if (quest_heroes[3].IsQuestReady()) {
       GameEnd(&main_window, &music, "files/music/congratulation.wav",
               "img/congratulation.jpg", player.GetCoor().x - 1000,

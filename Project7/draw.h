@@ -1,13 +1,13 @@
 #ifndef NEWPROJECT228_DRAW_H
 #define NEWPROJECT228_DRAW_H
 
-#include <vector>
 #include "constants.h"
 #include "enemy.h"
-#include "functions.h"
 #include "main_headers.h"
-#include "player.h"
+#include "functions.h"
 #include "quest_hero.h"
+#include "player.h"
+#include <vector>
 
 void DrawHeroes(sf::RenderWindow* window,
                 const std::vector<QuestHero>& heroes) {
@@ -99,14 +99,11 @@ void DrawMap(sf::RenderWindow* window,
 void DrawMainInfo(sf::RenderWindow* window,
 	Player* player,
 	const sf::Font& font) {
-	sf::Text health("Health: " + std::to_string(player->GetHealth()),
-	    font, 50);
+	sf::Text health("Health: " + std::to_string(player->GetHealth()), font, 50);
 	sf::Text exp("Exp: " + std::to_string(player->GetExp()), font, 50);
 	sf::Text level("Level: " + std::to_string(player->GetLevel()), font, 50);
-	sf::Text attack("Attack: " + std::to_string(player->GetAttack()),
-	    font, 50);
-	sf::Text defense("Defense: " + std::to_string(player->GetDefense()),
-	    font, 50);
+	sf::Text attack("Attack: " + std::to_string(player->GetAttack()), font, 50);
+	sf::Text defense("Defense: " + std::to_string(player->GetDefense()), font, 50);
 	health.setFillColor(sf::Color::Black);
 	exp.setFillColor(sf::Color::Black);
 	level.setFillColor(sf::Color::Black);
@@ -167,7 +164,7 @@ void DrawExp(sf::RenderWindow* window, Player& player,
 }
 
 void DrawEnemies(sf::RenderWindow* window,
-                 std::vector<Enemy>& enemies,
+                  std::vector<Enemy>& enemies,
                  sf::Font font) {
   for (const auto& enemy : enemies) {
     if (!enemy.IsExist()) continue;
