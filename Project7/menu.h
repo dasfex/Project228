@@ -1,9 +1,9 @@
 #ifndef PROJECT228_MENU_H
 #define PROJECT228_MENU_H
 
-#include <vector>
-#include <string>
 #include <algorithm>
+#include <string>
+#include <vector>
 #include "main_headers.h"
 
 using std::vector;
@@ -11,17 +11,18 @@ using std::vector;
 bool is_menu_was_open = false;
 int volume = 50;
 
-void CheckMousePos(int num, int &ret, int x_1, int y_1, int x_2, int y_2,
-                   sf::RenderWindow *window, sf::Sprite *menu, int c1, int c2,
+void CheckMousePos(int num, int& ret, int x_1, int y_1, int x_2, int y_2,
+                   sf::RenderWindow* window, sf::Sprite* menu, int c1, int c2,
                    int c3) {
-  if (sf::IntRect(x_1, y_1, x_2, y_2).contains(sf::Mouse::getPosition(*window))) {
+  if (sf::IntRect(x_1, y_1, x_2, y_2).contains(
+      sf::Mouse::getPosition(*window))) {
     menu->setColor(sf::Color(c1, c2, c3));
     ret = num;
   }
 }
 
-void GameEnd(sf::RenderWindow *window,
-             sf::Music *music,
+void GameEnd(sf::RenderWindow* window,
+             sf::Music* music,
              std::string music_path,
              std::string img_path,
              int x,
@@ -51,8 +52,8 @@ void GameEnd(sf::RenderWindow *window,
   exit(0);
 }
 
-void Settings(sf::RenderWindow *window, sf::Music *music,
-              sf::Music *menu_music, int coor_x, int coor_y) {
+void Settings(sf::RenderWindow* window, sf::Music* music,
+              sf::Music* menu_music, int coor_x, int coor_y) {
 
   sf::Texture music_texture1, music_texture2, music_texture3, music_texture4,
       music_texture5, music_texture6, type_music_1_texture,
@@ -84,12 +85,15 @@ void Settings(sf::RenderWindow *window, sf::Music *music,
                                    path + "GameOfThrone.wav"};
 
   sf::Sprite settings(setting_background), music_1(music_texture1),
-      music_2(music_texture2), music_3(music_texture3), music_4(music_texture4),
-      music_5(music_texture5), music_6(music_texture6),
-      type_1(type_music_1_texture), type_2(type_music_2_texture);
+      music_2(music_texture2), music_3(music_texture3),
+      music_4(music_texture4), music_5(music_texture5),
+      music_6(music_texture6), type_1(type_music_1_texture),
+      type_2(type_music_2_texture);
 
-  vector<sf::Sprite> musics1 = {type_1, music_1, music_2, music_3, music_4, music_5, music_6};
-  vector<sf::Sprite> musics2 = {type_2, music_1, music_2, music_3, music_4, music_5, music_6};
+  vector<sf::Sprite> musics1 = {type_1, music_1, music_2, music_3, music_4,
+                                music_5, music_6};
+  vector<sf::Sprite> musics2 = {type_2, music_1, music_2, music_3, music_4,
+                                music_5, music_6};
   settings.setScale(1.05, 1.15);
   settings.setPosition(70 + coor_x, 90 + coor_y);
   int music_num = 0;
@@ -126,11 +130,15 @@ void Settings(sf::RenderWindow *window, sf::Music *music,
     int x = 200;
     for (int i = 2; i <= 7; i++) {
       if (i < 5) {
-        CheckMousePos(i - 2, music_num, 200, x, 550, 130, window, &musics1[i - 1], 139, 0, 0);
-        CheckMousePos(i + 4, music_num, 1200, x, 550, 130, window, &musics2[i - 1], 139, 0, 0);
+        CheckMousePos(i - 2, music_num, 200, x, 550, 130, window,
+            &musics1[i - 1], 139, 0, 0);
+        CheckMousePos(i + 4, music_num, 1200, x, 550, 130, window,
+            &musics2[i - 1], 139, 0, 0);
       } else {
-        CheckMousePos(i - 2, music_num, 180, x, 550, 130, window, &musics1[i - 1], 139, 0, 0);
-        CheckMousePos(i + 4, music_num, 1180, x, 550, 130, window, &musics2[i - 1], 139, 0, 0);
+        CheckMousePos(i - 2, music_num, 180, x, 550, 130, window,
+            &musics1[i - 1], 139, 0, 0);
+        CheckMousePos(i + 4, music_num, 1180, x, 550, 130, window,
+            &musics2[i - 1], 139, 0, 0);
       }
       x += 140;
     }
@@ -177,10 +185,11 @@ void Settings(sf::RenderWindow *window, sf::Music *music,
   }
 }
 
-void Menu(sf::RenderWindow *window, sf::Music *music, sf::Music *menu_music,
+void Menu(sf::RenderWindow* window, sf::Music* music, sf::Music* menu_music,
           int coor_x = 0, int coor_y = 0) {
 
-  sf::Texture menu_texture1, menu_texture2, menu_texture3, menu_texture4, menu_background;
+  sf::Texture menu_texture1, menu_texture2, menu_texture3, menu_texture4,
+  menu_background;
 
   if (!is_menu_was_open) {
     menu_music->openFromFile("files/music/LPNumb.wav");
@@ -269,7 +278,7 @@ void Menu(sf::RenderWindow *window, sf::Music *music, sf::Music *menu_music,
 
     window->draw(background);
 
-    for (sf::Sprite &el : menu_batton) {
+    for (sf::Sprite& el : menu_batton) {
       window->draw(el);
     }
 
