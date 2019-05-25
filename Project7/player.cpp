@@ -1,4 +1,4 @@
-#include <iostream>
+#include <cmath>
 #include "constants.h"
 #include "player.h"
 
@@ -247,7 +247,7 @@ void Player::SetDefense(int defense) {
 }
 
 bool Player::SubtractHealth(int health) {
-  health_ -= health - defense_ / 2;
+  health_ -= std::max(4, health - defense_ / 2);
   if (health_ <= 0) {
     health = 0;
     is_alive_ = false;
