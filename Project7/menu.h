@@ -2,6 +2,7 @@
 #define PROJECT228_MENU_H
 
 #include <algorithm>
+#include <fstream>
 #include <string>
 #include <vector>
 #include "main_headers.h"
@@ -27,7 +28,7 @@ void GameEnd(sf::RenderWindow* window,
              std::string img_path,
              int x,
              int y,
-             sf::Clock *timer) {
+             sf::Clock* timer) {
 
   auto play_time = timer->getElapsedTime().asMilliseconds() + 13000;
   music->stop();
@@ -37,7 +38,7 @@ void GameEnd(sf::RenderWindow* window,
   game_over_texture.loadFromFile(img_path);
   sf::Sprite game_over(game_over_texture);
 
-  if (music_path == "files/music/game_over.wav") {
+  if (music_path == "files/music/game_over.ogg") {
     game_over.setScale(1.05, 1.05);
   } else {
     game_over.setScale(2, 2);
@@ -55,9 +56,18 @@ void GameEnd(sf::RenderWindow* window,
 void Settings(sf::RenderWindow* window, sf::Music* music,
               sf::Music* menu_music, int coor_x, int coor_y) {
 
-  sf::Texture music_texture1, music_texture2, music_texture3, music_texture4,
-      music_texture5, music_texture6, type_music_1_texture,
-      type_music_2_texture, setting_background;
+  std::fstream mus_file_name("files/musicnames.txt");
+  size_t music_textures_size;
+  mus_file_name >> music_textures_size;
+
+  std::vector<sf::Texture> music_textures(music_textures_size);
+  std::vector<std::string> mus_names(music_textures_size);
+
+  for (auto& name : mus_names) {
+    mus_file_name >> name;
+  }
+
+  sf::Texture type_music_1_texture, type_music_2_texture, setting_background;
 
   sf::Font font;
   font.loadFromFile("files/Samson.ttf");
@@ -67,33 +77,34 @@ void Settings(sf::RenderWindow* window, sf::Music* music,
 
   // Опять стремный блок
   setting_background.loadFromFile("img/setting_bg.jpg");
-  music_texture1.loadFromFile("img/Exclusive.png");
-  music_texture2.loadFromFile("img/IndianaJhons.png");
-  music_texture3.loadFromFile("img/LPNumb.png");
-  music_texture4.loadFromFile("img/ShootingStar.png");
-  music_texture5.loadFromFile("img/LPNobodysListen.png");
-  music_texture6.loadFromFile("img/GameOfThrones.png");
+  for (size_t i = 0; i < music_textures_size; ++i) {
+    music_textures[i].loadFromFile("img/" + mus_names[i] + ".png");
+  }
   type_music_1_texture.loadFromFile("img/MenuMusic.png");
   type_music_2_texture.loadFromFile("img/MusicGame.png");
 
-  std::string path = "files/music/";
-  vector<std::string> all_music = {path + "Exclusive.wav",
-                                   path + "IndianaJhons.wav",
-                                   path + "LPNumb.wav",
-                                   path + "Shooting_Stars.wav",
-                                   path + "LPNobodyListen.wav",
-                                   path + "GameOfThrone.wav"};
+  vector<std::string> all_music(music_textures_size);
+  for (size_t i = 0; i < music_textures_size; ++i) {
+    all_music[i] = "files/music/" + mus_names[i] + ".ogg";
+  }
 
-  sf::Sprite settings(setting_background), music_1(music_texture1),
-      music_2(music_texture2), music_3(music_texture3),
-      music_4(music_texture4), music_5(music_texture5),
-      music_6(music_texture6), type_1(type_music_1_texture),
-      type_2(type_music_2_texture);
+  sf::Sprite settings(setting_background),
+      type_1(type_music_1_texture), type_2(type_music_2_texture);
+  std::vector<sf::Sprite> music_(music_textures_size);
+  for (size_t i = 0; i < music_.size(); ++i) {
+    music_[i].setTexture(music_textures[i]);
+  }
 
-  vector<sf::Sprite> musics1 = {type_1, music_1, music_2, music_3, music_4,
-                                music_5, music_6};
-  vector<sf::Sprite> musics2 = {type_2, music_1, music_2, music_3, music_4,
-                                music_5, music_6};
+  vector<sf::Sprite> musics1 = {type_1};
+  for (const auto& music__ : music_) {
+    musics1.push_back(music__);
+  }
+
+  vector<sf::Sprite> musics2 = {type_2};
+  for (const auto& music__ : music_) {
+    musics2.push_back(music__);
+  }
+
   settings.setScale(1.05, 1.15);
   settings.setPosition(70 + coor_x, 90 + coor_y);
   int music_num = 0;
@@ -131,14 +142,14 @@ void Settings(sf::RenderWindow* window, sf::Music* music,
     for (int i = 2; i <= 7; i++) {
       if (i < 5) {
         CheckMousePos(i - 2, music_num, 200, x, 550, 130, window,
-            &musics1[i - 1], 139, 0, 0);
+                      &musics1[i - 1], 139, 0, 0);
         CheckMousePos(i + 4, music_num, 1200, x, 550, 130, window,
-            &musics2[i - 1], 139, 0, 0);
+                      &musics2[i - 1], 139, 0, 0);
       } else {
         CheckMousePos(i - 2, music_num, 180, x, 550, 130, window,
-            &musics1[i - 1], 139, 0, 0);
+                      &musics1[i - 1], 139, 0, 0);
         CheckMousePos(i + 4, music_num, 1180, x, 550, 130, window,
-            &musics2[i - 1], 139, 0, 0);
+                      &musics2[i - 1], 139, 0, 0);
       }
       x += 140;
     }
@@ -173,11 +184,11 @@ void Settings(sf::RenderWindow* window, sf::Music* music,
     vol.setString("Volume: " + std::to_string(volume));
     window->draw(vol);
 
-    for (sf::Sprite &el : musics1) {
+    for (sf::Sprite& el : musics1) {
       window->draw(el);
     }
 
-    for (sf::Sprite &el : musics2) {
+    for (sf::Sprite& el : musics2) {
       window->draw(el);
     }
 
@@ -189,11 +200,11 @@ void Menu(sf::RenderWindow* window, sf::Music* music, sf::Music* menu_music,
           int coor_x = 0, int coor_y = 0) {
 
   sf::Texture menu_texture1, menu_texture2, menu_texture3, menu_texture4,
-  menu_background;
+      menu_background;
 
   if (!is_menu_was_open) {
-    menu_music->openFromFile("files/music/LPNumb.wav");
-    music->openFromFile("files/music/GameOfThrone.wav");
+    menu_music->openFromFile("files/music/LPNumb.ogg");
+    music->openFromFile("files/music/GameOfThrone.ogg");
     menu_music->setVolume(volume);
     music->setVolume(volume);
   } else {
@@ -203,7 +214,6 @@ void Menu(sf::RenderWindow* window, sf::Music* music, sf::Music* menu_music,
   menu_music->setLoop(true);
   menu_music->play();
 
-  // Тут точно такой же стремный блок((
   if (is_menu_was_open) {
     menu_texture1.loadFromFile("img/continue.png");
   } else {
@@ -239,7 +249,7 @@ void Menu(sf::RenderWindow* window, sf::Music* music, sf::Music* menu_music,
   }
 
   while (is_menu_open) {
-    for (sf::Sprite &el : menu_batton) {
+    for (sf::Sprite& el : menu_batton) {
       el.setColor(sf::Color(139, 0, 0));
     }
     menu_num = 0;

@@ -129,13 +129,13 @@ int main() {
     }
 
     if (!player.IsAlive()) {
-      GameEnd(&main_window, &music, "files/music/game_over.wav",
+      GameEnd(&main_window, &music, "files/music/game_over.ogg",
               "img/game_over.jpg", player.GetCoor().x - 1000,
               player.GetCoor().y - 600, &timer_for_animation_);
     }
 
     if (quest_heroes[3].IsQuestReady()) {
-      GameEnd(&main_window, &music, "files/music/congratulation.wav",
+      GameEnd(&main_window, &music, "files/music/congratulation.ogg",
               "img/congratulation.jpg", player.GetCoor().x - 1000,
               player.GetCoor().y - 600, &timer_for_animation_);
     }
